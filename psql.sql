@@ -1,3 +1,6 @@
+DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS execute_types CASCADE;
+DROP TABLE IF EXISTS execute_steps CASCADE;
 CREATE OR REPLACE FUNCTION updated_row() 
 RETURNS TRIGGER AS $$
 BEGIN
@@ -24,24 +27,22 @@ CREATE TABLE users (
 CREATE TRIGGER users_updated_row BEFORE UPDATE ON users FOR EACH ROW EXECUTE PROCEDURE updated_row();
 CREATE UNIQUE INDEX on users (token);
 CREATE UNIQUE INDEX on users (account);
-INSERT INTO users (account, password, token) VALUES ('admin', 'admin', 'ADMIN@TOKEN')
+INSERT INTO users (account, password, token) VALUES ('admin', '21232f297a57a5a743894a0e4a801fc3', 'ADMIN@TOKEN');
 
-/*
+
 CREATE TABLE execute_types (
     id              serial          NOT NULL    PRIMARY KEY,
     description     varchar(255)    NOT NULL    DEFAULT '',
-    setter_user_id  integer         NOT NULL    REFERENCES users(id)    ON DELETE CASCADE,
     priority        integer         NOT NULL    DEFAULT 999,
-	cm_mode			varchar(255)	DEFAULT '',
     created_at      timestamp       DEFAULT date_trunc('second',now()),
     updated_at      timestamp       DEFAULT date_trunc('second',now())
 );
 CREATE TRIGGER execute_types_updated_row BEFORE UPDATE ON execute_types FOR EACH ROW EXECUTE PROCEDURE updated_row();
 CREATE INDEX on execute_types (priority);
-INSERT INTO execute_types (description, setter_user_id, priority, cm_mode) values ('C', 1, 1, 'text/x-csrc');
-INSERT INTO execute_types (description, setter_user_id, priority, cm_mode) values ('C++', 1, 2, 'text/x-c++src');
-INSERT INTO execute_types (description, setter_user_id, priority, cm_mode) values ('C++11', 1, 3, 'text/x-c++src');
-INSERT INTO execute_types (description, setter_user_id, priority, cm_mode) values ('Java', 1, 4, 'text/x-java');
+INSERT INTO execute_types (description, priority, cm_mode) values ('C', 1, 'text/x-csrc');
+INSERT INTO execute_types (description, priority, cm_mode) values ('C++', 2, 'text/x-c++src');
+INSERT INTO execute_types (description, priority, cm_mode) values ('C++11', 3, 'text/x-c++src');
+INSERT INTO execute_types (description, priority, cm_mode) values ('Java', 4, 'text/x-java');
 
 CREATE TABLE execute_steps (
     id              serial          NOT NULL    PRIMARY KEY,
@@ -52,15 +53,16 @@ CREATE TABLE execute_steps (
 );
 CREATE TRIGGER execute_steps_updated_row BEFORE UPDATE ON execute_steps FOR EACH ROW EXECUTE PROCEDURE updated_row();
 CREATE INDEX ON execute_steps (execute_type_id);
-INSERT INTO execute_steps (execute_type_id, command) values (1, 'gcc __FILE__');
+INSERT INTO execute_steps (execute_type_id, command) values (1, 'gcc -lm -std=c99 __FILE__');
 INSERT INTO execute_steps (execute_type_id, command) values (1, './a.out');
 INSERT INTO execute_steps (execute_type_id, command) values (2, 'g++ __FILE__');
 INSERT INTO execute_steps (execute_type_id, command) values (2, './a.out');
-INSERT INTO execute_steps (execute_type_id, command) values (3, 'g++ -std=c++11  __FILE__');
+INSERT INTO execute_steps (execute_type_id, command) values (3, 'g++ -std=c++11 -O2  __FILE__');
 INSERT INTO execute_steps (execute_type_id, command) values (3, './a.out');
 INSERT INTO execute_steps (execute_type_id, command) values (4, 'javac __FILE__');
 INSERT INTO execute_steps (execute_type_id, command) values (4, 'java -Xmx__MEMORY_LIMIT__k -Xss__MEMORY_LIMIT__k __MAIN_FILE__');
 
+/*
 CREATE TABLE verdicts(
     id              serial          NOT NULL    PRIMARY KEY,
     title           varchar(255)    ,
