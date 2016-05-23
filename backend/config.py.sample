@@ -10,6 +10,7 @@ TORNADO_SETTING['cookie_secret'] = 'cookie secret!'
 TORNADO_SETTING['compress_response'] = True
 TORNADO_SETTING['autoescape'] = 'xhtml_escape'
 TORNADO_SETTING['xheaders'] = True
+TORNADO_SETTING['password_salt'] = 'asdf'
 
 DB_SETTING = {}
 DB_SETTING['dsn'] = 'dbname= user= password= host= port=5432'

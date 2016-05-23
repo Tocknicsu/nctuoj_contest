@@ -5,7 +5,6 @@ import tornado.gen
 import tornado.web
 import tornado.websocket
 import datetime
-import inspect
 from urllib.parse import quote
 from log import log
 import momoko
@@ -96,6 +95,9 @@ class RequestHandler(tornado.web.RequestHandler):
         remote_ip = x_real_ip or self.request.remote_ip
         self.remote_ip = remote_ip
         self.log("[%s] %s %s"%(self.request.method, self.request.uri, self.remote_ip))
+
+
+        yield self.get_identity()
         ##################################################
         ### Get Identity                               ###
         ##################################################
@@ -103,7 +105,7 @@ class RequestHandler(tornado.web.RequestHandler):
         ##################################################
         ### Get Basic Information                      ###
         ##################################################
-        
+       
         ##################################################
         ### Check Permission                           ###
         ##################################################
@@ -130,26 +132,22 @@ class ApiRequestHandler(RequestHandler):
     def prepare(self):
         res = yield super().prepare()
 
-"""
-class WebRequestHandler(RequestHandler):
-    def set_secure_cookie(self, name, value, expires_days=30, version=None, **kwargs):
-        kwargs['httponly'] = True
-        super().set_secure_cookie(name, value, expires_days, version, **kwargs)
-
-    def write_error(self, err, **kwargs):
-        try: status_code, err = err
-        except: status_code = err; err = ''
-        kwargs['err'] = err
-        self.set_status(status_code)
-        self.render('./err/'+str(status_code)+'.html', **kwargs)
-
-    def render(self, templ, **kwargs):
-        super().render('./web/template/'+templ, **kwargs)
-
     @tornado.gen.coroutine
-    def prepare(self):
-        res = yield super().prepare()
-"""
+    def get_identity(self):
+        token = self.get_args(['token'])['token']
+        if token:
+            err, res = yield from Service.User.get_info_by_token({'token': token})
+            if err:
+                account = None
+            else:
+                self.account = res
+        else:
+            self.account = None
+        if self.account and self.account['account'] == "admin":
+            self.isAdmin = True
+        else:
+            self.isAdmin = False
+
 
 class StaticFileHandler(tornado.web.StaticFileHandler):
     def prepare(self):

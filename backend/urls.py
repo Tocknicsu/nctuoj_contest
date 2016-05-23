@@ -4,5 +4,5 @@ class Handler:
 include(Handler, "./handler/")
 urls = [
     ('/', Handler.Index),
-    ('/api/simple/', Handler.api.Simple),
+    ('/api/users/signin/', Handler.api.UserSignIn),
 ]
