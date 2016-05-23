@@ -20,6 +20,3 @@ class TestApiExecute(TestCase):
             }
         }
         self.assertEqualR(res, expect_result)
-
-
-    

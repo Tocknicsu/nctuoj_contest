@@ -39,10 +39,10 @@ CREATE TABLE execute_types (
 );
 CREATE TRIGGER execute_types_updated_row BEFORE UPDATE ON execute_types FOR EACH ROW EXECUTE PROCEDURE updated_row();
 CREATE INDEX on execute_types (priority);
-INSERT INTO execute_types (description, priority, cm_mode) values ('C', 1, 'text/x-csrc');
-INSERT INTO execute_types (description, priority, cm_mode) values ('C++', 2, 'text/x-c++src');
-INSERT INTO execute_types (description, priority, cm_mode) values ('C++11', 3, 'text/x-c++src');
-INSERT INTO execute_types (description, priority, cm_mode) values ('Java', 4, 'text/x-java');
+INSERT INTO execute_types (description, priority) values ('C', 1);
+INSERT INTO execute_types (description, priority) values ('C++', 2);
+INSERT INTO execute_types (description, priority) values ('C++11', 3);
+INSERT INTO execute_types (description, priority) values ('Java', 4);
 
 CREATE TABLE execute_steps (
     id              serial          NOT NULL    PRIMARY KEY,
