@@ -1,0 +1,41 @@
+[
+    {
+        "name": "test_signin",
+        "url": "/api/users/signin/",
+        "method": "post",
+        "payload": {
+            "account": "admin",
+            "password": "admin"
+        },
+        "response_status": 200,
+        "response_data": {
+            "msg": "ADMIN@TOKEN"
+        }
+    },
+    {
+        "name": "test_signin_failed",
+        "url": "/api/users/signin/",
+        "method": "post",
+        "payload": {
+            "account": "admin",
+            "password": "adminwrongpassword"
+        },
+        "response_status": 403,
+        "response_data": {
+            "msg": "Wrong Password"
+        }
+    },
+    {
+        "name": "test_signin_no_user",
+        "url": "/api/users/signin/",
+        "method": "post",
+        "payload": {
+            "account": "admin1245",
+            "password": "admin"
+        },
+        "response_status": 404,
+        "response_data": {
+            "msg": "User Not Exist"
+        }
+    }
+]

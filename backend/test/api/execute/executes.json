@@ -1,0 +1,13 @@
+[
+    {
+        "name": "test_get_executes",
+        "url": "/api/executes/",
+        "method": "get",
+        "payload": {
+        },
+        "response_status": 200,
+        "response_data": {
+            "msg": [{"description": "C", "priority": 1, "id": 1}, {"description": "C++", "priority": 2, "id": 2}, {"description": "C++11", "priority": 3, "id": 3}, {"description": "Java", "priority": 4, "id": 4}]
+        }
+    }
+]
