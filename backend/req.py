@@ -10,7 +10,6 @@ from log import log
 import momoko
 import config
 import types
-import re
 from utils.form import form_validation
 from utils.utils import *
 from include import *

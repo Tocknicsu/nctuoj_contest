@@ -6,6 +6,19 @@
         "payload": {
             "count": 10
         },
+        "response_status": 403,
+        "response_data": {
+            "msg": 403
+        }
+    },
+    {
+        "name": "test_gen_user",
+        "url": "/api/users/gen/",
+        "method": "post",
+        "payload": {
+            "token": "ADMIN@TOKEN",
+            "count": 10
+        },
         "response_status": 200,
         "response_data": {
         }

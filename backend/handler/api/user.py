@@ -4,6 +4,14 @@ import tornado.gen
 from req import Service
 from req import ApiRequestHandler
 
+class UsersGen(ApiRequestHandler):
+    @tornado.gen.coroutine
+    def post(self):
+        args = ['count']
+        data = self.get_args(args)
+        self.log(data)
+        self.render()
+
 class UserSignIn(ApiRequestHandler):
     @tornado.gen.coroutine
     def post(self):
