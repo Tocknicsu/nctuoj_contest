@@ -44,7 +44,11 @@ def test(filename):
                 print("Error: lack %s in %s"%(x, data))
                 return
         data['url'] = config.base_url + data['url']
-        func = getattr(requests, data["method"])
+        try:
+            func = getattr(requests, data["method"])
+        except:
+            print("Error: No Such Method %s"%(data['method']))
+            return
         if data['method'] == "get":
             response = func(data['url'], params=data['payload'])
         else:
@@ -53,6 +57,7 @@ def test(filename):
             response_json = json.loads(response.text)
         except:
             print("Error: Response Json Parse Error %s"%(response.text))
+            return
         if response.status_code != data['response_status'] or response_json != data['response_data']:
             print("Error: Unexpect Response")
             print("Expect: [%s] %s"%(data['response_status'], data['response_data']))

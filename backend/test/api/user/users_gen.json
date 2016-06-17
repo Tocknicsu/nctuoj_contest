@@ -1,0 +1,13 @@
+[
+    {
+        "name": "test_gen_user",
+        "url": "/api/users/gen/",
+        "method": "post",
+        "payload": {
+            "count": 10
+        },
+        "response_status": 200,
+        "response_data": {
+        }
+    }
+]
