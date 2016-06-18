@@ -41,12 +41,7 @@ class User(BaseService):
         res.pop('password')
         return (None, res)
     
-    def get_users_private(self):
-        res = yield self.db.execute("SELECT * FROM users")
-        res = res.fetchall()
-        return (None, res)
-
     def get_users(self):
-        res = yield self.db.execute("SELECT id, account FROM users")
+        res = yield self.db.execute("SELECT * FROM users")
         res = res.fetchall()
         return (None, res)

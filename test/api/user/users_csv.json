@@ -1,23 +1,21 @@
 [
     {
         "name": "test_gen_user",
-        "url": "/api/users/gen/",
+        "url": "/api/users/csv/",
         "method": "post",
         "payload": {
-            "count": 10
         },
         "response_status": 403,
         "response_data": {
-            "msg": 403
+            "msg": "Permission Denied"
         }
     },
     {
         "name": "test_gen_user",
-        "url": "/api/users/gen/",
+        "url": "/api/users/csv/",
         "method": "post",
         "payload": {
-            "token": "ADMIN@TOKEN",
-            "count": 10
+            "token": "ADMIN@TOKEN"
         },
         "response_status": 200,
         "response_data": {

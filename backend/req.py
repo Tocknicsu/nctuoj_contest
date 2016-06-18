@@ -137,15 +137,15 @@ class ApiRequestHandler(RequestHandler):
         if token:
             err, res = yield from Service.User.get_info_by_token({'token': token})
             if err:
-                account = None
+                account = {}
             else:
                 self.account = res
         else:
-            self.account = None
+            self.account = {}
         if self.account and self.account['account'] == "admin":
-            self.isAdmin = True
+            self.account['isAdmin'] = True
         else:
-            self.isAdmin = False
+            self.account['isAdmin'] = False
 
 
 class StaticFileHandler(tornado.web.StaticFileHandler):

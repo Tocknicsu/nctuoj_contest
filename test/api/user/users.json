@@ -5,9 +5,9 @@
         "method": "get",
         "payload": {
         },
-        "response_status": 200,
+        "response_status": 403,
         "response_data": {
-            "msg": [{"id": 1, "account": "admin"}]
+            "msg": "Permission Denied"
         }
     },
     {
