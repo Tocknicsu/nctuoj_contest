@@ -43,6 +43,8 @@ INSERT INTO execute_types (description, priority) values ('C', 1);
 INSERT INTO execute_types (description, priority) values ('C++', 2);
 INSERT INTO execute_types (description, priority) values ('C++11', 3);
 INSERT INTO execute_types (description, priority) values ('Java', 4);
+INSERT INTO execute_types (description, priority) values ('Python2', 5);
+INSERT INTO execute_types (description, priority) values ('Python3', 6);
 
 CREATE TABLE execute_steps (
     id              serial          NOT NULL    PRIMARY KEY,
@@ -61,6 +63,10 @@ INSERT INTO execute_steps (execute_type_id, command) values (3, 'g++ -std=c++11 
 INSERT INTO execute_steps (execute_type_id, command) values (3, './a.out');
 INSERT INTO execute_steps (execute_type_id, command) values (4, 'javac __FILE__');
 INSERT INTO execute_steps (execute_type_id, command) values (4, 'java -Xmx__MEMORY_LIMIT__k -Xss__MEMORY_LIMIT__k __MAIN_FILE__');
+INSERT INTO execute_steps (execute_type_id, command) values (5, 'python2 -m py_compile __FILE__');
+INSERT INTO execute_steps (execute_type_id, command) values (5, 'python2 __FILE__');
+INSERT INTO execute_steps (execute_type_id, command) values (6, 'python3 -m py_compile __FILE__');
+INSERT INTO execute_steps (execute_type_id, command) values (6, 'python3 __FILE__');
 
 /*
 CREATE TABLE verdicts(
