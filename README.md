@@ -13,6 +13,8 @@
 - scoreboard
 - users
     support admin, official, unofficial, test
+- test
+    should preprocess and speical equal
 
 ## Frontend Side
 - Temporary using bootstrap and jQuery
