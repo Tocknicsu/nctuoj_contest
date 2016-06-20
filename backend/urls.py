@@ -9,4 +9,5 @@ urls = [
     ('/api/users/signin/', Handler.api.UserSignIn),
     ('/api/executes/', Handler.api.Executes),
     ('/api/executes/(\d+)/', Handler.api.Execute),
+    ('/api/system/(\w*)/', Handler.api.System),
 ]
