@@ -5,7 +5,7 @@ from service.base import BaseService
 
 def HashPassword(x):
     hpwd = hashlib.sha512(str(x).encode()).hexdigest() + config.TORNADO_SETTING['password_salt']
-    hpwd = hashlib.md5(str(x).encode()).hexdigest()
+    hpwd = hashlib.md5(hpwd).hexdigest()
     return hpwd
 
 
