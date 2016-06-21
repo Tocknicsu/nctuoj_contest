@@ -143,10 +143,9 @@ class ApiRequestHandler(RequestHandler):
                 self.account = res
         else:
             self.account = {}
-        if self.account and self.account['type'] == map_users_type['ADMIN']:
-            self.account['isAdmin'] = True
-        else:
-            self.account['isAdmin'] = False
+        for x in map_users_type:
+            self.account['is'+x] = 'type' in self.account and self.account['type'] == map_users_type[x]
+        self.log(self.account)
 
 
 class StaticFileHandler(tornado.web.StaticFileHandler):

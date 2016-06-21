@@ -115,7 +115,7 @@ class User(BaseService):
         account,name,password,type
         '''
         required_args = [{
-            'name': 'users_file',    
+            'name': '+users_file',    
         },]
         err = self.form_validation(data, required_args)
         if err: return (err, None)

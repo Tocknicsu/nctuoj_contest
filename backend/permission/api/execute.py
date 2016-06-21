@@ -3,7 +3,7 @@ from permission.base import BasePermission
 
 class Executes(BasePermission):
     def post(self, req):
-        if not req.account['isAdmin']:
+        if not req.account['isADMIN']:
             return "Permission Denied"
         return None
 
