@@ -62,7 +62,7 @@ class User(BaseService):
         }]
         err = self.form_validation(data, required_args)
         if err: return (err, None)
-        res = yield self.db.execute('SELECT * FROM users WHERE id=%s AND "type" >= %s', (data['id'],, data['account']['type']))
+        res = yield self.db.execute('SELECT * FROM users WHERE id=%s AND "type" >= %s', (data['id'], data['account']['type']))
         if res.rowcount == 0:
             return ((403, 'no such user'), None)
         res = res.fetchone()
