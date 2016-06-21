@@ -16,6 +16,32 @@ DataType = {
     "response_data": dict,
 }
 
+ignore_list = ["created_at", "updated_at"]
+
+def Equal(data1, data2):
+    if type(data1) != type(data2):
+        return False
+    if isinstance(data1, list):
+        if len(data1) != len(data2):
+            return False
+        for x in range(len(data1)):
+            if not Equal(data1[x], data2[x]):
+                return False
+        return True
+    elif isinstance(data1, dict):
+        if len(data1) != len(data2):
+            return False
+        for x in data1:
+            if x in ignore_list:
+                if x not in data2:
+                    return False
+            else:
+                if not Equal(data1[x], data2[x]):
+                    return False
+        return True
+    else:
+        return data1 == data2
+
 def test(filename):
     print("Test File: %s"%(filename))
     print("=============================")
@@ -58,7 +84,7 @@ def test(filename):
         except:
             print("Error: Response Json Parse Error %s"%(response.text))
             return
-        if response.status_code != data['response_status'] or response_json != data['response_data']:
+        if response.status_code != data['response_status'] or not Equal(response_json, data['response_data']):
             print("Error: Unexpect Response")
             print("Expect: [%s] %s"%(data['response_status'], data['response_data']))
             print("Response: [%s] %s"%(response.status_code, response.text))
