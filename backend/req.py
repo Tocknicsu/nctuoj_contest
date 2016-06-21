@@ -136,7 +136,7 @@ class ApiRequestHandler(RequestHandler):
     def get_identity(self):
         token = self.get_args(['token'])['token']
         if token:
-            err, res = yield from Service.User.get_info_by_token({'token': token})
+            err, res = yield from Service.User.get_user_by_token({'token': token})
             if err:
                 account = {}
             else:
