@@ -138,7 +138,7 @@ class ApiRequestHandler(RequestHandler):
         if token:
             err, res = yield from Service.User.get_user_by_token({'token': token})
             if err:
-                account = {}
+                self.account = {}
             else:
                 self.account = res
         else:
