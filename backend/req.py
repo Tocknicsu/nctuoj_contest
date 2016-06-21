@@ -145,7 +145,6 @@ class ApiRequestHandler(RequestHandler):
             self.account = {}
         for x in map_users_type:
             self.account['is'+x] = 'type' in self.account and self.account['type'] == map_users_type[x]
-        self.log(self.account)
 
 
 class StaticFileHandler(tornado.web.StaticFileHandler):

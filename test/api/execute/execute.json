@@ -9,5 +9,18 @@
         "response_data": {
             "msg": [{"command": "gcc -lm -std=c99 __FILE__"}, {"command": "./a.out"}]
         }
+    },
+    {
+        "name": "test_put_execute",
+        "url": "/api/executes/1/",
+        "method": "put",
+        "payload": {
+            "description": "C",
+            "commands[]": ["gcc -lm -std=c99 __FILE__", "./a.out"]
+        },
+        "response_status": 200,
+        "response_data": {
+            "msg": [{"command": "gcc -lm -std=c99 __FILE__"}, {"command": "./a.out"}]
+        }
     }
 ]
