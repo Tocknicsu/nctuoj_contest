@@ -16,18 +16,30 @@ $$ language 'plpgsql';
     -- );
 -- CREATE TRIGGER table_name_updated_at_column BEFORE UPDATE ON table_name FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column_column();
 
+/*
+users type
+0 admin
+1 test
+2 unofficial
+3 official
+ */
+
 CREATE TABLE users (
     id              serial          NOT NULL    PRIMARY KEY,
     account         varchar(32)     NOT NULL,
+    name            varchar(32)     NOT NULL,
     password        varchar(32)     NOT NULL,
     token           varchar(64)     NOT NULL,
+    "type"          integer         NOT NULL,
     created_at      timestamp       DEFAULT date_trunc('second', now()),
     updated_at      timestamp       DEFAULT date_trunc('second', now())
 );
 CREATE TRIGGER users_updated_row BEFORE UPDATE ON users FOR EACH ROW EXECUTE PROCEDURE updated_row();
-CREATE UNIQUE INDEX on users (token);
 CREATE UNIQUE INDEX on users (account);
-INSERT INTO users (account, password, token) VALUES ('admin', '21232f297a57a5a743894a0e4a801fc3', 'ADMIN@TOKEN');
+CREATE UNIQUE INDEX on users (name);
+CREATE UNIQUE INDEX on users (token);
+CREATE INDEX on users ("type");
+INSERT INTO users (account, name, password, token, "type") VALUES ('admin', 'admin', '21232f297a57a5a743894a0e4a801fc3', 'ADMIN@TOKEN', 0);
 
 
 CREATE TABLE execute_types (

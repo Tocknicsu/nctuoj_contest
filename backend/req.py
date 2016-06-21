@@ -13,6 +13,7 @@ import types
 from utils.form import form_validation
 from utils.utils import *
 from include import *
+from map import *
 
 class DatetimeEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -142,7 +143,7 @@ class ApiRequestHandler(RequestHandler):
                 self.account = res
         else:
             self.account = {}
-        if self.account and self.account['account'] == "admin":
+        if self.account and self.account['type'] == map_users_type['ADMIN']:
             self.account['isAdmin'] = True
         else:
             self.account['isAdmin'] = False
