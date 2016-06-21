@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS execute_types CASCADE;
 DROP TABLE IF EXISTS execute_steps CASCADE;
+DROP TABLE IF EXISTS clarifications CASCADE;
 CREATE OR REPLACE FUNCTION updated_row() 
 RETURNS TRIGGER AS $$
 BEGIN
@@ -79,6 +80,20 @@ INSERT INTO execute_steps (execute_type_id, command) values (5, 'python2 -m py_c
 INSERT INTO execute_steps (execute_type_id, command) values (5, 'python2 __FILE__');
 INSERT INTO execute_steps (execute_type_id, command) values (6, 'python3 -m py_compile __FILE__');
 INSERT INTO execute_steps (execute_type_id, command) values (6, 'python3 __FILE__');
+
+CREATE TABLE clarifications (
+    id              serial          NOT NULL    PRIMARY KEY,
+    user_id         integer         NOT NULL    REFERENCES users(id)    ON DELETE CASCADE,
+    problem_id      integer         NOT NULL,
+    question        text            NOT NULL,
+    reply_type      bool            NOT NULL    DEFAULT false,
+    reply           text            NOT NULL,
+    created_at      timestamp       DEFAULT date_trunc('second',now()),
+    updated_at      timestamp       DEFAULT date_trunc('second',now())
+);
+CREATE TRIGGER clarifications_updated_row BEFORE UPDATE ON clarifications FOR EACH ROW EXECUTE PROCEDURE updated_row();
+CREATE INDEX ON clarifications (user_id);
+CREATE INDEX ON clarifications (problem_id);
 
 /*
 CREATE TABLE verdicts(
