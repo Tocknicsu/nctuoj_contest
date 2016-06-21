@@ -14,7 +14,8 @@
 - [x] users
     - [x] support admin, official, unofficial, test
 - [ ] test
-    - [ ] should preprocess and speical equal
+    - [ ] should preprocess
+    - [x] special equal
 
 ## Frontend Side
 - Temporary using bootstrap and jQuery
