@@ -119,4 +119,18 @@ class User(BaseService):
         },]
         err = self.form_validation(data, required_args)
         if err: return (err, None)
-        users = csv.DictReader(io.StringIO(data['users_file']['body']), ['account', 'name', 'password', 'type'])
+        users = list(csv.DictReader(io.StringIO(data['users_file']['body'].decode()), ['account', 'name', 'password', 'type']))
+        res = {}
+        res['error'] = []
+        res['success'] = []
+        for user in users:
+            user['repassword'] = user['password']
+            err, id = yield from self.post_user(user)
+            if err:
+                user['err_msg'] = err[1]
+                res['error'].append(user)
+            else:
+                user['id'] = id
+                res['success'].append(user)
+
+        return (None, res)

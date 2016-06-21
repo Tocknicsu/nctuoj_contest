@@ -27,7 +27,11 @@ class UsersCSV(ApiRequestHandler):
     def post(self):
         args = ['users_file[file]']
         data = self.get_args(args)
-        self.render()
+        err, res = yield from Service.User.gen_users_by_csv(data)
+        if err:
+            self.render(err)
+        else:
+            self.render(res)
 
 class UserSignIn(ApiRequestHandler):
     @tornado.gen.coroutine
