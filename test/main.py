@@ -29,15 +29,16 @@ def Equal(data1, data2):
                 return False
         return True
     elif isinstance(data1, dict):
+        for x in ignore_list:
+            if x in data1:
+                data1.pop(x)
+            if x in data2:
+                data2.pop(x)
         if len(data1) != len(data2):
             return False
         for x in data1:
-            if x in ignore_list:
-                if x not in data2:
-                    return False
-            else:
-                if not Equal(data1[x], data2[x]):
-                    return False
+            if not Equal(data1[x], data2[x]):
+                return False
         return True
     else:
         return data1 == data2
