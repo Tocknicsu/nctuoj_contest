@@ -95,19 +95,6 @@ CREATE TRIGGER clarifications_updated_row BEFORE UPDATE ON clarifications FOR EA
 CREATE INDEX ON clarifications (user_id);
 CREATE INDEX ON clarifications (problem_id);
 
-/*
-CREATE TABLE verdicts(
-    id              serial          NOT NULL    PRIMARY KEY,
-    title           varchar(255)    ,
-    execute_type_id integer         NOT NULL    DEFAULT 0   REFERENCES execute_types(id)    ON DELETE CASCADE,
-    problem_id      integer         NOT NULL    DEFAULT 0,
-    file_name       varchar(255)    NOT NULL,
-    setter_user_id  integer         NOT NULL    REFERENCES users(id)    ON DELETE CASCADE,
-    created_at      timestamp       DEFAULT date_trunc('second',now()),
-    updated_at      timestamp       DEFAULT date_trunc('second',now())
-);
-CREATE TRIGGER verdicts_update_row BEFORE UPDATE ON verdicts FOR EACH ROW EXECUTE PROCEDURE updated_row();
-
 CREATE TABLE score_types (
     id              serial          NOT NULL    PRIMARY KEY,
     name            varchar(255)    NOT NULL,
@@ -118,28 +105,26 @@ CREATE TRIGGER score_types_update_row BEFORE UPDATE ON score_types FOR EACH ROW 
 INSERT INTO score_types (name) VALUES ('sum');
 INSERT INTO score_types (name) VALUES ('min');
 
---DROP TABLE IF EXISTS problems;
-CREATE TABLE problems (
+CREATE TABLE verdicts(
     id              serial          NOT NULL    PRIMARY KEY,
-    title           varchar(255)    NOT NULL DEFAULT '',
-    pdf             boolean         NOT NULL DEFAULT FALSE,
-    description     text            NOT NULL DEFAULT '',
-    input           text            NOT NULL DEFAULT '',
-    output          text            NOT NULL DEFAULT '',
-    sample_input    text            NOT NULL DEFAULT '',
-    sample_output   text            NOT NULL DEFAULT '',
-    hint            text            NOT NULL DEFAULT '',
-    verdict_id      integer         DEFAULT 1   REFERENCES verdicts(id) ON DELETE CASCADE,
-    score_type_id   integer         DEFAULT 1   REFERENCES score_types(id) ON DELETE CASCADE,
+    title           varchar(255)    ,
+    execute_type_id integer         NOT NULL    DEFAULT 0   REFERENCES execute_types(id)    ON DELETE CASCADE,
+    file_name       varchar(255)    NOT NULL,
     created_at      timestamp       DEFAULT date_trunc('second',now()),
     updated_at      timestamp       DEFAULT date_trunc('second',now())
 );
-ALTER SEQUENCE problems_id_seq RESTART WITH 10001;
-CREATE TRIGGER problems_updated_row BEFORE UPDATE ON problems FOR EACH ROW EXECUTE PROCEDURE updated_row();
-CREATE INDEX ON problems (visible);
-CREATE INDEX ON problems (group_id);
+CREATE TRIGGER verdicts_update_row BEFORE UPDATE ON verdicts FOR EACH ROW EXECUTE PROCEDURE updated_row();
 
---DROP TABLE IF EXISTS map_problem_execute;
+CREATE TABLE problems (
+    id              serial          NOT NULL    PRIMARY KEY,
+    title           varchar(255)    NOT NULL    DEFAULT '',
+    verdict_id      integer         NOT NULL    DEFAULT 0   REFERENCES verdicts(id) ON DELETE CASCADE,
+    score_type_id   integer         NOT NULL    DEFAULT 0   REFERENCES score_types(id) ON DELETE CASCADE,
+    created_at      timestamp       DEFAULT date_trunc('second',now()),
+    updated_at      timestamp       DEFAULT date_trunc('second',now())
+);
+CREATE TRIGGER problems_update_row BEFORE UPDATE ON problems FOR EACH ROW EXECUTE PROCEDURE updated_row();
+
 CREATE TABLE map_problem_execute (
     id              serial          NOT NULL    PRIMARY KEY,
     problem_id      integer         NOT NULL    REFERENCES problems(id) ON DELETE CASCADE,
@@ -158,13 +143,14 @@ CREATE TABLE testdata(
     time_limit      integer         NOT NULL    DEFAULT 1000,
     memory_limit    integer         NOT NULL    DEFAULT 262144,
     output_limit    integer         NOT NULL    DEFAULT 64,
-    score           integer         NOT NULL    DEFAULT 0,
+    score           integer         NOT NULL    DEFAULT 100,
     created_at      timestamp       DEFAULT date_trunc('second',now()),
     updated_at      timestamp       DEFAULT date_trunc('second',now())
 );
 CREATE TRIGGER testdata_updated_row BEFORE UPDATE ON testdata FOR EACH ROW EXECUTE PROCEDURE updated_row();
 CREATE INDEX ON testdata (problem_id);
 
+/*
 CREATE TABLE map_verdict_string (
     id              serial          NOT NULL    PRIMARY KEY,
     abbreviation    varchar(15)     NOT NULL,
