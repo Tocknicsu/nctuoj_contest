@@ -58,3 +58,12 @@ class Execute(BaseService):
             yield self.db.execute("INSERT INTO execute_steps (execute_type_id, command) VALUES (%s, %s)", (data['id'], x,))
         return (None, None)
 
+    def delete_execute(self, data={}):
+        required_args = [{
+            'name': '+id',
+            'type': int,
+        }]
+        err = self.form_validation(data, required_args)
+        if err: return (err, None)
+        yield self.db.execute("DELETE FROM execute_types WHERE id=%s", (data['id'],))
+        return (None, None)
