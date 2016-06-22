@@ -10,7 +10,11 @@ class Executes(BasePermission):
 
 class Execute(BasePermission):
     def put(self, req):
-        pass
+        if not req.account['isADMIN']:
+            return "Permission Denied"
+        return None
 
     def delete(self, req):
-        pass
+        if not req.account['isADMIN']:
+            return "Permission Denied"
+        return None
