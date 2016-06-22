@@ -2,6 +2,13 @@ DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS execute_types CASCADE;
 DROP TABLE IF EXISTS execute_steps CASCADE;
 DROP TABLE IF EXISTS clarifications CASCADE;
+DROP TABLE IF EXISTS verdicts CASCADE;
+DROP TABLE IF EXISTS score_types CASCADE;
+DROP TABLE IF EXISTS contests CASCADE;
+DROP TABLE IF EXISTS problems CASCADE;
+DROP TABLE IF EXISTS map_problem_execute CASCADE;
+DROP TABLE IF EXISTS testdata;
+
 CREATE OR REPLACE FUNCTION updated_row() 
 RETURNS TRIGGER AS $$
 BEGIN
@@ -24,6 +31,17 @@ users type
 2 unofficial
 3 official
  */
+CREATE TABLE contests(
+    title           varchar(255)    ,
+    description     text            ,
+    "start"         timestamp       NOT NULL    DEFAULT date_trunc('second', now()),
+    "freeze"        integer         NOT NULL    DEFAULT 0 CHECK ("freeze" * interval '1 minute' <= "end"-"start"),
+    "end"           timestamp       NOT NULL    DEFAULT date_trunc('second', now()),
+    created_at      timestamp       DEFAULT date_trunc('second',now()),
+    updated_at      timestamp       DEFAULT date_trunc('second',now())
+);
+CREATE TRIGGER contests_update_row BEFORE UPDATE ON contests FOR EACH ROW EXECUTE PROCEDURE updated_row();
+INSERT INTO contests (title, description) VALUES ('NCTUOJ', 'Welcome to use NCTUOJ contest version. If you have any problem, please mailto wingemerald@gmail.com and allencat850502@gmail.com');
 
 CREATE TABLE users (
     id              serial          NOT NULL    PRIMARY KEY,
@@ -219,21 +237,6 @@ CREATE INDEX ON map_submission_testdata(memory_usage);
 CREATE INDEX ON map_submission_testdata(verdict);
 
 --DROP TABLE IF EXISTS contests;
-CREATE TABLE contests(
-    id              serial          NOT NULL    PRIMARY KEY,
-    title           varchar(255)    ,
-    description     text            ,
-    "start"         timestamp       NOT NULL    DEFAULT date_trunc('second', now()),
-    "freeze"        integer         NOT NULL    DEFAULT 0 CHECK ("freeze" * interval '1 minute' <= "end"-"start"),
-    "end"           timestamp       NOT NULL    DEFAULT date_trunc('second', now()),
-    "type"          integer         NOT NULL    DEFAULT 0,
-    created_at      timestamp       DEFAULT date_trunc('second',now()),
-    updated_at      timestamp       DEFAULT date_trunc('second',now())
-);
-ALTER SEQUENCE contests_id_seq RESTART WITH 1001;
-CREATE TRIGGER contests_update_row BEFORE UPDATE ON contests FOR EACH ROW EXECUTE PROCEDURE updated_row();
-CREATE INDEX ON contests (group_id);
-CREATE INDEX ON contests (visible);
 
 CREATE TABLE map_contest_problem (
     problem_id      integer         NOT NULL    REFERENCES problems(id) ON DELETE CASCADE,
