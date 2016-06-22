@@ -70,6 +70,7 @@ def test(filename):
             if x not in data:
                 print("Error: lack %s in %s"%(x, data))
                 return
+        print("%s: "%(data['name']))
         data['url'] = config.base_url + data['url']
         try:
             func = getattr(requests, data["method"])

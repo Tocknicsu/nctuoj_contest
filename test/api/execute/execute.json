@@ -16,6 +16,17 @@
         }
     },
     {
+        "name": "test_get_execute_no_exist",
+        "url": "/api/executes/100/",
+        "method": "get",
+        "payload": {
+        },
+        "response_status": 404,
+        "response_data": {
+            "msg": "Not Found"
+        }
+    },
+    {
         "name": "test_put_execute",
         "url": "/api/executes/1/",
         "method": "put",

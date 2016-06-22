@@ -6,12 +6,10 @@ class UsersCSV(BasePermission):
     def post(self, req):
         ### No Login
         if not req.account['isADMIN']:
-            return "Permission Denied"
-        return None
+            return (403, "Permission Denied")
 
 class Users(BasePermission):
     def get(self, req):
         if not req.account['isADMIN']:
-            return "Permission Denied"
-        return None
+            return (403, "Permission Denied")
 

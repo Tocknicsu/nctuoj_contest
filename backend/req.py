@@ -80,7 +80,10 @@ class RequestHandler(tornado.web.RequestHandler):
         method = self.request.method.lower()
         if not hasattr(now, method):
             return None
-        res = getattr(now, method)(self)
+        if len(self.path_args):
+            res = getattr(now, method)(self, *self.path_args)
+        else:
+            res = getattr(now, method)(self)
         if isinstance(res, types.GeneratorType):
             res = yield from res
         return res
@@ -109,9 +112,9 @@ class RequestHandler(tornado.web.RequestHandler):
         ##################################################
         ### Check Permission                           ###
         ##################################################
-        err = yield self.check_permission()
-        if err:
-            self.write_error((403, err))
+        msg = yield self.check_permission()
+        if isinstance(msg, tuple):
+            self.write_error(msg)
         
 
 

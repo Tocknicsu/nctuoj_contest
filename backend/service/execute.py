@@ -15,10 +15,17 @@ class Execute(BaseService):
         }]
         err = self.form_validation(data, required_args)
         if err: return (err, None)
-        res = yield self.db.execute("SELECT * FROM execute_types WHERE id=%s", (data['id'],))
-        if res.rowcount == 0:
-            return ((404, "Not Found"), None)
-        res = res.fetchone()
+        res = (yield self.db.execute("SELECT * FROM execute_types WHERE id=%s", (data['id'],))).fetchone()
+        return (None, res)
+
+    def get_execute_with_steps(self, data={}):
+        required_args = [{
+            'name': '+id',
+            'type': int,
+        }]
+        err = self.form_validation(data, required_args)
+        if err: return (err, None)
+        res = (yield self.db.execute("SELECT * FROM execute_types WHERE id=%s", (data['id'],))).fetchone()
         res['commands'] = (yield self.db.execute("SELECT es.command FROM execute_types as e, execute_steps as es WHERE e.id=es.execute_type_id AND e.id=%s ORDER BY es.id", (data['id'],))).fetchall()
         return (None, res)
 
@@ -37,6 +44,7 @@ class Execute(BaseService):
         for x in data['commands']:
             yield self.db.execute("INSERT INTO execute_steps (execute_type_id, command) VALUES (%s, %s)", (res['id'], x,))
         return (None, res)
+
 
 
 

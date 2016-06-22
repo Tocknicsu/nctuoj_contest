@@ -4,17 +4,31 @@ from permission.base import BasePermission
 class Executes(BasePermission):
     def post(self, req):
         if not req.account['isADMIN']:
-            return "Permission Denied"
-        return None
+            return (403, "Permission Denied")
 
 
 class Execute(BasePermission):
-    def put(self, req):
-        if not req.account['isADMIN']:
-            return "Permission Denied"
-        return None
+    def exist(self, data={}):
+        err, res = yield from Service.Execute.get_execute(data)
+        if res is None:
+            return (404, "Not Found")
 
-    def delete(self, req):
+    
+    def get(self, req, id):
+        err = yield from self.exist({'id': id})
+        if err:
+            return err
+
+    def put(self, req, id):
         if not req.account['isADMIN']:
-            return "Permission Denied"
-        return None
+            return (403, "Permission Denied")
+        err = yield from self.exist({'id': id})
+        if err:
+            return err
+
+    def delete(self, req, id):
+        if not req.account['isADMIN']:
+            return (403, "Permission Denied")
+        err = yield from self.exist({'id': id})
+        if err:
+            return err

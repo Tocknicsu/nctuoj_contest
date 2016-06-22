@@ -21,13 +21,13 @@ class Executes(ApiRequestHandler):
         if err:
             self.render(err)
         else:
-            err, res = yield from Service.Execute.get_execute(res)
+            err, res = yield from Service.Execute.get_execute_with_steps(res)
             self.render(res)
 
 class Execute(ApiRequestHandler):
     @tornado.gen.coroutine
     def get(self, id):
-        err, res = yield from Service.Execute.get_execute({'id': id})
+        err, res = yield from Service.Execute.get_execute_with_steps({'id': id})
         if err: 
             self.render(err)
         else:
@@ -42,7 +42,7 @@ class Execute(ApiRequestHandler):
         if err:
             self.render(err)
         else:
-            err, res = yield from Service.Execute.get_execute({'id': id})
+            err, res = yield from Service.Execute.get_execute_with_steps({'id': id})
             self.render(res)
         
     @tornado.gen.coroutine
