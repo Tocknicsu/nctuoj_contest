@@ -143,8 +143,10 @@ class ApiRequestHandler(RequestHandler):
                 self.account = res
         else:
             self.account = {}
+        self.account['isLOGIN'] = False
         for x in map_users_type:
             self.account['is'+x] = 'type' in self.account and self.account['type'] == map_users_type[x]
+            self.account['isLOGIN'] = self.account['isLOGIN'] or self.account['is'+x]
 
 
 class StaticFileHandler(tornado.web.StaticFileHandler):
