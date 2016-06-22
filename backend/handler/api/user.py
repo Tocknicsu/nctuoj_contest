@@ -22,6 +22,11 @@ class Users(ApiRequestHandler):
         else:
             self.render(res)
 
+class UsersMe(ApiRequestHandler):
+    @tornado.gen.coroutine
+    def get(self):
+        self.render(self.account)
+
 class UsersCSV(ApiRequestHandler):
     @tornado.gen.coroutine
     def post(self):

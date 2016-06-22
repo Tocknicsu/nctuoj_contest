@@ -5,6 +5,7 @@ include(Handler, "./handler/")
 urls = [
     ('/', Handler.Index),
     ('/api/users/', Handler.api.Users),
+    ('/api/users/me/', Handler.api.UsersMe),
     ('/api/users/csv/', Handler.api.UsersCSV),
     ('/api/users/signin/', Handler.api.UserSignIn),
     ('/api/clarifications/', Handler.api.Clarifications),
