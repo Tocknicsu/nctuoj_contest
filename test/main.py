@@ -18,18 +18,18 @@ DataType = {
 
 ignore_list = ["created_at", "updated_at"]
 
-def Equal(data1, data2):
+def Equal(data1, data2, ignore):
     if type(data1) != type(data2):
         return False
     if isinstance(data1, list):
         if len(data1) != len(data2):
             return False
         for x in range(len(data1)):
-            if not Equal(data1[x], data2[x]):
+            if not Equal(data1[x], data2[x], ignore):
                 return False
         return True
     elif isinstance(data1, dict):
-        for x in ignore_list:
+        for x in (ignore_list + ignore):
             if x in data1:
                 data1.pop(x)
             if x in data2:
@@ -37,7 +37,7 @@ def Equal(data1, data2):
         if len(data1) != len(data2):
             return False
         for x in data1:
-            if not Equal(data1[x], data2[x]):
+            if not Equal(data1[x], data2[x], ignore):
                 return False
         return True
     else:
@@ -80,16 +80,30 @@ def test(filename):
         if data['method'] == "get":
             response = func(data['url'], params=data['payload'])
         else:
-            response = func(data['url'], data=data['payload'])
+            files = {}
+            if 'files' in data: 
+                if isinstance(data['files'], dict):
+                    for name, path in data['files'].items():
+                        try:
+                            files[name] = open(path, "rb")
+                        except:
+                            print("file: %s path: %s not found(ignored)" % (name, path))
+                else:
+                    print("Error: files is not dict(ignored)")
+            response = func(data['url'], data=data['payload'], files=files)
         try:
             response_json = json.loads(response.text)
         except:
             print("Error: Response Json Parse Error %s"%(response.text))
             return
-        if response.status_code != data['response_status'] or not Equal(response_json, data['response_data']):
+        ignore = []
+        if 'ignore' in data:
+            ignore = data['ignore']
+        if response.status_code != data['response_status'] or not Equal(response_json, data['response_data'], ignore):
             print("Error: Unexpect Response")
             print("Expect: [%s] %s"%(data['response_status'], data['response_data']))
             print("Response: [%s] %s"%(response.status_code, response.text))
+    print('\n')
 
 if __name__ == '__main__':
     if len(sys.argv) == 1:
