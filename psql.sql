@@ -4,7 +4,7 @@ DROP TABLE IF EXISTS execute_steps CASCADE;
 DROP TABLE IF EXISTS clarifications CASCADE;
 DROP TABLE IF EXISTS verdicts CASCADE;
 DROP TABLE IF EXISTS score_types CASCADE;
-DROP TABLE IF EXISTS contests CASCADE;
+DROP TABLE IF EXISTS contest CASCADE;
 DROP TABLE IF EXISTS problems CASCADE;
 DROP TABLE IF EXISTS map_problem_execute CASCADE;
 DROP TABLE IF EXISTS testdata;
@@ -31,7 +31,7 @@ users type
 2 unofficial
 3 official
  */
-CREATE TABLE contests(
+CREATE TABLE contest(
     title           varchar(255)    ,
     description     text            ,
     "start"         timestamp       NOT NULL    DEFAULT date_trunc('second', now()),
@@ -40,8 +40,8 @@ CREATE TABLE contests(
     created_at      timestamp       DEFAULT date_trunc('second',now()),
     updated_at      timestamp       DEFAULT date_trunc('second',now())
 );
-CREATE TRIGGER contests_update_row BEFORE UPDATE ON contests FOR EACH ROW EXECUTE PROCEDURE updated_row();
-INSERT INTO contests (title, description) VALUES ('NCTUOJ', 'Welcome to use NCTUOJ contest version. If you have any problem, please mailto wingemerald@gmail.com and allencat850502@gmail.com');
+CREATE TRIGGER contest_update_row BEFORE UPDATE ON contest FOR EACH ROW EXECUTE PROCEDURE updated_row();
+INSERT INTO contest ("start", "end", title, description) VALUES ('2000-01-01 00:00:00', '2000-01-01 00:00:00', 'NCTUOJ', 'Welcome to use NCTUOJ contest version. If you have any problem, please mailto wingemerald@gmail.com and allencat850502@gmail.com');
 
 CREATE TABLE users (
     id              serial          NOT NULL    PRIMARY KEY,
