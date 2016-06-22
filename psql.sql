@@ -31,7 +31,7 @@ CREATE TABLE users (
     name            varchar(32)     NOT NULL,
     password        varchar(32)     NOT NULL,
     token           varchar(64)     NOT NULL,
-    "type"          integer         NOT NULL,
+    "type"          integer         NOT NULL    CHECK("type" = ANY('{0, 1, 2, 3}')),
     created_at      timestamp       DEFAULT date_trunc('second', now()),
     updated_at      timestamp       DEFAULT date_trunc('second', now())
 );
