@@ -129,7 +129,10 @@ class User(BaseService):
         res['success'] = []
         for user in users:
             user['repassword'] = user['password']
-            err, id = yield from self.post_user(user)
+            try:
+                err, id = yield from self.post_user(user)
+            except Exception as e:
+                err = None, str(e)
             if err:
                 user['err_msg'] = err[1]
                 res['error'].append(user)
