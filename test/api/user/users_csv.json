@@ -17,8 +17,44 @@
         "payload": {
             "token": "ADMIN@TOKEN"
         },
+        "files": {
+            "users_file": "./api/user/users.csv"
+        },
+        "ignore": ["password", "repassword", "token", "err_msg"],
         "response_status": 200,
         "response_data": {
+            "msg": {
+                "error": [{
+                    "name": "a", 
+                    "account": "a",
+                    "type": 1
+                }, {
+                    "account": "e", 
+                    "name": "e", 
+                    "type": 4
+                }], 
+                "success": [{
+                    "account": "a", 
+                    "name": "a", 
+                    "id": 2, 
+                    "type": 0
+                }, {
+                    "account": "b", 
+                    "name": "b", 
+                    "id": 3, 
+                    "type": 1
+                }, {
+                    "account": "c", 
+                    "name": "c", 
+                    "id": 4, 
+                    "type": 2
+                }, {
+                    "account": "d", 
+                    "name": "d", 
+                    "id": 5, 
+                    "type": 3
+                }]
+            }
         }
     }
 ]
