@@ -23,6 +23,20 @@
             "description": "C",
             "commands[]": ["gcc -lm -std=c99 __FILE__", "./a.out"]
         },
+        "response_status": 403,
+        "response_data": {
+            "msg": "Permission Denied"
+        }
+    },
+    {
+        "name": "test_put_execute_admin",
+        "url": "/api/executes/1/",
+        "method": "put",
+        "payload": {
+            "token": "ADMIN@TOKEN",
+            "description": "C",
+            "commands[]": ["gcc -lm -std=c99 __FILE__", "./a.out"]
+        },
         "response_status": 200,
         "response_data": {
             "msg": {

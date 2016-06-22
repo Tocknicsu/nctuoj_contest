@@ -23,7 +23,6 @@ class Execute(BaseService):
         return (None, res)
 
     def post_execute(self, data={}):
-        """
         required_args = [{
             'name': '+commands',
             'type': list,
@@ -33,8 +32,13 @@ class Execute(BaseService):
         }]
         err = self.form_validation(data, required_args)
         if err: return (err, None)
-        res = yield self.db.execute("INSERT INTO executes (description
-        """
+        res = yield self.db.execute("INSERT INTO execute_types (description) VALUES (%s) RETURNING id", (data['description'],))
+        res = res.fetchone()
+        for x in data['commands']:
+            yield self.db.execute("INSERT INTO execute_steps (execute_type_id, command) VALUES (%s, %s)", (res['id'], x,))
+        return (None, res)
+
+
 
     def put_execute(self, data={}):
         required_args = [{
@@ -51,6 +55,6 @@ class Execute(BaseService):
         if err: return (err, None)
         res = yield self.db.execute("DELETE FROM execute_steps WHERE execute_type_id=%s", (data['id'],))
         for x in data['commands']:
-            res = yield self.db.execute("INSERT INTO execute_steps (execute_type_id, command) VALUES (%s, %s)", (data['id'], x,))
+            yield self.db.execute("INSERT INTO execute_steps (execute_type_id, command) VALUES (%s, %s)", (data['id'], x,))
         return (None, None)
 

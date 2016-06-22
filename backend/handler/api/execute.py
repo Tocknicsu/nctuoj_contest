@@ -13,6 +13,17 @@ class Executes(ApiRequestHandler):
         else:
             self.render(res)
 
+    @tornado.gen.coroutine
+    def post(self):
+        args = ['description', 'commands[]']
+        data = self.get_args(args)
+        err, res = yield from Service.Execute.post_execute(data)
+        if err:
+            self.render(err)
+        else:
+            err, res = yield from Service.Execute.get_execute(res)
+            self.render(res)
+
 class Execute(ApiRequestHandler):
     @tornado.gen.coroutine
     def get(self, id):

@@ -9,5 +9,30 @@
         "response_data": {
             "msg": [{"priority": 1, "id": 1, "description": "C"}, {"priority": 2, "id": 2, "description": "C++"}, {"priority": 3, "id": 3, "description": "C++11"}, {"priority": 4, "id": 4, "description": "Java"}, {"priority": 5, "id": 5, "description": "Python2"}, {"priority": 6, "id": 6, "description": "Python3"}]
         }
+    },
+    {
+        "name": "test_post_executes",
+        "url": "/api/executes/",
+        "method": "post",
+        "payload": {
+        },
+        "response_status": 403,
+        "response_data": {
+            "msg": "Permission Denied"
+        }
+    },
+    {
+        "name": "test_post_executes_admin",
+        "url": "/api/executes/",
+        "method": "post",
+        "payload": {
+            "token": "ADMIN@TOKEN",
+            "description": "NEW",
+            "commands[]": ["NEW COMMAND1", "NEW COMMAND2"]
+        },
+        "response_status": 200,
+        "response_data": {
+            "msg": {"commands": [{"command": "NEW COMMAND1"}, {"command": "NEW COMMAND2"}], "description": "NEW", "priority": 999, "id": 7}
+        }
     }
 ]
