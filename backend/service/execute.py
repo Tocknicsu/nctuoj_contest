@@ -15,9 +15,26 @@ class Execute(BaseService):
         }]
         err = self.form_validation(data, required_args)
         if err: return (err, None)
-        res = yield self.db.execute("SELECT es.command FROM execute_types as e, execute_steps as es WHERE e.id=es.execute_type_id AND e.id=%s ORDER BY es.id", (data['id'],))
-        res = res.fetchall()
+        res = yield self.db.execute("SELECT * FROM execute_types WHERE id=%s", (data['id'],))
+        if res.rowcount == 0:
+            return ((404, "Not Found"), None)
+        res = res.fetchone()
+        res['commands'] = (yield self.db.execute("SELECT es.command FROM execute_types as e, execute_steps as es WHERE e.id=es.execute_type_id AND e.id=%s ORDER BY es.id", (data['id'],))).fetchall()
         return (None, res)
+
+    def post_execute(self, data={}):
+        """
+        required_args = [{
+            'name': '+commands',
+            'type': list,
+        }, {
+            'name': '+description',
+            'type': str,
+        }]
+        err = self.form_validation(data, required_args)
+        if err: return (err, None)
+        res = yield self.db.execute("INSERT INTO executes (description
+        """
 
     def put_execute(self, data={}):
         required_args = [{
