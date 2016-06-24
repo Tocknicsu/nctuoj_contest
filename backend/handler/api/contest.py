@@ -14,6 +14,13 @@ class Contest(ApiRequestHandler):
             self.render(res)
 
     @tornado.gen.coroutine
-    def put(self, id):
-        pass
+    def put(self):
+        args = ['title', 'description', 'start', 'end', 'freeze']
+        data = self.get_args(args)
+        err, res = yield from Service.Contest.put_contest(data)
+        if err:
+            self.render(err)
+        else:
+            err, res = yield from Service.Contest.get_contest()
+            self.render(res)
         
