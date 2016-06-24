@@ -15,7 +15,13 @@ class Problems(ApiRequestHandler):
 
     @tornado.gen.coroutine
     def post(self):
-        pass
+        args = ['title', 'pdf[file]', 'score_type']
+        data = self.get_args(args)
+        err, res = yield from Service.Problem.post_problem(data)
+        if err:
+            self.render(err)
+        else:
+            self.render(res)
 
 class Problem(ApiRequestHandler):
     @tornado.gen.coroutine

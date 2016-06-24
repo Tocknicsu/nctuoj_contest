@@ -136,7 +136,6 @@ CREATE TRIGGER verdicts_update_row BEFORE UPDATE ON verdicts FOR EACH ROW EXECUT
 CREATE TABLE problems (
     id              serial          NOT NULL    PRIMARY KEY,
     title           varchar(255)    NOT NULL    DEFAULT '',
-    verdict_id      integer         NOT NULL    DEFAULT 0   REFERENCES verdicts(id) ON DELETE CASCADE,
     score_type_id   integer         NOT NULL    DEFAULT 0   REFERENCES score_types(id) ON DELETE CASCADE,
     created_at      timestamp       DEFAULT date_trunc('second',now()),
     updated_at      timestamp       DEFAULT date_trunc('second',now())

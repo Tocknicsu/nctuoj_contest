@@ -16,6 +16,22 @@
         "url": "/api/contest/",
         "method": "put",
         "payload": {
+            "title": "change",
+            "start": "2001-01-01 00:00:00",
+            "end": "2001-01-01 00:00:00",
+            "freeze": "0",
+            "description": "XD"
+        }, 
+        "response_status": 403,
+        "response_data":{
+            "msg": "Permission Denied"
+        }
+    },
+    {
+        "name": "test_put_contest_admin",
+        "url": "/api/contest/",
+        "method": "put",
+        "payload": {
             "token": "ADMIN@TOKEN",
             "title": "change",
             "start": "2001-01-01 00:00:00",
