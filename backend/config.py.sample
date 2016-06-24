@@ -20,3 +20,4 @@ DB_SETTING['setsession'] = ("SET TIME ZONE +8",)
 DB_SETTING['raise_connect_errors'] = False
 DB_SETTING['cursor_factory'] = psycopg2.extras.RealDictCursor
 
+DATA_ROOT = "/mnt/oj/"

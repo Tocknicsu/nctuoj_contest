@@ -21,14 +21,27 @@ class Problems(ApiRequestHandler):
         if err:
             self.render(err)
         else:
+            err, res = yield from Service.Problem.get_problem(res)
             self.render(res)
 
 class Problem(ApiRequestHandler):
     @tornado.gen.coroutine
     def get(self, id):
-        pass
+        err, res = yield from Service.Problem.get_problem({'id': id})
+        if err:
+            self.render(err)
+        else:
+            self.render(res)
 
     @tornado.gen.coroutine
     def put(self, id):
-        pass
+        args = ['title', 'pdf[file]', 'score_type']
+        data = self.get_args(args)
+        data['id'] = id
+        err, res = yield from Service.Problem.post_problem(data)
+        if err:
+            self.render(err)
+        else:
+            err, res = yield from Service.Problem.get_problem({'id': id})
+            self.render(res)
         

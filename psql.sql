@@ -3,7 +3,6 @@ DROP TABLE IF EXISTS execute_types CASCADE;
 DROP TABLE IF EXISTS execute_steps CASCADE;
 DROP TABLE IF EXISTS clarifications CASCADE;
 DROP TABLE IF EXISTS verdicts CASCADE;
-DROP TABLE IF EXISTS score_types CASCADE;
 DROP TABLE IF EXISTS contest CASCADE;
 DROP TABLE IF EXISTS problems CASCADE;
 DROP TABLE IF EXISTS map_problem_execute CASCADE;
@@ -113,19 +112,8 @@ CREATE TRIGGER clarifications_updated_row BEFORE UPDATE ON clarifications FOR EA
 CREATE INDEX ON clarifications (user_id);
 CREATE INDEX ON clarifications (problem_id);
 
-CREATE TABLE score_types (
-    id              serial          NOT NULL    PRIMARY KEY,
-    name            varchar(255)    NOT NULL,
-    created_at      timestamp       DEFAULT date_trunc('second',now()),
-    updated_at      timestamp       DEFAULT date_trunc('second',now())
-);
-CREATE TRIGGER score_types_update_row BEFORE UPDATE ON score_types FOR EACH ROW EXECUTE PROCEDURE updated_row();
-INSERT INTO score_types (name) VALUES ('sum');
-INSERT INTO score_types (name) VALUES ('min');
-
 CREATE TABLE verdicts(
     id              serial          NOT NULL    PRIMARY KEY,
-    title           varchar(255)    ,
     execute_type_id integer         NOT NULL    DEFAULT 0   REFERENCES execute_types(id)    ON DELETE CASCADE,
     file_name       varchar(255)    NOT NULL,
     created_at      timestamp       DEFAULT date_trunc('second',now()),
@@ -136,7 +124,7 @@ CREATE TRIGGER verdicts_update_row BEFORE UPDATE ON verdicts FOR EACH ROW EXECUT
 CREATE TABLE problems (
     id              serial          NOT NULL    PRIMARY KEY,
     title           varchar(255)    NOT NULL    DEFAULT '',
-    score_type_id   integer         NOT NULL    DEFAULT 0   REFERENCES score_types(id) ON DELETE CASCADE,
+    score_type      integer         NOT NULL    DEFAULT 0,
     created_at      timestamp       DEFAULT date_trunc('second',now()),
     updated_at      timestamp       DEFAULT date_trunc('second',now())
 );
