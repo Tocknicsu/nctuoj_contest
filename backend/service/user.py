@@ -5,6 +5,7 @@ import csv
 import io
 import time
 from service.base import BaseService
+from map import *
 
 def HashPassword(x):
     hpwd = hashlib.sha512(str(x).encode()).hexdigest() + config.TORNADO_SETTING['password_salt']
@@ -37,6 +38,7 @@ class User(BaseService):
         self.log(HashPassword(data['password']))
         if res['password'] != HashPassword(data['password']):
             return ((403, "Wrong Password"), None)
+        err, res = yield from self.get_user_by_token(res)
         return (None, res)
 
     def get_user_by_token(self, data={}):
@@ -51,6 +53,10 @@ class User(BaseService):
             return ((403, 'no such user'), None)
         res = res.fetchone()
         res.pop('password')
+        res['isLOGIN'] = False
+        for x in map_users_type:
+            res['is'+x] = 'type' in res and res['type'] == map_users_type[x]
+            res['isLOGIN'] = res['isLOGIN'] or res['is'+x]
         return (None, res)
 
     def get_user(self, data={}):
@@ -69,6 +75,10 @@ class User(BaseService):
         res.pop('password')
         if not data['account']['idADMIN']:
             res.pop('token')
+        res['isLOGIN'] = False
+        for x in map_users_type:
+            res['is'+x] = 'type' in res and res['type'] == map_users_type[x]
+            res['isLOGIN'] = res['isLOGIN'] or res['is'+x]
         return (None, res)
     
     def get_users(self, data={}):
