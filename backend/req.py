@@ -14,6 +14,7 @@ from utils.form import form_validation
 from utils.utils import *
 from include import *
 from map import *
+from tornado_cors import CorsMixin
 
 class DatetimeEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -48,7 +49,7 @@ def Service__init__():
     Service.Permission = T()
     include(Service.Permission, "./permission/", ["base.py"], True)
 
-class RequestHandler(tornado.web.RequestHandler):
+class RequestHandler(CorsMixin, tornado.web.RequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.log = log
@@ -120,6 +121,7 @@ class RequestHandler(tornado.web.RequestHandler):
 
 class ApiRequestHandler(RequestHandler):
     def render(self, msg=""):
+        self.set_header('Access-Control-Allow-Origin', '*')
         if isinstance(msg, tuple): code, msg = msg
         else: code = 200
         self.set_status(code)
