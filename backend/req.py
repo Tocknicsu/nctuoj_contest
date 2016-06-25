@@ -148,6 +148,11 @@ class ApiRequestHandler(RequestHandler):
                 self.account = res
         else:
             self.account = {}
+        
+        if 'isLOGIN' not in self.account:
+            for x in map_users_type:
+                self.account['is' + x] = False
+            self.account['isLOGIN'] = False
 
 
 class StaticFileHandler(tornado.web.StaticFileHandler):
