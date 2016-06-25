@@ -37,7 +37,7 @@ class User(BaseService):
         self.log(HashPassword(data['password']))
         if res['password'] != HashPassword(data['password']):
             return ((403, "Wrong Password"), None)
-        return (None, res['token'])
+        return (None, res)
 
     def get_user_by_token(self, data={}):
         required_args = [{
