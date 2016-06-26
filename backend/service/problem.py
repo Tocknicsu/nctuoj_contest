@@ -101,5 +101,8 @@ class Problem(BaseService):
         if err: return (err, None)
         yield self.db.execute("DELETE FROM map_problem_execute WHERE problem_id=%s", (data['id'],))
         for x in data['executes']:
-            yield self.db.execute("INSERT INTO map_problem_execute (problem_id, execute_type_id) VALUES (%s, %s)", (data['id'], x,))
+            try:
+                yield self.db.execute("INSERT INTO map_problem_execute (problem_id, execute_type_id) VALUES (%s, %s)", (data['id'], x,))
+            except:
+                pass
         return (None, None)

@@ -37,12 +37,25 @@
         "url": "/api/problems/1/executes/",
         "method": "put",
         "payload": {
+            "executes[]": [1, 2, 3, 4]
+        },
+        "response_status": 403,
+        "response_data": {
+            "msg": "Permission Denied"
+        }
+    },
+    {
+        "name": "test_put_problem_execute_admin",
+        "url": "/api/problems/1/executes/",
+        "method": "put",
+        "payload": {
             "token": "ADMIN@TOKEN",
             "executes[]": [1, 2, 3, 4]
         },
         "response_status": 200,
         "response_data": {
-            "msg": ""
+            "msg": [{"description": "C", "id": 1}, {"description": "C++", "id": 2}, {"description": "C++11", "id": 3}, {"description": "Java", "id": 4}]
         }
     }
+    
 ]
