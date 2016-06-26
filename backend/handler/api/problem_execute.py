@@ -15,7 +15,10 @@ class ProblemExecutes(ApiRequestHandler):
 
     @tornado.gen.coroutine
     def put(self, id):
-        err, res = yield from Service.Problem.put_problem_execute({'id': id})
+        args = ['executes[]']
+        data = self.get_args(args)
+        data['id'] = id
+        err, res = yield from Service.Problem.put_problem_execute(data)
         if err:
             self.render(err)
         else:

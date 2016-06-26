@@ -84,7 +84,7 @@ class Problem(BaseService):
         }]
         err = self.form_validation(data, required_args)
         if err: return (err, None)
-        res = yield self.db.execute("")
+        res = yield self.db.execute("SELECT e.id, e.description FROM map_problem_execute as me, execute_types as e WHERE e.id=me.execute_type_id and me.problem_id=%s", (data['id'],))
         res = res.fetchall()
         return (None, res)
 
@@ -96,12 +96,10 @@ class Problem(BaseService):
             'name': '+executes',
             'type': list
         }]
+        self.log(data)
         err = self.form_validation(data, required_args)
         if err: return (err, None)
-        yield self.db.execute()
+        yield self.db.execute("DELETE FROM map_problem_execute WHERE problem_id=%s", (data['id'],))
         for x in data['executes']:
-            try:
-                yield self.db.execute()
-            except:
-                pass
+            yield self.db.execute("INSERT INTO map_problem_execute (problem_id, execute_type_id) VALUES (%s, %s)", (data['id'], x,))
         return (None, None)

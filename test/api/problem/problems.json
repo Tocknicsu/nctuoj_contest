@@ -12,7 +12,7 @@
         },
         "response_status": 403,
         "response_data": {
-            "msg": "permission denied"
+            "msg": "Permission Denied"
         }
     }, 
     {
@@ -30,6 +30,19 @@
         "response_status": 200,
         "response_data": {
             "msg": {"id": 1, "score_type": 0, "title": "problem A"}
+        }
+    },
+    {
+        "name": "test_put_problem_execute",
+        "url": "/api/problems/1/executes/",
+        "method": "put",
+        "payload": {
+            "token": "ADMIN@TOKEN",
+            "executes[]": [1, 2, 3, 4]
+        },
+        "response_status": 200,
+        "response_data": {
+            "msg": ""
         }
     }
 ]

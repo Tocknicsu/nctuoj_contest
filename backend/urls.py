@@ -11,7 +11,7 @@ urls = [
     ('/api/users/signin/', Handler.api.UserSignIn),
     ('/api/problems/', Handler.api.Problems),
     ('/api/problems/(\d+)/', Handler.api.Problem),
-    ('/api/Problems/(\d+)/executes/', Handler.api.ProblemExecutes),
+    ('/api/problems/(\d+)/executes/', Handler.api.ProblemExecutes),
     ('/api/clarifications/', Handler.api.Clarifications),
     ('/api/clarifications/(\d+)/', Handler.api.Clarification),
     ('/api/executes/', Handler.api.Executes),
