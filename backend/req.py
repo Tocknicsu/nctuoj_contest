@@ -131,7 +131,7 @@ class ApiRequestHandler(RequestHandler):
             cls=DatetimeEncoder))
 
     def write_error(self, err, **kwargs):
-        self.render(err)
+        self.render((err, kwargs))
 
     @tornado.gen.coroutine
     def prepare(self):
