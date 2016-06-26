@@ -9,7 +9,7 @@ class Problems(BasePermission):
 
 class Problem(BasePermission):
     def exist(self, data={}):
-        err, res = yield from Service.Problem.get_execute(data)
+        err, res = yield from Service.Problem.get_problem(data)
         if res is None:
             return (404, "Not Found")
 
