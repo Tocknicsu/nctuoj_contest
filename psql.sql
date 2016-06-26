@@ -112,14 +112,6 @@ CREATE TRIGGER clarifications_updated_row BEFORE UPDATE ON clarifications FOR EA
 CREATE INDEX ON clarifications (user_id);
 CREATE INDEX ON clarifications (problem_id);
 
-CREATE TABLE verdicts(
-    id              serial          NOT NULL    PRIMARY KEY,
-    execute_type_id integer         NOT NULL    DEFAULT 0   REFERENCES execute_types(id)    ON DELETE CASCADE,
-    file_name       varchar(255)    NOT NULL,
-    created_at      timestamp       DEFAULT date_trunc('second',now()),
-    updated_at      timestamp       DEFAULT date_trunc('second',now())
-);
-CREATE TRIGGER verdicts_update_row BEFORE UPDATE ON verdicts FOR EACH ROW EXECUTE PROCEDURE updated_row();
 
 CREATE TABLE problems (
     id              serial          NOT NULL    PRIMARY KEY,
@@ -129,6 +121,15 @@ CREATE TABLE problems (
     updated_at      timestamp       DEFAULT date_trunc('second',now())
 );
 CREATE TRIGGER problems_update_row BEFORE UPDATE ON problems FOR EACH ROW EXECUTE PROCEDURE updated_row();
+
+CREATE TABLE verdicts(
+    id              integer         NOT NULL    REFERENCES problems(id) ON DELETE CASCADE,
+    execute_type_id integer         NOT NULL    DEFAULT 0   REFERENCES execute_types(id)    ON DELETE CASCADE,
+    file_name       varchar(255)    NOT NULL,
+    created_at      timestamp       DEFAULT date_trunc('second',now()),
+    updated_at      timestamp       DEFAULT date_trunc('second',now())
+);
+CREATE TRIGGER verdicts_update_row BEFORE UPDATE ON verdicts FOR EACH ROW EXECUTE PROCEDURE updated_row();
 
 CREATE TABLE map_problem_execute (
     id              serial          NOT NULL    PRIMARY KEY,
