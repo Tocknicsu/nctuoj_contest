@@ -48,6 +48,6 @@ class Execute(ApiRequestHandler):
     @tornado.gen.coroutine
     def delete(self, id):
         err, res = yield from Service.Execute.delete_execute({'id': id})
-        self.render()
+        self.render({'id': id})
 
 
