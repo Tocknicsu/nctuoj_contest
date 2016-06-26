@@ -38,7 +38,7 @@ class Problem(ApiRequestHandler):
         args = ['title', 'pdf[file]', 'score_type']
         data = self.get_args(args)
         data['id'] = id
-        err, res = yield from Service.Problem.post_problem(data)
+        err, res = yield from Service.Problem.put_problem(data)
         if err:
             self.render(err)
         else:

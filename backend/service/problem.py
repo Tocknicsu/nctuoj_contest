@@ -46,7 +46,7 @@ class Problem(BaseService):
             f.write(pdf['body'])
         return (None, res)
 
-    def put_problem(self):
+    def put_problem(self, data):
         required_args = [{
             'name': '+id',
             'type': int
@@ -62,9 +62,10 @@ class Problem(BaseService):
         err = self.form_validation(data, required_args)
         if err: return (err, None)
         pdf = data.pop('pdf')
+        id = data.pop('id')
         sql, param = self.gen_update_sql('problems', data)
-        res = yield self.db.execute(sql, param)
-        folder = '%s/data/problems/%s'%(config.DATA_ROOT, str(res['id']))
+        res = yield self.db.execute(sql + ' WHERE id = %s', param + (id,))
+        folder = '%s/data/problems/%s'%(config.DATA_ROOT, str(id))
         file_path = '%s/pdf.pdf'%(folder)
         try: os.makedirs(folder)
         except: pass
