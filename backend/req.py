@@ -50,9 +50,13 @@ def Service__init__():
     include(Service.Permission, "./permission/", ["base.py"], True)
 
 class RequestHandler(CorsMixin, tornado.web.RequestHandler):
+    CORS_ORIGIN = '*'
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.log = log
+        self.log(self.CORS_HEADERS)
+        self.log(self.CORS_METHODS)
 
 
     def get_args(self, name):
@@ -121,7 +125,7 @@ class RequestHandler(CorsMixin, tornado.web.RequestHandler):
 
 class ApiRequestHandler(RequestHandler):
     def render(self, msg=""):
-        self.set_header('Access-Control-Allow-Origin', '*')
+        # self.set_header('Access-Control-Allow-Origin', '*')
         if isinstance(msg, tuple): code, msg = msg
         else: code = 200
         self.set_status(code)
