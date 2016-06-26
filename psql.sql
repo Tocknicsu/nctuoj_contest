@@ -63,18 +63,16 @@ INSERT INTO users (account, name, password, token, "type") VALUES ('admin', 'adm
 CREATE TABLE execute_types (
     id              serial          NOT NULL    PRIMARY KEY,
     description     varchar(255)    NOT NULL    DEFAULT '',
-    priority        integer         NOT NULL    DEFAULT 999,
     created_at      timestamp       DEFAULT date_trunc('second',now()),
     updated_at      timestamp       DEFAULT date_trunc('second',now())
 );
 CREATE TRIGGER execute_types_updated_row BEFORE UPDATE ON execute_types FOR EACH ROW EXECUTE PROCEDURE updated_row();
-CREATE INDEX on execute_types (priority);
-INSERT INTO execute_types (description, priority) values ('C', 1);
-INSERT INTO execute_types (description, priority) values ('C++', 2);
-INSERT INTO execute_types (description, priority) values ('C++11', 3);
-INSERT INTO execute_types (description, priority) values ('Java', 4);
-INSERT INTO execute_types (description, priority) values ('Python2', 5);
-INSERT INTO execute_types (description, priority) values ('Python3', 6);
+INSERT INTO execute_types (description) values ('C');
+INSERT INTO execute_types (description) values ('C++');
+INSERT INTO execute_types (description) values ('C++11');
+INSERT INTO execute_types (description) values ('Java');
+INSERT INTO execute_types (description) values ('Python2');
+INSERT INTO execute_types (description) values ('Python3');
 
 CREATE TABLE execute_steps (
     id              serial          NOT NULL    PRIMARY KEY,
@@ -156,6 +154,32 @@ CREATE TABLE testdata(
 CREATE TRIGGER testdata_updated_row BEFORE UPDATE ON testdata FOR EACH ROW EXECUTE PROCEDURE updated_row();
 CREATE INDEX ON testdata (problem_id);
 
+CREATE TABLE submissions(
+    id              serial          NOT NULL    PRIMARY KEY,
+    user_id         integer         NOT NULL    REFERENCES users(id)    ON DELETE CASCADE,
+    problem_id      integer         NOT NULL    REFERENCES problems(id) ON DELETE CASCADE,
+    execute_type_id integer         NOT NULL    REFERENCES execute_types(id)    ON DELETE CASCADE,
+    time_usage      integer         ,
+    memory_usage    integer         ,
+    verdict         integer         NOT NULL    DEFAULT 1,
+    score           integer         ,
+    length          integer         NOT NULL,
+    file_name       varchar(255)    NOT NULL,
+    ip              inet            NOT NULL,
+    created_at      timestamp       DEFAULT date_trunc('second',now()),
+    updated_at      timestamp       DEFAULT date_trunc('second',now())
+);
+ALTER SEQUENCE submissions_id_seq RESTART WITH 10001;
+CREATE TRIGGER submissions_updated_row BEFORE UPDATE ON submissions FOR EACH ROW EXECUTE PROCEDURE updated_row();
+CREATE INDEX ON submissions (user_id);
+CREATE INDEX ON submissions (problem_id);
+CREATE INDEX ON submissions (execute_type_id);
+CREATE INDEX ON submissions (memory_usage);
+CREATE INDEX ON submissions (time_usage);
+CREATE INDEX ON submissions (verdict);
+CREATE INDEX ON submissions (length);
+CREATE INDEX ON submissions (created_at);
+
 /*
 CREATE TABLE map_verdict_string (
     id              serial          NOT NULL    PRIMARY KEY,
@@ -181,31 +205,6 @@ INSERT INTO map_verdict_string (abbreviation,description,priority,color) VALUES(
 
 
 --DROP TABLE IF EXISTS submissions;
-CREATE TABLE submissions(
-    id              serial          NOT NULL    PRIMARY KEY,
-    user_id         integer         NOT NULL    REFERENCES users(id)    ON DELETE CASCADE,
-    problem_id      integer         NOT NULL    REFERENCES problems(id) ON DELETE CASCADE,
-    execute_type_id integer         NOT NULL    REFERENCES execute_types(id)    ON DELETE CASCADE,
-    time_usage      integer         ,
-    memory_usage    integer         ,
-    verdict         integer         NOT NULL    DEFAULT 1   REFERENCES map_verdict_string(id)   ON DELETE CASCADE,
-    score           integer         ,
-    length          integer         NOT NULL,
-    file_name       varchar(255)    NOT NULL,
-    ip              inet            NOT NULL,
-    created_at      timestamp       DEFAULT date_trunc('second',now()),
-    updated_at      timestamp       DEFAULT date_trunc('second',now())
-);
-ALTER SEQUENCE submissions_id_seq RESTART WITH 10001;
-CREATE TRIGGER submissions_updated_row BEFORE UPDATE ON submissions FOR EACH ROW EXECUTE PROCEDURE updated_row();
-CREATE INDEX ON submissions (user_id);
-CREATE INDEX ON submissions (problem_id);
-CREATE INDEX ON submissions (execute_type_id);
-CREATE INDEX ON submissions (memory_usage);
-CREATE INDEX ON submissions (time_usage);
-CREATE INDEX ON submissions (verdict);
-CREATE INDEX ON submissions (length);
-CREATE INDEX ON submissions (created_at);
 
 CREATE TABLE map_submission_testdata (
     id              serial          NOT NULL    PRIMARY KEY,

@@ -4,6 +4,7 @@ import json
 import os
 import requests
 import sys
+import subprocess as sp
 
 import config
 
@@ -104,6 +105,9 @@ def test(filename):
             print("Expect: [%s] %s"%(data['response_status'], data['response_data']))
             print("Response: [%s] %s"%(response.status_code, response.text))
     print('\n')
+def flushdb():
+    sp.call("./flush_db.sh 1>/dev/null 2>/dev/null", shell=True)
+
 
 if __name__ == '__main__':
     if len(sys.argv) == 1:
@@ -115,5 +119,6 @@ if __name__ == '__main__':
         files = sys.argv[1:]
 
     for filename in files:
+        flushdb()
         test(filename)
 
