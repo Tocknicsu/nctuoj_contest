@@ -115,7 +115,7 @@ class RequestHandler(CorsMixin, tornado.web.RequestHandler):
         ##################################################
         msg = yield self.check_permission()
         if isinstance(msg, tuple):
-            self.write_error(msg)
+            self.render(msg)
         
 
 
