@@ -63,16 +63,17 @@ INSERT INTO users (account, name, password, token, "type") VALUES ('admin', 'adm
 CREATE TABLE execute_types (
     id              serial          NOT NULL    PRIMARY KEY,
     description     varchar(255)    NOT NULL    DEFAULT '',
+    file_name       varchar(255)    NOT NULL    DEFAULT '',
     created_at      timestamp       DEFAULT date_trunc('second',now()),
     updated_at      timestamp       DEFAULT date_trunc('second',now())
 );
 CREATE TRIGGER execute_types_updated_row BEFORE UPDATE ON execute_types FOR EACH ROW EXECUTE PROCEDURE updated_row();
-INSERT INTO execute_types (description) values ('C');
-INSERT INTO execute_types (description) values ('C++');
-INSERT INTO execute_types (description) values ('C++11');
-INSERT INTO execute_types (description) values ('Java');
-INSERT INTO execute_types (description) values ('Python2');
-INSERT INTO execute_types (description) values ('Python3');
+INSERT INTO execute_types (description, file_name) values ('C', 'main.c');
+INSERT INTO execute_types (description, file_name) values ('C++14', 'main.cpp');
+INSERT INTO execute_types (description, file_name) values ('C++14', 'main.cpp');
+INSERT INTO execute_types (description, file_name) values ('Java', 'Main.java');
+INSERT INTO execute_types (description, file_name) values ('Python2', 'main.py');
+INSERT INTO execute_types (description, file_name) values ('Python3', 'main.py');
 
 CREATE TABLE execute_steps (
     id              serial          NOT NULL    PRIMARY KEY,
@@ -85,9 +86,9 @@ CREATE TRIGGER execute_steps_updated_row BEFORE UPDATE ON execute_steps FOR EACH
 CREATE INDEX ON execute_steps (execute_type_id);
 INSERT INTO execute_steps (execute_type_id, command) values (1, 'gcc -lm -std=c99 __FILE__');
 INSERT INTO execute_steps (execute_type_id, command) values (1, './a.out');
-INSERT INTO execute_steps (execute_type_id, command) values (2, 'g++ __FILE__');
+INSERT INTO execute_steps (execute_type_id, command) values (2, 'g++ -std=c++11 -O2 __FILE__');
 INSERT INTO execute_steps (execute_type_id, command) values (2, './a.out');
-INSERT INTO execute_steps (execute_type_id, command) values (3, 'g++ -std=c++11 -O2  __FILE__');
+INSERT INTO execute_steps (execute_type_id, command) values (3, 'g++ -std=c++14 -O2 __FILE__');
 INSERT INTO execute_steps (execute_type_id, command) values (3, './a.out');
 INSERT INTO execute_steps (execute_type_id, command) values (4, 'javac __FILE__');
 INSERT INTO execute_steps (execute_type_id, command) values (4, 'java -Xmx__MEMORY_LIMIT__k -Xss__MEMORY_LIMIT__k __MAIN_FILE__');
