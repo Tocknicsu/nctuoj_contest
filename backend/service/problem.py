@@ -57,18 +57,22 @@ class Problem(BaseService):
             'name': '+score_type',
             'type': int
         }, {
-            'name': '+pdf',
+            'name': 'pdf',
         }]
         err = self.form_validation(data, required_args)
         if err: return (err, None)
-        pdf = data.pop('pdf')
+        if 'pdf' in data:
+            pdf = data.pop('pdf')
+        else:
+            pdf = None
         id = data.pop('id')
         sql, param = self.gen_update_sql('problems', data)
         res = yield self.db.execute(sql + ' WHERE id = %s', param + (id,))
-        folder = '%s/data/problems/%s'%(config.DATA_ROOT, str(id))
-        file_path = '%s/pdf.pdf'%(folder)
-        try: os.makedirs(folder)
-        except: pass
-        with open(file_path, 'wb+') as f:
-            f.write(pdf['body'])
+        if pdf:
+            folder = '%s/data/problems/%s'%(config.DATA_ROOT, str(id))
+            file_path = '%s/pdf.pdf'%(folder)
+            try: os.makedirs(folder)
+            except: pass
+            with open(file_path, 'wb+') as f:
+                f.write(pdf['body'])
         return (None, None)
