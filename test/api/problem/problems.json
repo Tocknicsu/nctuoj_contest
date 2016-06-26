@@ -1,6 +1,22 @@
 [
     {
-        "name": "test_gen_user",
+        "name": "test_post_problem",
+        "url": "/api/problems/",
+        "method": "post",
+        "payload": {
+            "title": "problem A",
+            "score_type": 0
+        },
+        "files": {
+            "pdf": "./api/problem/problem.pdf"
+        },
+        "response_status": 403,
+        "response_data": {
+            "msg": "permission denied"
+        }
+    }, 
+    {
+        "name": "test_post_problem_admin",
         "url": "/api/problems/",
         "method": "post",
         "payload": {
@@ -13,7 +29,7 @@
         },
         "response_status": 200,
         "response_data": {
-
+            "msg": {"id": 1, "score_type": 0, "title": "problem A"}
         }
     }
 ]

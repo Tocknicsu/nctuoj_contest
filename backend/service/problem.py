@@ -76,3 +76,32 @@ class Problem(BaseService):
             with open(file_path, 'wb+') as f:
                 f.write(pdf['body'])
         return (None, None)
+
+    def get_problem_execute(self, data={}):
+        required_args = [{
+            'name': '+id',
+            'type': int
+        }]
+        err = self.form_validation(data, required_args)
+        if err: return (err, None)
+        res = yield self.db.execute("")
+        res = res.fetchall()
+        return (None, res)
+
+    def put_problem_execute(self, data={}):
+        required_args = [{
+            'name': '+id',
+            'type': int
+        }, {
+            'name': '+executes',
+            'type': list
+        }]
+        err = self.form_validation(data, required_args)
+        if err: return (err, None)
+        yield self.db.execute()
+        for x in data['executes']:
+            try:
+                yield self.db.execute()
+            except:
+                pass
+        return (None, None)
