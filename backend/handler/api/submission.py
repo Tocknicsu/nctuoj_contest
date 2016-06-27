@@ -23,11 +23,11 @@ class Submissions(ApiRequestHandler):
         data['ip'] = self.remote_ip
         self.log(data)
         if data['file'] == None:
-            data.pop('code')
-            data.pop('file_name')
+            data.pop('file')
             err, res = yield from Service.Submission.post_submission_code(data)
         else:
-            data.pop('file')
+            data.pop('code')
+            data.pop('file_name')
             err, res = yield from Service.Submission.post_submission_file(data)
         if err:
             self.render(err)

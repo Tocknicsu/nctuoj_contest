@@ -44,5 +44,22 @@
         "response_data":{
             "msg": null
         }
+    },
+    {
+        "name": "post_submission_file",
+        "url": "/api/submissions/",
+        "method": "post",
+        "files": {
+            "file": "./api/submission/submission.c"
+        },
+        "payload": {
+            "token": "ADMIN@TOKEN",
+            "problem_id": 1,
+            "execute_type_id": 1
+        }, 
+        "response_status": 200,
+        "response_data": {
+            "msg": null
+        }
     }
 ]
