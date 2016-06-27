@@ -85,10 +85,7 @@ class RequestHandler(CorsMixin, tornado.web.RequestHandler):
         method = self.request.method.lower()
         if not hasattr(now, method):
             return None
-        if len(self.path_args):
-            res = getattr(now, method)(self, *self.path_args)
-        else:
-            res = getattr(now, method)(self)
+        res = getattr(now, method)(self, *self.path_args)
         if isinstance(res, types.GeneratorType):
             res = yield from res
         return res
@@ -120,6 +117,23 @@ class RequestHandler(CorsMixin, tornado.web.RequestHandler):
         msg = yield self.check_permission()
         if isinstance(msg, tuple):
             self.render(msg)
+
+    @tornado.gen.coroutine
+    def get_identity(self):
+        token = self.get_args(['token'])['token']
+        if token:
+            err, res = yield from Service.User.get_user_by_token({'token': token})
+            if err:
+                self.account = {}
+            else:
+                self.account = res
+        else:
+            self.account = {}
+        
+        if 'isLOGIN' not in self.account:
+            for x in map_users_type:
+                self.account['is' + x] = False
+            self.account['isLOGIN'] = False
         
 
 
@@ -141,27 +155,11 @@ class ApiRequestHandler(RequestHandler):
     def prepare(self):
         res = yield super().prepare()
 
+
+class StaticFileHandler(tornado.web.StaticFileHandler, RequestHandler):
     @tornado.gen.coroutine
-    def get_identity(self):
-        token = self.get_args(['token'])['token']
-        if token:
-            err, res = yield from Service.User.get_user_by_token({'token': token})
-            if err:
-                self.account = {}
-            else:
-                self.account = res
-        else:
-            self.account = {}
-        
-        if 'isLOGIN' not in self.account:
-            for x in map_users_type:
-                self.account['is' + x] = False
-            self.account['isLOGIN'] = False
-
-
-class StaticFileHandler(tornado.web.StaticFileHandler):
     def prepare(self):
-        super().prepare()
+        res = yield super().prepare()
 
 class WebSocketHandler(tornado.websocket.WebSocketHandler):
     def __init__(self, *args, **kwargs):
