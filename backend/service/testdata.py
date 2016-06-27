@@ -1,6 +1,8 @@
 from req import Service
 from service.base import BaseService
 
+import os
+
 
 class Testdata(BaseService):
     def get_testdata_list(self, data={}):
@@ -56,6 +58,16 @@ class Testdata(BaseService):
         sql, param = self.gen_insert_sql('testdata', data)
         res = yield self.db.execute(sql, param)
         res = res.fetchone()
+        folder = '%s/data/testdata/%s'%(config.DATA_ROOT, res['id'])
+        try: os.makedirs(folder)
+        except: pass
+        for x in files:
+            file_path = '%s/%s'%(folder, x)
+            with open(file_path, 'wb+') as f:
+                if files[x] == None:
+                    f.write(''.encode())
+                else:
+                    f.write(data[x]['body']
         return (None, res)
 
     def put_testdata(self, data={}):
@@ -87,6 +99,16 @@ class Testdata(BaseService):
         id = data.pop('id')
         sql, param = self.gen_update_sql('testdata', data)
         res = yield self.db.execute(sql + ' WHERE id = %s', param + (id,))
+        folder = '%s/data/testdata/%s'%(config.DATA_ROOT, data['id'])
+        try: os.makedirs(folder)
+        except: pass
+        for x in files:
+            file_path = '%s/%s'%(folder, x)
+            with open(file_path, 'wb+') as f:
+                if files[x] == None:
+                    pass
+                else:
+                    f.write(data[x]['body']
         return (None, None)
 
     def delete_testdata(self, data={}):
