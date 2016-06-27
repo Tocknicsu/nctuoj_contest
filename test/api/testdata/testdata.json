@@ -33,6 +33,10 @@
         "name": "post_testdata",
         "url": "/api/problems/1/testdata/",
         "method": "post",
+        "files": {
+            "input": "./api/testdata/1.in",
+            "output": "./api/testdata/1.out"
+        },
         "payload": {
             "token": "ADMIN@TOKEN",
             "score": 100,
@@ -49,6 +53,10 @@
         "name": "post_testdata",
         "url": "/api/problems/1/testdata/",
         "method": "post",
+        "files": {
+            "input": "./api/testdata/2.in",
+            "output": "./api/testdata/2.out"
+        },
         "payload": {
             "token": "ADMIN@TOKEN",
             "score": 100,
