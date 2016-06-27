@@ -111,12 +111,6 @@ class RequestHandler(CorsMixin, tornado.web.RequestHandler):
         ### Get Basic Information                      ###
         ##################################################
        
-        ##################################################
-        ### Check Permission                           ###
-        ##################################################
-        msg = yield self.check_permission()
-        if isinstance(msg, tuple):
-            self.render(msg)
 
     @tornado.gen.coroutine
     def get_identity(self):
@@ -154,12 +148,22 @@ class ApiRequestHandler(RequestHandler):
     @tornado.gen.coroutine
     def prepare(self):
         res = yield super().prepare()
+        ##################################################
+        ### Check Permission                           ###
+        ##################################################
+        msg = yield self.check_permission()
+        if isinstance(msg, tuple):
+            self.render(msg)
 
 
 class StaticFileHandler(tornado.web.StaticFileHandler, RequestHandler):
     @tornado.gen.coroutine
     def prepare(self):
         res = yield super().prepare()
+        msg = yield self.check_permission()
+        if isinstance(msg, tuple):
+            self.set_status(msg[0])
+            self.finish()
 
 class WebSocketHandler(tornado.websocket.WebSocketHandler):
     def __init__(self, *args, **kwargs):

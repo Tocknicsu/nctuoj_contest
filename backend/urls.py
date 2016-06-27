@@ -24,4 +24,5 @@ urls = [
     ('/api/executes/', Handler.api.Executes),
     ('/api/executes/(\d+)/', Handler.api.Execute),
     ('/api/system/(\w*)/', Handler.api.System),
+    ('/file/test/(\w*)', Handler.file.Test, {'path': '/tmp/'}),
 ]
