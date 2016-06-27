@@ -7,7 +7,7 @@ from req import ApiRequestHandler
 class Testdata(ApiRequestHandler):
     @tornado.gen.coroutine
     def get(self, problem_id):
-        err, res = yield from Service.Testdata.get_testdata_list({'id': id})
+        err, res = yield from Service.Testdata.get_testdata_list({'id': problem_id})
         if err:
             self.render(err)
         else:
@@ -22,17 +22,20 @@ class Testdata(ApiRequestHandler):
         if err:
             self.render(err)
         else:
+            err, res = yield from Service.Testdata.get_testdata(res)
             self.render(res)
 
 class Testdatum(ApiRequestHandler):
-    def get(self, testdata_id):
+    @tornado.gen.coroutine
+    def get(self, problem_id, testdata_id):
         err, res = yield from Service.Testdata.get_testdata({'id': testdata_id})
         if err:
             self.render(err)
         else:
             self.render(res)
 
-    def put(self, testdata_id):
+    @tornado.gen.coroutine
+    def put(self, problem_id, testdata_id):
         args = ['score', 'time_limit', 'memory_limit', 'output_limit', 'input[file]', 'output[file]']
         data = self.get_args(args)
         data['id'] = testdata_id
@@ -42,7 +45,8 @@ class Testdatum(ApiRequestHandler):
         else:
             self.render(res)
 
-    def delete(self, testdata_id):
+    @tornado.gen.coroutine
+    def delete(self, problem_id, testdata_id):
         err, res = yield from Service.Testdata.delete_testdata({'id': testdata_id})
         if err:
             self.render(err)

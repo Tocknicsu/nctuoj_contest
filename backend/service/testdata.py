@@ -15,6 +15,7 @@ class Testdata(BaseService):
         return (None, res)
 
     def get_testdata(self, data={}):
+        self.log(data)
         required_args = [{
             'name': '+id',
             'type': int,
@@ -22,7 +23,7 @@ class Testdata(BaseService):
         err = self.form_validation(data, required_args)
         if err: return (err, None)
         res = yield self.db.execute("SELECT * FROM testdata WHERE id=%s ORDER BY id ASC", (data['id'],))
-        res = res.fetchall()
+        res = res.fetchone()
         return (None, res)
         
 
@@ -52,9 +53,9 @@ class Testdata(BaseService):
         files = {}
         files['input'] = data.pop('input')
         files['output'] = data.pop('output')
-        id = data.pop('id')
         sql, param = self.gen_insert_sql('testdata', data)
         res = yield self.db.execute(sql, param)
+        res = res.fetchone()
         return (None, res)
 
     def put_testdata(self, data={}):
