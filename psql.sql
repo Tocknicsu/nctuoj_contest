@@ -104,7 +104,7 @@ CREATE TABLE clarifications (
     problem_id      integer         NOT NULL,
     question        text            NOT NULL,
     reply_type      bool            NOT NULL    DEFAULT false,
-    reply           text            NOT NULL,
+    reply           text            NOT NULL    DEFAULT '',
     created_at      timestamp       DEFAULT date_trunc('second',now()),
     updated_at      timestamp       DEFAULT date_trunc('second',now())
 );
