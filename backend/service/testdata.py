@@ -2,6 +2,7 @@ from req import Service
 from service.base import BaseService
 
 import os
+import config
 
 
 class Testdata(BaseService):
@@ -67,7 +68,7 @@ class Testdata(BaseService):
                 if files[x] == None:
                     f.write(''.encode())
                 else:
-                    f.write(data[x]['body']
+                    f.write(data[x]['body'])
         return (None, res)
 
     def put_testdata(self, data={}):
@@ -108,7 +109,7 @@ class Testdata(BaseService):
                 if files[x] == None:
                     pass
                 else:
-                    f.write(data[x]['body']
+                    f.write(data[x]['body'])
         return (None, None)
 
     def delete_testdata(self, data={}):
