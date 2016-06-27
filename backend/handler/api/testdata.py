@@ -25,8 +25,8 @@ class Testdata(ApiRequestHandler):
             self.render(res)
 
 class Testdatum(ApiRequestHandler):
-    def get(self, problem_id):
-        err, res = yield from Service.Testdata.get_testdata({'id': problem_id})
+    def get(self, testdata_id):
+        err, res = yield from Service.Testdata.get_testdata({'id': testdata_id})
         if err:
             self.render(err)
         else:
