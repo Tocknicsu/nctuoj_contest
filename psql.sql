@@ -171,7 +171,7 @@ CREATE TABLE submissions(
     created_at      timestamp       DEFAULT date_trunc('second',now()),
     updated_at      timestamp       DEFAULT date_trunc('second',now())
 );
-ALTER SEQUENCE submissions_id_seq RESTART WITH 10001;
+
 CREATE TRIGGER submissions_updated_row BEFORE UPDATE ON submissions FOR EACH ROW EXECUTE PROCEDURE updated_row();
 CREATE INDEX ON submissions (user_id);
 CREATE INDEX ON submissions (problem_id);

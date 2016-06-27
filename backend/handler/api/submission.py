@@ -17,9 +17,15 @@ class Submissions(ApiRequestHandler):
 
     @tornado.gen.coroutine
     def post(self):
-        args = ['problem_id', 'execute_type_id', 'file_name', 'code']
+        args = ['problem_id', 'execute_type_id', 'file_name', 'code', 'file[file]']
         data = self.get_args(args)
-        err, res = yield from Service.Submission.post_submission(data)
+        data['user_id'] = self.account['id']
+        data['ip'] = self.remote_ip
+        self.log(data)
+        if data['file'] == None:
+            err, res = yield from Service.Submission.post_submission_code(data)
+        else:
+            err, res = yield from Service.Submission.post_submission_file(data)
         if err:
             self.render(err)
         else:

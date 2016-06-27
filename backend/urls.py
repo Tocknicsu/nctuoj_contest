@@ -14,7 +14,7 @@ urls = [
     ('/api/problems/(\d+)/executes/', Handler.api.ProblemExecutes),
     #('/api/problems/(\d+)/rejudge/', Handler.api.ProblemRejudge),
     #('/api/problems/(\d+)/testdata/', Handler.api.ProblemTestdata),
-    #('/api/submissions/', Handler.api.Submissions),
+    ('/api/submissions/', Handler.api.Submissions),
     #('/api/submissions/(\d+)/', Handler.api.Submission),
     #('/api/submissions/(\d+)/rejudge/', Handler.api.SubmissionRejudge),
     ('/api/clarifications/', Handler.api.Clarifications),
