@@ -22,6 +22,7 @@ class Clarifications(ApiRequestHandler):
         if err:
             self.render(err)
         else:
+            err, res = yield from Service.Clarification.get_clarification(res)
             self.render(res)
 
 class Clarification(ApiRequestHandler):
@@ -42,5 +43,6 @@ class Clarification(ApiRequestHandler):
         if err:
             self.render(err)
         else:
+            err, res = yield from Service.Clarification.get_clarification({'id': id})
             self.render(res)
         

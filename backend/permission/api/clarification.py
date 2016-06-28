@@ -9,7 +9,7 @@ class Clarifications(BasePermission):
 
 
 class Clarification(BasePermission):
-    def put(self, req):
+    def put(self, req, id):
         if not req.account['isADMIN']:
             return "Permission Denied"
         return None
