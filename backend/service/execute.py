@@ -4,7 +4,7 @@ from service.base import BaseService
 
 class Execute(BaseService):
     def get_execute_list(self):
-        res = yield self.db.execute("SELECT id, description, file_name FROM execute_types ORDER BY id ASC")
+        res = yield self.db.execute("SELECT * FROM execute_types ORDER BY id ASC")
         res = res.fetchall()
         return (None, res)
 
