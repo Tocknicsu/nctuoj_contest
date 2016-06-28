@@ -15,7 +15,7 @@ class Executes(ApiRequestHandler):
 
     @tornado.gen.coroutine
     def post(self):
-        args = ['description', 'commands[]']
+        args = ['description', 'commands[]', 'file_name']
         data = self.get_args(args)
         err, res = yield from Service.Execute.post_execute(data)
         if err:
@@ -35,7 +35,7 @@ class Execute(ApiRequestHandler):
 
     @tornado.gen.coroutine
     def put(self, id):
-        args = ['description', 'commands[]']
+        args = ['description', 'commands[]', 'file_name']
         data = self.get_args(args)
         data['id'] = id
         err, res = yield from Service.Execute.put_execute(data)
