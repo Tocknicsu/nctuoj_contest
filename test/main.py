@@ -5,6 +5,7 @@ import os
 import requests
 import sys
 import subprocess as sp
+import importlib
 
 import config
 
@@ -44,25 +45,17 @@ def Equal(data1, data2, ignore):
     else:
         return data1 == data2
 
-def test(filename):
-    print("Test File: %s"%(filename))
-    print("=============================")
-    try:
-        f = open(filename)
-    except:
-        print("Error: Open Error")
-        return
-    plaintext = f.read()
-    f.close()
-    try:
-        datalist = json.loads(plaintext)
-    except:
-        print("Error: Parse To Json Error")
-        return
+def test_py(filename):
+    print("Test file: %s"%(filename))
+    filepath = filename[2:-3].replace("/", ".")
+    package = importlib.import_module(filepath)
+    if not hasattr(package, "data"):
+        print("Error: Can't find 'data' in the %s"%filename)
+        return 
+    datalist = getattr(package, "data")
     if not isinstance(datalist, list):
         print("Error: Json is not a list")
         return
-
     for data in datalist:
         if not isinstance(data, dict):
             print("Error: %s is not dict"%(data))
@@ -105,6 +98,7 @@ def test(filename):
             print("Expect: [%s] %s"%(data['response_status'], data['response_data']))
             print("Response: [%s] %s"%(response.status_code, response.text))
     print('\n')
+
 def flushdb():
     sp.call("./flush_db.sh 1>/dev/null 2>/dev/null", shell=True)
 
@@ -112,13 +106,15 @@ def flushdb():
 if __name__ == '__main__':
     if len(sys.argv) == 1:
         files = []
-        for root, dirnames, filenames in os.walk("./"):
-            for filename in fnmatch.filter(filenames, '*.json'):
+        for root, dirnames, filenames in os.walk("./api/"):
+            for filename in fnmatch.filter(filenames, '*.py'):
                 files.append(os.path.join(root, filename))
     else:
         files = sys.argv[1:]
 
+    print(files)
+
     for filename in files:
         flushdb()
-        test(filename)
+        test_py(filename)
 
