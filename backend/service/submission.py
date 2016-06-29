@@ -44,6 +44,9 @@ class Submission(BaseService):
         }]
         err = self.form_validation(data, required_args)
         if err: return (err, None)
+        if data['file_name'] == '':
+            err, res = yield from Service.Execute.get_execute({'id': data['execute_type_id']})
+            data['file_name'] = res['file_name']
         code = data.pop('code')
         data['length'] = len(code)
         sql, param = self.gen_insert_sql("submissions", data)
