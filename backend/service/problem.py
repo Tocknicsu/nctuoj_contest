@@ -20,6 +20,7 @@ class Problem(BaseService):
         res = yield self.db.execute("SELECT * FROM problems WHERE id=%s", (data['id'],))
         res = res.fetchone()
         err, res['executes'] = yield from self.get_problem_execute(data)
+        err, res['testdata'] = yield from Service.Testdata.get_testdata_list(data)
         return (None, res)
 
     def post_problem(self, data={}):
