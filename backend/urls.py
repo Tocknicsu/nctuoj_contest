@@ -10,7 +10,9 @@ urls = [
     ('/api/users/csv/', Handler.api.UsersCSV),
     ('/api/users/signin/', Handler.api.UserSignIn),
     ('/api/problems/', Handler.api.Problems),
+    #('/api/problems/meta/', Handler.api.ProblemsMeta),
     ('/api/problems/(\d+)/', Handler.api.Problem),
+    #('/api/problems/(\d+)/', Handler.api.ProblemMeta),
     ('/api/problems/(\d+)/executes/', Handler.api.ProblemExecutes),
     #('/api/problems/(\d+)/rejudge/', Handler.api.ProblemRejudge),
     ('/api/problems/(\d+)/testdata/', Handler.api.Testdata),
@@ -24,5 +26,6 @@ urls = [
     ('/api/executes/', Handler.api.Executes),
     ('/api/executes/(\d+)/', Handler.api.Execute),
     ('/api/system/(\w*)/', Handler.api.System),
+    #('/api/scoreboard/', Handler.api.Scoreboard),
     ('/file/test/(\w*)', Handler.file.Test, {'path': '/tmp/'}),
 ]
