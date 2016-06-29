@@ -1,4 +1,4 @@
-[
+data = [
     {
         "name": "test_get_execute",
         "url": "/api/executes/1/",
@@ -10,7 +10,8 @@
             "msg": {
                 "id": 1,
                 "description": "C",
-                "commands": [{"command": "gcc -lm -std=c99 __FILE__"}, {"command": "./a.out"}]
+                "commands": [{"command": "gcc -lm -std=c99 __FILE__"}, {"command": "./a.out"}],
+                "file_name": "main.c"
             }
         }
     },
@@ -31,7 +32,8 @@
         "method": "put",
         "payload": {
             "description": "C",
-            "commands[]": ["gcc -lm -std=c99 __FILE__", "./a.out"]
+            "commands[]": ["gcc -lm -std=c99 __FILE__", "./a.out"],
+            "file_name": "main.c",
         },
         "response_status": 403,
         "response_data": {
@@ -45,14 +47,16 @@
         "payload": {
             "token": "ADMIN@TOKEN",
             "description": "C",
-            "commands[]": ["gcc -lm -std=c99 __FILE__", "./a.out"]
+            "commands[]": ["gcc -lm -std=c99 __FILE__", "./a.out"],
+            "file_name": "main.c",
         },
         "response_status": 200,
         "response_data": {
             "msg": {
                 "id": 1,
                 "description": "C",
-                "commands": [{"command": "gcc -lm -std=c99 __FILE__"}, {"command": "./a.out"}]
+                "commands": [{"command": "gcc -lm -std=c99 __FILE__"}, {"command": "./a.out"}],
+                "file_name": "main.c"
             }
         }
     },
@@ -76,7 +80,9 @@
         },
         "response_status": 200,
         "response_data": {
-            "msg": ""
+            "msg": {
+                "id": 1
+            }
         }
     }
 ]

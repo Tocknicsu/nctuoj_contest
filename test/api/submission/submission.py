@@ -1,4 +1,4 @@
-[
+data = [
     {
         "name": "post_problem",
         "url": "/api/problems/",
@@ -13,7 +13,7 @@
         },
         "response_status": 200,
         "response_data": {
-            "msg": {"id": 1, "score_type": 0, "title": "problem A"}
+            "msg": {"id": 1, "score_type": 0, "title": "problem A", "testdata": [], "executes": []}
         }
     },
     {
@@ -26,7 +26,7 @@
         },
         "response_status": 200,
         "response_data": {
-            "msg": [{"description": "C", "id": 1}, {"description": "C++14", "id": 2}, {"description": "C++14", "id": 3}, {"description": "Java", "id": 4}]
+            "msg": [{"description": "C", "id": 1}, {"description": "C++11", "id": 2}, {"description": "C++14", "id": 3}, {"description": "Java", "id": 4}]
         }
     },
     {
@@ -42,7 +42,19 @@
         },
         "response_status": 200,
         "response_data":{
-            "msg": null
+            "msg": {
+                "problem_id": 1, 
+                "length": 56, 
+                "memory_usage": None, 
+                "file_name": "test.c", 
+                "user_id": 1, 
+                "time_usage": None, 
+                "ip": "127.0.0.1", 
+                "id": 1, 
+                "execute_type_id": 1, 
+                "verdict": 1, 
+                "score": None,
+            }
         }
     },
     {
@@ -59,7 +71,19 @@
         }, 
         "response_status": 200,
         "response_data": {
-            "msg": null
+            "msg": {
+                "problem_id": 1, 
+                "length": 76, 
+                "memory_usage": None, 
+                "file_name": "submission.c", 
+                "user_id": 1, 
+                "time_usage": None, 
+                "ip": "127.0.0.1", 
+                "id": 2, 
+                "execute_type_id": 1, 
+                "verdict": 1, 
+                "score": None,
+            }
         }
     }
 ]

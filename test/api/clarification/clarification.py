@@ -1,4 +1,4 @@
-[
+data = [
     {
         "name": "post_problem",
         "url": "/api/problems/",
@@ -13,7 +13,7 @@
         },
         "response_status": 200,
         "response_data": {
-            "msg": {"id": 1, "score_type": 0, "title": "problem A"}
+            "msg": {"id": 1, "score_type": 0, "title": "problem A", "executes": [], "testdata": []}
         }
     },
     {
@@ -26,7 +26,7 @@
         },
         "response_status": 200,
         "response_data": {
-            "msg": [{"description": "C", "id": 1}, {"description": "C++14", "id": 2}, {"description": "C++14", "id": 3}, {"description": "Java", "id": 4}]
+            "msg": [{"description": "C", "id": 1}, {"description": "C++11", "id": 2}, {"description": "C++14", "id": 3}, {"description": "Java", "id": 4}]
         }
     },
     {
@@ -40,7 +40,7 @@
         },
         "response_status": 200,
         "response_data":{
-            "msg": {"reply_type": false, "user_id": 1, "question": "How are you", "problem_id": 1, "reply": "", "id": 1}
+            "msg": {"reply_type": 0, "user_id": 1, "question": "How are you", "problem_id": 1, "reply": "", "id": 1}
         }
     },
     {
@@ -54,7 +54,7 @@
         },
         "response_status": 200,
         "response_data":{
-            "msg": {"problem_id": 1, "user_id": 1, "question": "How are you", "id": 1, "reply_type": true, "reply": "I'm fine."}
+            "msg": {"problem_id": 1, "user_id": 1, "question": "How are you", "id": 1, "reply_type": 1, "reply": "I'm fine."}
         }
     }
 ]

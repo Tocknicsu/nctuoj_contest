@@ -77,5 +77,6 @@ class Execute(BaseService):
         }]
         err = self.form_validation(data, required_args)
         if err: return (err, None)
-        yield self.db.execute("DELETE FROM execute_types WHERE id=%s", (data['id'],))
-        return (None, None)
+        res = yield self.db.execute("DELETE FROM execute_types WHERE id=%s RETURNING id", (data['id'],))
+        res = res.fetchone()
+        return (None, res)

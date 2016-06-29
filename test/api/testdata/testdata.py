@@ -1,4 +1,4 @@
-[
+data = [
     {
         "name": "post_problem",
         "url": "/api/problems/",
@@ -13,7 +13,7 @@
         },
         "response_status": 200,
         "response_data": {
-            "msg": {"id": 1, "score_type": 0, "title": "problem A"}
+            "msg": {"id": 1, "score_type": 0, "title": "problem A", "executes": [], "testdata": []}
         }
     },
     {
@@ -26,7 +26,7 @@
         },
         "response_status": 200,
         "response_data": {
-            "msg": [{"description": "C", "id": 1}, {"description": "C++14", "id": 2}, {"description": "C++14", "id": 3}, {"description": "Java", "id": 4}]
+            "msg": [{"description": "C", "id": 1}, {"description": "C++11", "id": 2}, {"description": "C++14", "id": 3}, {"description": "Java", "id": 4}]
         }
     },
     {

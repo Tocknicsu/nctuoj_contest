@@ -1,4 +1,4 @@
-[
+data = [
     {
         "name": "test_signin",
         "url": "/api/users/signin/",
@@ -9,7 +9,7 @@
         },
         "response_status": 200,
         "response_data": {
-            "msg": "ADMIN@TOKEN"
+            "msg": {"isADMIN": True, "isLOGIN": True, "account": "admin", "isOFFICIAL": False, "isUNOFFICIAL": False, "token": "ADMIN@TOKEN", "isTEST": False, "name": "admin", "id": 1, "type": 0, "updated_at": "2016-06-29 19:11:19", "created_at": "2016-06-29 19:11:19"}
         }
     },
     {

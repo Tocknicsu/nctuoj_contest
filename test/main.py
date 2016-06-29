@@ -39,6 +39,8 @@ def Equal(data1, data2, ignore):
         if len(data1) != len(data2):
             return False
         for x in data1:
+            if x not in data2:
+                return False
             if not Equal(data1[x], data2[x], ignore):
                 return False
         return True

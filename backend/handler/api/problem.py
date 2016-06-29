@@ -21,13 +21,13 @@ class Problems(ApiRequestHandler):
         if err:
             self.render(err)
         else:
-            err, res = yield from Service.Problem.get_problem(res)
+            err, res = yield from Service.Problem.get_problem_detail(res)
             self.render(res)
 
 class Problem(ApiRequestHandler):
     @tornado.gen.coroutine
     def get(self, id):
-        err, res = yield from Service.Problem.get_problem({'id': id})
+        err, res = yield from Service.Problem.get_problem_detail({'id': id})
         if err:
             self.render(err)
         else:
@@ -42,6 +42,6 @@ class Problem(ApiRequestHandler):
         if err:
             self.render(err)
         else:
-            err, res = yield from Service.Problem.get_problem({'id': id})
+            err, res = yield from Service.Problem.get_problem_detail({'id': id})
             self.render(res)
         

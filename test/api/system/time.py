@@ -1,4 +1,5 @@
-[
+import datetime
+data = [
     {
         "name": "test_time",
         "url": "/api/system/time/",
@@ -7,7 +8,7 @@
         },
         "response_status": 200,
         "response_data": {
-            "msg": "Ignore this error"
+            "msg": str(datetime.datetime.now())[:-7]
         }
     }
 ]

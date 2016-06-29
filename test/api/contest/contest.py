@@ -1,4 +1,4 @@
-[
+data = [
     {
         "name": "test_get_contest",
         "url": "/api/contest/",

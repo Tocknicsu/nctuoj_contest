@@ -46,7 +46,8 @@ class Clarification(BaseService):
             'type': str,
         }, {
             'name': '+reply_type',
-            'type': bool,
+            'type': int,
+            'range': (0, 1)
         }]
         err = self.form_validation(data, required_args)
         if err: return (err, None)

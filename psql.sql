@@ -70,7 +70,7 @@ CREATE TABLE execute_types (
 );
 CREATE TRIGGER execute_types_updated_row BEFORE UPDATE ON execute_types FOR EACH ROW EXECUTE PROCEDURE updated_row();
 INSERT INTO execute_types (description, file_name) values ('C', 'main.c');
-INSERT INTO execute_types (description, file_name) values ('C++14', 'main.cpp');
+INSERT INTO execute_types (description, file_name) values ('C++11', 'main.cpp');
 INSERT INTO execute_types (description, file_name) values ('C++14', 'main.cpp');
 INSERT INTO execute_types (description, file_name) values ('Java', 'Main.java');
 INSERT INTO execute_types (description, file_name) values ('Python2', 'main.py');
@@ -103,7 +103,7 @@ CREATE TABLE clarifications (
     user_id         integer         NOT NULL    REFERENCES users(id)    ON DELETE CASCADE,
     problem_id      integer         NOT NULL,
     question        text            NOT NULL,
-    reply_type      bool            NOT NULL    DEFAULT false,
+    reply_type      integer         NOT NULL    DEFAULT 0,
     reply           text            NOT NULL    DEFAULT '',
     created_at      timestamp       DEFAULT date_trunc('second',now()),
     updated_at      timestamp       DEFAULT date_trunc('second',now())
