@@ -37,7 +37,7 @@ class Submission(BaseService):
         limit, offset = self.calc_limit_offset(data['page'], data['count'])
         res = {}
         res['data'] = (yield self.db.execute("SELECT * FROM submissions ORDER BY id DESC LIMIT %s OFFSET %s", (limit, offset,))).fetchall()
-        res['count'] = (yield self.db.execute("SELECT COUNT(*) as count FROM submissions")).fetchone()
+        res['count'] = (yield self.db.execute("SELECT COUNT(*) as count FROM submissions")).fetchone()['count']
         return (None, res)
 
     def get_submission_list(self, data={}):
@@ -53,7 +53,7 @@ class Submission(BaseService):
         limit, offset = self.calc_limit_offset(data['page'], data['count'])
         res = {}
         res['data'] = (yield self.db.execute("SELECT * FROM submissions WHERE user_id=%s ORDER BY id DESC LIMIT %s OFFSET %s", (data['user_id'], limit, offset,))).fetchall()
-        res['count'] = (yield self.db.execute("SELECT * FROM submissions WHERE user_id=%s", (data['user_id'],))).fetchone()
+        res['count'] = (yield self.db.execute("SELECT * FROM submissions WHERE user_id=%s", (data['user_id'],))).fetchone()['count']
         return (None, res)
 
     def get_submission(self, data={}):
