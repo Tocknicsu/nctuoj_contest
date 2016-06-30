@@ -19,11 +19,18 @@ class Clarifications(BasePermission):
         id = data.pop('problem_id')
         data['id'] = id
         err = yield from self.exist(data)
+        if err:
+            return err
         return None
 
 
 class Clarification(BasePermission):
     def put(self, req, id):
         if not req.account['isADMIN']:
+            return (403, "Permission Denied")
+        err, res = yield from Service.Clarification.get_clarification({"id": id})
+        if res is None:
+            return (404, "Not Found")
+        if len(res['reply']):
             return (403, "Permission Denied")
         return None

@@ -59,6 +59,10 @@ CREATE UNIQUE INDEX on users (name);
 CREATE UNIQUE INDEX on users (token);
 CREATE INDEX on users ("type");
 INSERT INTO users (account, name, password, token, "type") VALUES ('admin', 'admin', '00b93578e0284e8a4b92fec5f386cbb5', 'ADMIN@TOKEN', 0);
+INSERT INTO users (account, name, password, token, "type") VALUES ('test', 'test', '', 'TEST@TOKEN', 1);
+INSERT INTO users (account, name, password, token, "type") VALUES ('unofficial', 'unofficial', '', 'UNOFFICIAL@TOKEN', 2);
+INSERT INTO users (account, name, password, token, "type") VALUES ('official', 'official', '', 'UNOFFICIAL@TOKEN', 3);
+
 
 
 CREATE TABLE execute_types (
