@@ -10,6 +10,7 @@ DROP TABLE IF EXISTS testdata;
 DROP TABLE IF EXISTS submissions CASCADE;
 DROP TABLE IF EXISTS scoreboard CASCADE;
 DROP TABLE IF EXISTS map_submission_testdata CASCADE;
+DROP TABLE IF EXISTS map_verdict_string;
 
 CREATE OR REPLACE FUNCTION updated_row() 
 RETURNS TRIGGER AS $$
@@ -208,16 +209,16 @@ CREATE TABLE map_verdict_string (
 );
 CREATE TRIGGER map_verdict_string_updated_row BEFORE UPDATE ON map_verdict_string FOR EACH ROW EXECUTE PROCEDURE updated_row();
 CREATE INDEX ON map_verdict_string(priority);
-INSERT INTO map_verdict_string (abbreviation,description,priority,color) VALUES('Pending', 'Pending');
-INSERT INTO map_verdict_string (abbreviation,description,priority,color) VALUES('Judging', 'Judging');
-INSERT INTO map_verdict_string (abbreviation,description,priority,color) VALUES('SE', 'No - System Error');
-INSERT INTO map_verdict_string (abbreviation,description,priority,color) VALUES('CE', 'No - Compile Error');
-INSERT INTO map_verdict_string (abbreviation,description,priority,color) VALUES('RE', 'No - Runtime Error');
-INSERT INTO map_verdict_string (abbreviation,description,priority,color) VALUES('MLE', 'No - Memory Limit Exceed');
-INSERT INTO map_verdict_string (abbreviation,description,priority,color) VALUES('TLE', 'No - Time Limit Exceed');
-INSERT INTO map_verdict_string (abbreviation,description,priority,color) VALUES('OLE', 'No - Output Limit Exceed');
-INSERT INTO map_verdict_string (abbreviation,description,priority,color) VALUES('WA', 'No - Wrong Answer');
-INSERT INTO map_verdict_string (abbreviation,description,priority,color) VALUES('AC', 'Yes - Accepted');
+INSERT INTO map_verdict_string (abbreviation,description) VALUES('Pending', 'Pending');
+INSERT INTO map_verdict_string (abbreviation,description) VALUES('Judging', 'Judging');
+INSERT INTO map_verdict_string (abbreviation,description) VALUES('SE', 'No - System Error');
+INSERT INTO map_verdict_string (abbreviation,description) VALUES('CE', 'No - Compile Error');
+INSERT INTO map_verdict_string (abbreviation,description) VALUES('RE', 'No - Runtime Error');
+INSERT INTO map_verdict_string (abbreviation,description) VALUES('MLE', 'No - Memory Limit Exceed');
+INSERT INTO map_verdict_string (abbreviation,description) VALUES('TLE', 'No - Time Limit Exceed');
+INSERT INTO map_verdict_string (abbreviation,description) VALUES('OLE', 'No - Output Limit Exceed');
+INSERT INTO map_verdict_string (abbreviation,description) VALUES('WA', 'No - Wrong Answer');
+INSERT INTO map_verdict_string (abbreviation,description) VALUES('AC', 'Yes - Accepted');
 
 
 CREATE TABLE map_submission_testdata (
