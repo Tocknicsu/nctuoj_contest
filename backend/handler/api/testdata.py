@@ -43,7 +43,7 @@ class Testdatum(ApiRequestHandler):
         if err:
             self.render(err)
         else:
-            err, res = yield from Service.Testdata.get_testdata(data)
+            err, res = yield from Service.Testdata.get_testdata({'id': testdata_id})
             self.render(res)
 
     @tornado.gen.coroutine

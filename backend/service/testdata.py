@@ -100,7 +100,7 @@ class Testdata(BaseService):
         id = data.pop('id')
         sql, param = self.gen_update_sql('testdata', data)
         res = yield self.db.execute(sql + ' WHERE id = %s', param + (id,))
-        folder = '%s/data/testdata/%s'%(config.DATA_ROOT, data['id'])
+        folder = '%s/data/testdata/%s'%(config.DATA_ROOT, id)
         try: os.makedirs(folder)
         except: pass
         for x in files:
@@ -120,4 +120,4 @@ class Testdata(BaseService):
         err = self.form_validation(data, required_args)
         if err: return (err, None)
         yield self.db.execute("DELETE FROM testdata WHERE id=%s", (data['id'],))
-        return (None, res)
+        return (None, data)
