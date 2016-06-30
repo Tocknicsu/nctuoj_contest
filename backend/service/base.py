@@ -33,3 +33,10 @@ class BaseService:
         sql = ''.join(' "%s",'%col for col in data)[:-1]
         sql = 'SELECT %s FROM "%s" '%(sql, tablename)
         return sql
+    
+    def calc_limit_offset(self, page, count):
+        page = int(page)
+        count = int(count)
+        offset = (page - 1) * count
+        return (count, offset)
+

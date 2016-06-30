@@ -1,89 +1,81 @@
-data = [
-    {
-        "name": "post_problem",
-        "url": "/api/problems/",
-        "method": "post",
-        "payload": {
-            "token": "ADMIN@TOKEN",
-            "title": "problem A",
-            "score_type": 0
+def problem_data():
+    data = []
+    for i in range(1, 5):
+        data += [{
+            "name": "post_problem_%s"%(chr(ord('A')+i-1)),
+            "url": "/api/problems/",
+            "method": "post",
+            "payload": {
+                "token": "ADMIN@TOKEN",
+                "title": "problem A",
+                "score_type": 0
+            },
+            "files": {
+                "pdf": "./api/problem/problem.pdf"
+            },
+            "ignore": ["msg"],
+            "response_status": 200,
+            "response_data": {}
         },
-        "files": {
-            "pdf": "./api/problem/problem.pdf"
-        },
-        "response_status": 200,
-        "response_data": {
-            "msg": {"id": 1, "score_type": 0, "title": "problem A", "testdata": [], "executes": []}
-        }
-    },
-    {
-        "name": "put_problem_execute",
-        "url": "/api/problems/1/executes/",
-        "method": "put",
-        "payload": {
-            "token": "ADMIN@TOKEN",
-            "executes[]": [1, 2, 3, 4]
-        },
-        "response_status": 200,
-        "response_data": {
-            "msg": [{"description": "C", "id": 1}, {"description": "C++11", "id": 2}, {"description": "C++14", "id": 3}, {"description": "Java", "id": 4}]
-        }
-    },
-    {
-        "name": "post_submission",
-        "url": "/api/submissions/",
-        "method": "post",
-        "payload": {
-            "token": "ADMIN@TOKEN",
-            "problem_id": 1,
-            "execute_type_id": 1,
-            "file_name": "test.c",
-            "code": "#include <stdio.h>\n int main(){ printf(\"Hello World\"); }"
-        },
-        "response_status": 200,
-        "response_data":{
-            "msg": {
-                "problem_id": 1, 
-                "length": 56, 
-                "memory_usage": None, 
-                "file_name": "test.c", 
-                "user_id": 1, 
-                "time_usage": None, 
-                "ip": "127.0.0.1", 
-                "id": 1, 
-                "execute_type_id": 1, 
-                "verdict": 1, 
-                "score": None,
-            }
-        }
-    },
-    {
-        "name": "post_submission_file",
-        "url": "/api/submissions/",
-        "method": "post",
-        "files": {
-            "file": "./api/submission/submission.c"
-        },
-        "payload": {
-            "token": "ADMIN@TOKEN",
-            "problem_id": 1,
-            "execute_type_id": 1
-        }, 
-        "response_status": 200,
-        "response_data": {
-            "msg": {
-                "problem_id": 1, 
-                "length": 76, 
-                "memory_usage": None, 
-                "file_name": "submission.c", 
-                "user_id": 1, 
-                "time_usage": None, 
-                "ip": "127.0.0.1", 
-                "id": 2, 
-                "execute_type_id": 1, 
-                "verdict": 1, 
-                "score": None,
-            }
-        }
-    }
-]
+        {
+            "name": "put_problem_execute",
+            "url": "/api/problems/%s/executes/"%(i),
+            "method": "put",
+            "payload": {
+                "token": "ADMIN@TOKEN",
+                "executes[]": [1, 2, 3, 4]
+            },
+            "ignore": ["msg"],
+            "response_status": 200,
+            "response_data": {}
+        }]
+    return data
+
+def post_submission():
+    data = []
+    role_token = ["admin", "test", "unofficial", "official"]
+    for x in role_token:
+        for i in range(1, 5):
+            data += [{
+                "name": "post_submission_%s_%s"%(x, chr(ord('A')+i-1)),
+                "url": "/api/submissions/",
+                "method": "post",
+                "payload": {
+                    "problem_id": i,
+                    "execute_type_id": 1,
+                    "file_name": "test.c",
+                    "code": "#include <stdio.h>\n int main(){ printf(\"Hello World\"); }",
+                    "token": "%s@TOKEN"%(x.upper()),
+                },
+                "ignore": ["msg"],
+                "response_status": 200,
+                "response_data":{}
+
+            }]
+    return data
+
+def query_submissions():
+    data = []
+    role_token = ["admin", "test", "unofficial", "official"]
+    for x in role_token:
+        data += [
+            {
+                "name": "get_submission_%s"%(x),
+                "url": "/api/submissions/",
+                "method": "get",
+                "payload":{
+                    "count": 10,
+                    "page": 1,
+                    "token": "%s@TOKEN"%(x.upper()),
+                },
+                "response_status": 200,
+                "response_data": {
+                }
+            },
+        ]
+    return data
+
+data = []
+data += problem_data()
+data += post_submission()
+data += query_submissions()

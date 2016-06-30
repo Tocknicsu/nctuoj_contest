@@ -8,6 +8,7 @@ DROP TABLE IF EXISTS problems CASCADE;
 DROP TABLE IF EXISTS map_problem_execute CASCADE;
 DROP TABLE IF EXISTS testdata;
 DROP TABLE IF EXISTS submissions CASCADE;
+DROP TABLE IF EXISTS scoreboard CASCADE;
 
 CREATE OR REPLACE FUNCTION updated_row() 
 RETURNS TRIGGER AS $$
@@ -61,7 +62,7 @@ CREATE INDEX on users ("type");
 INSERT INTO users (account, name, password, token, "type") VALUES ('admin', 'admin', '00b93578e0284e8a4b92fec5f386cbb5', 'ADMIN@TOKEN', 0);
 INSERT INTO users (account, name, password, token, "type") VALUES ('test', 'test', '', 'TEST@TOKEN', 1);
 INSERT INTO users (account, name, password, token, "type") VALUES ('unofficial', 'unofficial', '', 'UNOFFICIAL@TOKEN', 2);
-INSERT INTO users (account, name, password, token, "type") VALUES ('official', 'official', '', 'UNOFFICIAL@TOKEN', 3);
+INSERT INTO users (account, name, password, token, "type") VALUES ('official', 'official', '', 'OFFICIAL@TOKEN', 3);
 
 
 
@@ -167,7 +168,7 @@ CREATE TABLE submissions(
     execute_type_id integer         NOT NULL    REFERENCES execute_types(id)    ON DELETE CASCADE,
     time_usage      integer         ,
     memory_usage    integer         ,
-    verdict         integer         NOT NULL    DEFAULT 1,
+    verdict_id      integer         NOT NULL    DEFAULT 1,
     score           integer         ,
     length          integer         NOT NULL,
     file_name       varchar(255)    NOT NULL,
@@ -186,6 +187,16 @@ CREATE INDEX ON submissions (verdict);
 CREATE INDEX ON submissions (length);
 CREATE INDEX ON submissions (created_at);
 
+CREATE TABLE scoreboard (
+    id              serial          NOT NULL    PRIMARY KEY,
+    data            json            NOT NULL,
+    created_at      timestamp       DEFAULT date_trunc('second',now()),
+    updated_at      timestamp       DEFAULT date_trunc('second',now())
+);
+INSERT INTO scoreboard (data) VALUES ('{}'::json);
+INSERT INTO scoreboard (data) VALUES ('{}'::json);
+INSERT INTO scoreboard (data) VALUES ('{}'::json);
+INSERT INTO scoreboard (data) VALUES ('{}'::json);
 /*
 CREATE TABLE map_verdict_string (
     id              serial          NOT NULL    PRIMARY KEY,
@@ -229,34 +240,6 @@ CREATE INDEX ON map_submission_testdata(time_usage);
 CREATE INDEX ON map_submission_testdata(memory_usage);
 CREATE INDEX ON map_submission_testdata(verdict);
 
---DROP TABLE IF EXISTS contests;
 
-CREATE TABLE map_contest_problem (
-    problem_id      integer         NOT NULL    REFERENCES problems(id) ON DELETE CASCADE,
-    penalty         integer         NOT NULL    DEFAULT 20,
-    created_at      timestamp       DEFAULT date_trunc('second',now()),
-    updated_at      timestamp       DEFAULT date_trunc('second',now())
-);
-CREATE TRIGGER map_conteset_problem_update_row BEFORE UPDATE ON map_contest_problem FOR EACH ROW EXECUTE PROCEDURE updated_row();
-CREATE INDEX ON map_contest_problem (problem_id);
-CREATE UNIQUE INDEX ON map_contest_problem (contest_id, problem_id);
 
-CREATE TABLE wait_submissions (
-    id              serial          NOT NULL    PRIMARY KEY,
-    submission_id   integer         NOT NULL    REFERENCES submissions(id)  ON  DELETE  CASCADE,
-);
-CREATE TRIGGER wait_submissions_update_row BEFORE UPDATE ON wait_submissions FOR EACH ROW EXECUTE PROCEDURE updated_row();
-CREATE UNIQUE INDEX ON wait_submissions(submission_id);
-
-CREATE TABLE judge_token (
-    id              serial          NOT NULL    PRIMARY KEY,
-    addr            varchar(31)     DEFAULT '',
-    description     varchar(255)    DEFAULT '',
-    token           varchar(255)    NOT NULL,
-    created_at      timestamp       DEFAULT date_trunc('second',now()),
-    updated_at      timestamp       DEFAULT date_trunc('second',now())
-);
-CREATE TRIGGER judge_token_update_row BEFORE UPDATE ON judge_token FOR EACH ROW EXECUTE PROCEDURE updated_row();
-CREATE UNIQUE INDEX ON judge_token(token);
-INSERT INTO judge_token (token) VALUES('TOKEN');
 */

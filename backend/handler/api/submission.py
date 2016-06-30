@@ -7,9 +7,15 @@ from req import ApiRequestHandler
 class Submissions(ApiRequestHandler):
     @tornado.gen.coroutine
     def get(self):
-        args = ['problem_id', 'user', 'verdict']
-        data = self.get_args(args)
-        err, res = yield from Service.Submission.get_submission_list(data)
+        if self.account['isADMIN']:
+            args = ['problem_id', 'user', 'verdict_id', 'count', 'page']
+            data = self.get_args(args)
+            err, res = yield from Service.Submission.get_submission_list_admin(data)
+        else:
+            args = ['count', 'page']
+            data = self.get_args(args)
+            data['user_id'] = self.account['id']
+            err, res = yield from Service.Submission.get_submission_list(data)
         if err:
             self.render(err)
         else:
@@ -21,7 +27,6 @@ class Submissions(ApiRequestHandler):
         data = self.get_args(args)
         data['user_id'] = self.account['id']
         data['ip'] = self.remote_ip
-        self.log(data)
         if data['file'] == None:
             data.pop('file')
             err, res = yield from Service.Submission.post_submission_code(data)

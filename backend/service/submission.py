@@ -6,8 +6,53 @@ import re
 
 
 class Submission(BaseService):
+    def get_submission_list_admin(self, data={}):
+        required_args = [{
+            'name': '+count',
+            'type': int,
+        }, {
+            'name': '+page',
+            'type': int,
+        }, {
+            'name': 'user',
+            'type': str,
+        }, {
+            'name': 'problem_id',
+            'type': int,
+        }, {
+            'name': 'verdict',
+            'type': int,
+        }]
+        err = self.form_validation(data, required_args)
+        if err: return (err, None)
+        where = {}
+        if data['user'] is not None:
+            pass
+        if data['problem_id'] is not None:
+            pass
+        if data['verdict_id'] is not None:
+            pass
+
+        self.log(data)
+        limit, offset = self.calc_limit_offset(data['page'], data['count'])
+        res = yield self.db.execute("SELECT * FROM submissions ORDER BY id DESC LIMIT %s OFFSET %s", (limit, offset,))
+        res = res.fetchall()
+        return (None, res)
+
     def get_submission_list(self, data={}):
-        pass
+        required_args = [{
+            'name': '+count',
+            'type': int,
+        }, {
+            'name': '+page',
+            'type': int,
+        }]
+        err = self.form_validation(data, required_args)
+        if err: return (err, None)
+        limit, offset = self.calc_limit_offset(data['page'], data['count'])
+        res = yield self.db.execute("SELECT * FROM submissions WHERE user_id=%s ORDER BY id DESC LIMIT %s OFFSET %s", (data['user_id'], limit, offset,))
+        res = res.fetchall()
+        return (None, res)
 
     def get_submission(self, data={}):
         required_args = [{
