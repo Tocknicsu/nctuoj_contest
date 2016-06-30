@@ -50,13 +50,16 @@ class Problem(BaseService):
         sql, param = self.gen_insert_sql('problems', data)
         res = yield self.db.execute(sql, param)
         res = res.fetchone()
-        self.log(res)
+        ### Save File
         folder = '%s/data/problems/%s'%(config.DATA_ROOT, str(res['id']))
         file_path = '%s/pdf.pdf'%(folder)
         try: os.makedirs(folder)
         except: pass
         with open(file_path, 'wb+') as f:
             f.write(pdf['body'])
+        ### Add default verdict
+        yield self.db.execute("INSERT INTO verdicts (id, file_name, execute_type_id) VALUES (%s, %s, %s)", (res['id'], "main.py", 6,))
+        ### copy default verdict file
         return (None, res)
 
     def put_problem(self, data):
@@ -118,4 +121,40 @@ class Problem(BaseService):
                 yield self.db.execute("INSERT INTO map_problem_execute (problem_id, execute_type_id) VALUES (%s, %s)", (data['id'], x,))
             except:
                 pass
+        return (None, None)
+
+    def get_problem_verdict(self, data={}):
+        required_args = [{
+            'name': '+id',
+            'type': int
+        }]
+        err = self.form_validation(data, required_args)
+        if err: return (err, None)
+        res = yield self.db.execute("SELECT * FROM verdicts WHERE id=%s", (data['id'],))
+        res = res.fetchone()
+        return (None, res)
+
+    def put_problem_verdict(self, data={}):
+        required_args = [{
+            'name': '+id',
+            'type': int,
+        }, {
+            'name': '+execute_type_id',
+            'type': int,
+        }, {
+            'name': 'file',
+        }]
+        err = self.form_validation(data, required_args)
+        if err: return (err, None)
+        yield self.db.execute("UPDATE verdicts SET execute_type_id=%s WHERE id=%s",(data['execute_type_id'], data['id']))
+        if data['file'] is not None:
+            code_file = data.pop('file')
+            data['file_name'] = code_file['filename']
+            yield self.db.execute("UPDATE verdicts SET file_name=%s WHERE id=%s",(data['file_name'], data['id'],))
+            folder = '%s/data/verdicts/%s/'%(config.DATA_ROOT, id)
+            file_path = '%s/%s'%(folder, data['file_name'])
+            try: os.makedirs(folder)
+            except: pass
+            with open(file_path, 'wb+') as f:
+                f.write(code_file['body'])
         return (None, None)
