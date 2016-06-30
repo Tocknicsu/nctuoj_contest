@@ -35,8 +35,9 @@ class Submission(BaseService):
 
         self.log(data)
         limit, offset = self.calc_limit_offset(data['page'], data['count'])
-        res = yield self.db.execute("SELECT * FROM submissions ORDER BY id DESC LIMIT %s OFFSET %s", (limit, offset,))
-        res = res.fetchall()
+        res = {}
+        res['data'] = (yield self.db.execute("SELECT * FROM submissions ORDER BY id DESC LIMIT %s OFFSET %s", (limit, offset,))).fetchall()
+        res['count'] = (yield self.db.execute("SELECT COUNT(*) as count FROM submissions")).fetchone()
         return (None, res)
 
     def get_submission_list(self, data={}):
@@ -50,8 +51,9 @@ class Submission(BaseService):
         err = self.form_validation(data, required_args)
         if err: return (err, None)
         limit, offset = self.calc_limit_offset(data['page'], data['count'])
-        res = yield self.db.execute("SELECT * FROM submissions WHERE user_id=%s ORDER BY id DESC LIMIT %s OFFSET %s", (data['user_id'], limit, offset,))
-        res = res.fetchall()
+        res = {}
+        res['data'] = (yield self.db.execute("SELECT * FROM submissions WHERE user_id=%s ORDER BY id DESC LIMIT %s OFFSET %s", (data['user_id'], limit, offset,))).fetchall()
+        res['count'] = (yield self.db.execute("SELECT * FROM submissions WHERE user_id=%s", (data['user_id'],))).fetchone()
         return (None, res)
 
     def get_submission(self, data={}):
