@@ -44,6 +44,7 @@ class Clarification(BaseService):
         }, {
             'name': '+reply',
             'type': str,
+            'non_empty': True,
         }, {
             'name': '+reply_type',
             'type': int,
