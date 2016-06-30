@@ -9,6 +9,7 @@ DROP TABLE IF EXISTS map_problem_execute CASCADE;
 DROP TABLE IF EXISTS testdata;
 DROP TABLE IF EXISTS submissions CASCADE;
 DROP TABLE IF EXISTS scoreboard CASCADE;
+DROP TABLE IF EXISTS map_submission_testdata CASCADE;
 
 CREATE OR REPLACE FUNCTION updated_row() 
 RETURNS TRIGGER AS $$
@@ -197,31 +198,27 @@ INSERT INTO scoreboard (data) VALUES ('{}'::json);
 INSERT INTO scoreboard (data) VALUES ('{}'::json);
 INSERT INTO scoreboard (data) VALUES ('{}'::json);
 INSERT INTO scoreboard (data) VALUES ('{}'::json);
-/*
+
 CREATE TABLE map_verdict_string (
     id              serial          NOT NULL    PRIMARY KEY,
     abbreviation    varchar(15)     NOT NULL,
     description     varchar(31)     NOT NULL,
-    priority        integer         NOT NULL,
-    color           varchar(32)     NOT NULL    DEFAULT '#000',
     created_at      timestamp       DEFAULT date_trunc('second',now()),
     updated_at      timestamp       DEFAULT date_trunc('second',now())
 );
 CREATE TRIGGER map_verdict_string_updated_row BEFORE UPDATE ON map_verdict_string FOR EACH ROW EXECUTE PROCEDURE updated_row();
 CREATE INDEX ON map_verdict_string(priority);
-INSERT INTO map_verdict_string (abbreviation,description,priority,color) VALUES('Waiting', 'Waiting', 0, '#000');
-INSERT INTO map_verdict_string (abbreviation,description,priority,color) VALUES('Pending', 'In Queue', 1, '#000');
-INSERT INTO map_verdict_string (abbreviation,description,priority,color) VALUES('SE', 'System Error', 2, '#000');
-INSERT INTO map_verdict_string (abbreviation,description,priority,color) VALUES('CE', 'Compile Error', 3, 'rgb(51, 122, 183)');
-INSERT INTO map_verdict_string (abbreviation,description,priority,color) VALUES('RE', 'Runtime Error', 4, 'rgb(163, 188, 0)');
-INSERT INTO map_verdict_string (abbreviation,description,priority,color) VALUES('MLE', 'Memory Limit Exceed', 5, '#000');
-INSERT INTO map_verdict_string (abbreviation,description,priority,color) VALUES('TLE', 'Time Limit Exceed', 6, 'rgb(156, 39, 176)');
-INSERT INTO map_verdict_string (abbreviation,description,priority,color) VALUES('OLE', 'Output Limit Exceed', 7, '#000');
-INSERT INTO map_verdict_string (abbreviation,description,priority,color) VALUES('WA', 'Wrong Answer', 8, 'rgb(244, 67, 54)');
-INSERT INTO map_verdict_string (abbreviation,description,priority,color) VALUES('AC', 'Accepted', 9, 'rgb(76, 175, 80)');
+INSERT INTO map_verdict_string (abbreviation,description,priority,color) VALUES('Pending', 'Pending');
+INSERT INTO map_verdict_string (abbreviation,description,priority,color) VALUES('Judging', 'Judging');
+INSERT INTO map_verdict_string (abbreviation,description,priority,color) VALUES('SE', 'No - System Error');
+INSERT INTO map_verdict_string (abbreviation,description,priority,color) VALUES('CE', 'No - Compile Error');
+INSERT INTO map_verdict_string (abbreviation,description,priority,color) VALUES('RE', 'No - Runtime Error');
+INSERT INTO map_verdict_string (abbreviation,description,priority,color) VALUES('MLE', 'No - Memory Limit Exceed');
+INSERT INTO map_verdict_string (abbreviation,description,priority,color) VALUES('TLE', 'No - Time Limit Exceed');
+INSERT INTO map_verdict_string (abbreviation,description,priority,color) VALUES('OLE', 'No - Output Limit Exceed');
+INSERT INTO map_verdict_string (abbreviation,description,priority,color) VALUES('WA', 'No - Wrong Answer');
+INSERT INTO map_verdict_string (abbreviation,description,priority,color) VALUES('AC', 'Yes - Accepted');
 
-
---DROP TABLE IF EXISTS submissions;
 
 CREATE TABLE map_submission_testdata (
     id              serial          NOT NULL    PRIMARY KEY,
@@ -230,7 +227,7 @@ CREATE TABLE map_submission_testdata (
     time_usage      integer,
     memory_usage    integer,
     score           integer,
-    verdict         integer         DEFAULT 1   REFERENCES map_verdict_string(id)   ON DELETE CASCADE,
+    verdict_id      integer         DEFAULT 1   REFERENCES map_verdict_string(id)   ON DELETE CASCADE,
     created_at      timestamp       DEFAULT date_trunc('second',now()),
     updated_at      timestamp       DEFAULT date_trunc('second',now())
 );
@@ -238,8 +235,4 @@ CREATE TRIGGER map_submission_testdata_updated_row BEFORE UPDATE ON map_submissi
 CREATE INDEX ON map_submission_testdata(submission_id);
 CREATE INDEX ON map_submission_testdata(time_usage);
 CREATE INDEX ON map_submission_testdata(memory_usage);
-CREATE INDEX ON map_submission_testdata(verdict);
-
-
-
-*/
+CREATE INDEX ON map_submission_testdata(verdict_id);
