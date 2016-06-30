@@ -2,6 +2,7 @@ from req import Service
 from service.base import BaseService
 import config
 import os
+import shutil
 
 
 class Problem(BaseService):
@@ -58,8 +59,13 @@ class Problem(BaseService):
         with open(file_path, 'wb+') as f:
             f.write(pdf['body'])
         ### Add default verdict
-        yield self.db.execute("INSERT INTO verdicts (id, file_name, execute_type_id) VALUES (%s, %s, %s)", (res['id'], "main.py", 6,))
+        yield self.db.execute("INSERT INTO verdicts (id, file_name, execute_type_id) VALUES (%s, %s, %s)", (res['id'], "main.cpp", 2,))
         ### copy default verdict file
+        folder = '%s/data/verdicts/%s/'%(config.DATA_ROOT, str(res['id']))
+        file_path = '%s/%s'%(folder, "main.cpp")
+        try: os.makedirs(folder)
+        except: pass
+        shutil.copyfile("./default/verdict/main.cpp", file_path)
         return (None, res)
 
     def put_problem(self, data):
@@ -153,6 +159,8 @@ class Problem(BaseService):
             yield self.db.execute("UPDATE verdicts SET file_name=%s WHERE id=%s",(data['file_name'], data['id'],))
             folder = '%s/data/verdicts/%s/'%(config.DATA_ROOT, id)
             file_path = '%s/%s'%(folder, data['file_name'])
+            try: shutil.rmtree(folder)
+            except: pass
             try: os.makedirs(folder)
             except: pass
             with open(file_path, 'wb+') as f:

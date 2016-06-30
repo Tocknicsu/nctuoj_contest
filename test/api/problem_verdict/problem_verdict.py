@@ -27,19 +27,4 @@ data = [
         "response_data": {
         }
     },
-    {
-        "name": "put_problem_verdict",
-        "url": "/api/problems/1/verdict/",
-        "method": "put",
-        "payload": {
-            "token": "ADMIN@TOKEN",
-            "execute_type_id": 3,
-        },
-        "files": {
-            "file": "./api/problem_verdict/problem_verdict.py",
-        },
-        "response_status": 200,
-        "response_data": {
-        }
-    }
 ]
