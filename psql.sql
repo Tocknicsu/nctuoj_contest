@@ -6,11 +6,11 @@ DROP TABLE IF EXISTS verdicts CASCADE;
 DROP TABLE IF EXISTS contest CASCADE;
 DROP TABLE IF EXISTS problems CASCADE;
 DROP TABLE IF EXISTS map_problem_execute CASCADE;
-DROP TABLE IF EXISTS testdata;
 DROP TABLE IF EXISTS submissions CASCADE;
 DROP TABLE IF EXISTS scoreboard CASCADE;
 DROP TABLE IF EXISTS map_submission_testdata CASCADE;
-DROP TABLE IF EXISTS map_verdict_string;
+DROP TABLE IF EXISTS testdata CASCADE;
+DROP TABLE IF EXISTS map_verdict_string CASCADE;
 
 CREATE OR REPLACE FUNCTION updated_row() 
 RETURNS TRIGGER AS $$
@@ -185,7 +185,7 @@ CREATE INDEX ON submissions (problem_id);
 CREATE INDEX ON submissions (execute_type_id);
 CREATE INDEX ON submissions (memory_usage);
 CREATE INDEX ON submissions (time_usage);
-CREATE INDEX ON submissions (verdict);
+CREATE INDEX ON submissions (verdict_id);
 CREATE INDEX ON submissions (length);
 CREATE INDEX ON submissions (created_at);
 
@@ -208,7 +208,6 @@ CREATE TABLE map_verdict_string (
     updated_at      timestamp       DEFAULT date_trunc('second',now())
 );
 CREATE TRIGGER map_verdict_string_updated_row BEFORE UPDATE ON map_verdict_string FOR EACH ROW EXECUTE PROCEDURE updated_row();
-CREATE INDEX ON map_verdict_string(priority);
 INSERT INTO map_verdict_string (abbreviation,description) VALUES('Pending', 'Pending');
 INSERT INTO map_verdict_string (abbreviation,description) VALUES('Judging', 'Judging');
 INSERT INTO map_verdict_string (abbreviation,description) VALUES('SE', 'No - System Error');
