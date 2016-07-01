@@ -11,7 +11,22 @@ data = [
         },
         "response_status": 200,
         "response_data": {
-            "msg": {"id": 1, "score_type": 0, "title": "problem A", "testdata": [], "executes": []}
+            "msg": ""
+        }
+    }, 
+    {
+        "name": "test_put_problem_admin",
+        "url": "/api/problems/1/meta/",
+        "method": "put",
+        "payload": {
+            "token": "ADMIN@TOKEN",
+        },
+        "files": {
+            "zip": "./api/problem_meta/problem_meta.zip"
+        },
+        "response_status": 200,
+        "response_data": {
+            "msg": ""
         }
     }, 
 ]

@@ -88,7 +88,6 @@ class ProblemsMeta(ApiRequestHandler):
             self.render((400, "meta.json parse error"))
             return
         ### check basic in the meta
-        self.log(meta)
         meta['basic']['pdf'] = {}
         meta['basic']['pdf']['filename'] = meta['basic']['file']
         meta['basic']['pdf']['body'] = open("%s/%s"%(unzip_path, meta['basic']['pdf']['filename']), "rb").read()
@@ -97,14 +96,63 @@ class ProblemsMeta(ApiRequestHandler):
             return
 
         err, res = yield from Service.Problem.post_problem(meta['basic'])
+        problem_id = res['id']
+        errlist = []
         if err:
             self.render(err)
+        if 'testdata' in meta:
+            if not isinstance(meta['testdata'], list):
+                errlist += "testdata not a list"
+            else:
+                for x in meta['testdata']:
+                    if 'input' not in x:
+                        errlist += "input not in %s"%(x)
+                        continue
+                    if 'output' not in x:
+                        errlist += "output not in %s"%(x)
+                        continue
+                    _input = x['input']
+                    _output = x['output']
+                    x['input'] = {}
+                    x['input']['filename'] = _input
+                    x['input']['body'] = open("%s/%s"%(unzip_path, _input), "rb").read()
+                    x['output'] = {}
+                    x['output']['filename'] = _output
+                    x['output']['body'] = open("%s/%s"%(unzip_path, _output), "rb").read()
+                    x['problem_id'] = problem_id
+                    err, res = yield from Service.Testdata.post_testdata(x)
+                    if err:
+                        errlist += err
+        if 'executes' in meta:
+            if not isinstance(meta['executes'], list):
+                errlist += "executes not a list"
+            else:
+                data = {}
+                data['id'] = problem_id
+                data['executes'] = meta['executes']
+                err, res = yield from Service.Problem.put_problem_execute(data)
+                if err:
+                    errlist += err
+
+        if 'verdict' in meta:
+            if not isinstance(meta['verdict'], dict):
+                errlist += 'verdict not a dict'
+            else:
+                _file = meta['verdict']['file']
+                meta['verdict']['file'] = {}
+                meta['verdict']['file']['filename'] = _file
+                meta['verdict']['file']['body'] = open("%s/%s"%(unzip_path, _file), "rb").read()
+                meta['verdict']['id'] = problem_id
+                err, res = yield from Service.Problem.put_problem_verdict(meta['verdict'])
+                if err:
+                    errlist += err + " in the verdict"
+
         ### remove all tmp file
         try: os.remove(file_path)
         except: pass
         try: shutil.rmtree(unzip_path)
         except: pass
-        self.render()
+        self.render(errlist)
 
 
 
@@ -112,6 +160,103 @@ class ProblemsMeta(ApiRequestHandler):
 
 class ProblemMeta(ApiRequestHandler):
     @tornado.gen.coroutine
-    def put(self):
+    def put(self, id):
         args = ['zip[file]']
         data = self.get_args(args)
+        ### gen tmp file name
+        filename = hashlib.md5(data['zip']['body']).hexdigest()
+        folder = '%s/data/tmp'%(config.DATA_ROOT)
+        ### zip file_path
+        file_path = '%s/%s'%(folder, filename)
+        ### unzip file directory
+        unzip_path = '%s/unzip_%s'%(folder, filename)
+        try: os.makedirs(folder)
+        except: pass
+        try: os.makedirs(unzip_path)
+        except: pass
+        ### save zip file 
+        with open(file_path, 'wb+') as f:
+            f.write(data['zip']['body'])
+        ### unzip 
+        with zipfile.ZipFile(file_path) as f:
+            f.extractall(unzip_path)
+        ### get meta file path
+        meta_file_path = "%s/%s"%(unzip_path, "meta.json")
+        ### test meta is in the zip
+        if not os.path.exists(meta_file_path):
+            self.render((400, "meta.json not in the zip"))
+            return
+        ### parse meta file
+        meta = open(meta_file_path, "r").read()
+        try:
+            meta = json.loads(meta)
+        except:
+            self.render((400, "meta.json parse error"))
+            return
+        ### check basic in the meta
+        meta['basic']['pdf'] = {}
+        meta['basic']['pdf']['filename'] = meta['basic']['file']
+        meta['basic']['pdf']['body'] = open("%s/%s"%(unzip_path, meta['basic']['pdf']['filename']), "rb").read()
+        meta['basic']['id'] = id
+        if "basic" not in meta or not isinstance(meta['basic'], dict):
+            self.render((400, "meta.json not contain basic or basic is not a dict"))
+            return
+
+        err, res = yield from Service.Problem.put_problem(meta['basic'])
+        problem_id = id 
+        errlist = []
+        if err:
+            self.render(err)
+        if 'testdata' in meta:
+            if not isinstance(meta['testdata'], list):
+                errlist += "testdata not a list"
+            else:
+                for x in meta['testdata']:
+                    if 'input' not in x:
+                        errlist += "input not in %s"%(x)
+                        continue
+                    if 'output' not in x:
+                        errlist += "output not in %s"%(x)
+                        continue
+                    _input = x['input']
+                    _output = x['output']
+                    x['input'] = {}
+                    x['input']['filename'] = _input
+                    x['input']['body'] = open("%s/%s"%(unzip_path, _input), "rb").read()
+                    x['output'] = {}
+                    x['output']['filename'] = _output
+                    x['output']['body'] = open("%s/%s"%(unzip_path, _output), "rb").read()
+                    x['problem_id'] = problem_id
+                    err, res = yield from Service.Testdata.post_testdata(x)
+                    if err:
+                        errlist += err
+        if 'executes' in meta:
+            if not isinstance(meta['executes'], list):
+                errlist += "executes not a list"
+            else:
+                data = {}
+                data['id'] = problem_id
+                data['executes'] = meta['executes']
+                err, res = yield from Service.Problem.put_problem_execute(data)
+                if err:
+                    errlist += err
+
+        if 'verdict' in meta:
+            if not isinstance(meta['verdict'], dict):
+                errlist += 'verdict not a dict'
+            else:
+                _file = meta['verdict']['file']
+                meta['verdict']['file'] = {}
+                meta['verdict']['file']['filename'] = _file
+                meta['verdict']['file']['body'] = open("%s/%s"%(unzip_path, _file), "rb").read()
+                meta['verdict']['id'] = problem_id
+                err, res = yield from Service.Problem.put_problem_verdict(meta['verdict'])
+                if err:
+                    errlist += err + " in the verdict"
+
+        ### remove all tmp file
+        try: os.remove(file_path)
+        except: pass
+        try: shutil.rmtree(unzip_path)
+        except: pass
+        self.render(errlist)

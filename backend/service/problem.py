@@ -47,7 +47,6 @@ class Problem(BaseService):
             'name': '+pdf',
         }]
         err = self.form_validation(data, required_args)
-        self.log(data)
         if err: return (err, None)
         pdf = data.pop('pdf')
         sql, param = self.gen_insert_sql('problems', data)
@@ -120,7 +119,6 @@ class Problem(BaseService):
             'name': '+executes',
             'type': list
         }]
-        self.log(data)
         err = self.form_validation(data, required_args)
         if err: return (err, None)
         yield self.db.execute("DELETE FROM map_problem_execute WHERE problem_id=%s", (data['id'],))
