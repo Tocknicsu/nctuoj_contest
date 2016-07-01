@@ -18,6 +18,7 @@ urls = [
     #('/api/problems/(\d+)/rejudge/', Handler.api.ProblemRejudge),
     ('/api/problems/(\d+)/testdata/', Handler.api.Testdata),
     ('/api/problems/(\d+)/testdata/(\d+)/', Handler.api.Testdatum),
+    ('/api/problems/(\d+)/testdata/(\d+)/(\w+)/', Handler.api.TestdatumFile, {'path': '/mnt/oj/data/testdata'}),
     ('/api/problems/(\d+)/verdict/', Handler.api.ProblemVerdict),
     #('/api/problems/(\d+)/testdata/(\d+)/(\w*)/', Handler.api.TestdatumFile),
     ('/api/submissions/', Handler.api.Submissions),
