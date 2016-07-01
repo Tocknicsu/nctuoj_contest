@@ -33,6 +33,7 @@ class Problem(BaseService):
         res = res.fetchone()
         err, res['executes'] = yield from self.get_problem_execute(data)
         err, res['testdata'] = yield from Service.Testdata.get_testdata_list(data)
+        err, res['verdict'] = yield from self.get_problem_verdict(data)
         return (None, res)
 
     def post_problem(self, data={}):
