@@ -92,13 +92,8 @@ class ProblemsMeta(ApiRequestHandler):
         if "basic" not in meta or isinstance(meta['basic'], dict):
             self.render((400, "meta.json not contain basic or basic is not a dict"))
             return
+
         #err, res = yield from Service.Problem.post_problem(meta['basic'])
-
-
-
-
-
-            
         self.render()
         ### remove all tmp file
         try: os.remove(file_path)
