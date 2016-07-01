@@ -77,7 +77,9 @@ class RequestHandler(CorsMixin, tornado.web.RequestHandler):
     @tornado.gen.coroutine
     def check_permission(self):
         err, res = yield from Service.Util.contest_status()
-        if res == -1 and self.account['isADMIN'] == False:
+        uri = self.request.uri.split('?')[0]
+        self.log(uri)
+        if res == -1 and self.account['isADMIN'] == False and uri not in config.URL_WHITE_LIST:
             self.render((403, "Permission Denied"))
         now = Service.Permission
         for attr in self.path[1:]:
