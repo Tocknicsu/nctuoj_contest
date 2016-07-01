@@ -53,7 +53,6 @@ urls = [
     ('/api/clarifications/(\d+)/', Handler.api.Clarification),
     ('/api/executes/', Handler.api.Executes),
     ('/api/executes/(\d+)/', Handler.api.Execute),
-    ('/api/verdicts/', Handler.api.Verdicts),
     ('/api/scoreboard/', Handler.api.Scoreboard),
     ('/file/test/(\w*)', Handler.file.Test, {'path': '/tmp/'}),
 """

@@ -3,8 +3,11 @@ from service.base import BaseService
 
 
 class Clarification(BaseService):
-    def get_clarification_list(self):
-        res = yield self.db.execute("SELECT * FROM clarifications ORDER BY id ASC")
+    def get_clarification_list(self, data):
+        if data['isADMIN']:
+            res = yield self.db.execute("SELECT * FROM clarifications ORDER BY id ASC")
+        else:
+            res = yield self.db.execute("SELECT * FROM clarifications WHERE reply_type=1 or user_id=%s ORDER BY id ASC", (data['user_id'],))
         res = res.fetchall()
         return (None, res)
 

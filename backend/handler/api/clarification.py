@@ -7,7 +7,11 @@ from req import ApiRequestHandler
 class Clarifications(ApiRequestHandler):
     @tornado.gen.coroutine
     def get(self):
-        err, res = yield from Service.Clarification.get_clarification_list()
+        data = {
+            "isADMIN": self.account['isADMIN'],
+            "user_id": self.account['id'],
+        }
+        err, res = yield from Service.Clarification.get_clarification_list(data)
         if err:
             self.render(err)
         else:

@@ -17,19 +17,6 @@ data = [
         }
     },
     {
-        "name": "put_problem_execute",
-        "url": "/api/problems/1/executes/",
-        "method": "put",
-        "payload": {
-            "token": "ADMIN@TOKEN",
-            "executes[]": [1, 2, 3, 4]
-        },
-        "response_status": 200,
-        "response_data": {
-            "msg": [{"description": "C", "id": 1}, {"description": "C++11", "id": 2}, {"description": "C++14", "id": 3}, {"description": "Java", "id": 4}]
-        }
-    },
-    {
         "name": "post_clarification",
         "url": "/api/clarifications/",
         "method": "post",
@@ -69,6 +56,20 @@ data = [
         "response_status": 404,
         "response_data":{
             "msg": "Not Found"
+        }
+    },
+    {
+        "name": "put_clarification_no_reply",
+        "url": "/api/clarifications/1/",
+        "method": "put",
+        "payload": {
+            "token": "ADMIN@TOKEN",
+            "reply_type": 1,
+            "reply": ""
+        },
+        "response_status": 400,
+        "response_data":{
+            "msg": 'value of reply: "" should not be empty value'
         }
     },
     {
