@@ -2,14 +2,17 @@ from req import Service
 from permission.base import BasePermission
 
 
-class UsersCSV(BasePermission):
-    def post(self, req):
-        ### No Login
-        if not req.account['isADMIN']:
-            return (403, "Permission Denied")
 
 class Users(BasePermission):
     def get(self, req):
         if not req.account['isADMIN']:
             return (403, "Permission Denied")
 
+    def post(self, req):
+        if not req.account['isADMIN']:
+            return (403, "Permission Denied")
+
+class UsersCSV(BasePermission):
+    def post(self, req):
+        if not req.account['isADMIN']:
+            return (403, "Permission Denied")

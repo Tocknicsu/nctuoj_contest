@@ -111,6 +111,20 @@ class Problem(BaseService):
         res = res.fetchall()
         return (None, res)
 
+    def fine_problem_execute(self, data={}):
+        required_args = [{
+            'name': '+problem_id',
+            'type': int
+        }, {
+            'name': '+exeucte_type_id',
+            'type': int
+        }]
+        err = self.form_validation(data, required_args)
+        if err: return (err, None)
+        res = yield self.db.execute("SELECT * FROM map_problem_execute WHERE problem_id=%s and exeucte_type_id=%s", (data['problem_id'], data['execute_type_id'],))
+        res = res.fetchone()
+        return (None, res)
+
     def put_problem_execute(self, data={}):
         required_args = [{
             'name': '+id',
