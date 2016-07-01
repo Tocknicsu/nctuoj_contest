@@ -29,7 +29,7 @@ data = [
         },
         "response_status": 200,
         "response_data": {
-            "msg": {"id": 1, "score_type": 0, "title": "problem A", "testdata": [], "executes": []}
+            "msg": {"id": 1, "score_type": 0, "title": "problem A", "testdata": [], "executes": [], "verdict": {"execute_type_id": 2, "id": 1, "file_name": "main.cpp"}}
         }
     },
     {
