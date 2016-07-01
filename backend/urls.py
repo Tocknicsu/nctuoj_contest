@@ -12,6 +12,7 @@ urls = [
     ('/api/problems/', Handler.api.Problems),
     #('/api/problems/meta/', Handler.api.ProblemsMeta),
     ('/api/problems/(\d+)/', Handler.api.Problem),
+    ('/api/problems/(\d+)/pdf/', Handler.api.ProblemPdf, {'path': '/mnt/oj/data/problems'}),
     #('/api/problems/(\d+)/', Handler.api.ProblemMeta),
     ('/api/problems/(\d+)/executes/', Handler.api.ProblemExecutes),
     #('/api/problems/(\d+)/rejudge/', Handler.api.ProblemRejudge),
