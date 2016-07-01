@@ -3,6 +3,7 @@ import tornado.gen
 
 from req import Service
 from req import ApiRequestHandler
+from req import StaticFileHandler
 
 class ProblemVerdict(ApiRequestHandler):
     @tornado.gen.coroutine
@@ -25,3 +26,10 @@ class ProblemVerdict(ApiRequestHandler):
             err, res = yield from Service.Problem.get_problem_verdict({'id': id})
             self.render(res)
 
+class ProblemVerdictFile(StaticFileHandler):
+    @tornado.gen.coroutine
+    def get(self, id, include_body=True):
+        path = ''
+        err, res = yield from Service.Problem.get_problem_verdict({'id': id})
+        path = '%s/%s' % (id, res['file_name'])
+        yield super().get(path, include_body)
