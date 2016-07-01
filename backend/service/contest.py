@@ -1,6 +1,7 @@
 from req import Service
 from service.base import BaseService
 from datetime import datetime
+from datetime import timedelta
 
 
 class Contest(BaseService):
@@ -27,6 +28,10 @@ class Contest(BaseService):
         }]
         err = self.form_validation(data, required_args)
         if err: return (err, None)
+        if data['start'] > data['end']:
+            return ((400, 'start cannot larger than end'), None)
+        if data['start'] + timedelta(minutes=data['freeze']) > data['end']:
+            return ((400, 'start + freeze cannot larger than end'), None)
         data['start'] = str(data['start'])
         data['end'] = str(data['end'])
         sql, param = self.gen_update_sql("contest", data)

@@ -89,5 +89,40 @@ data = [
                 "description": "XD"
             }
         }
+    },
+    {
+        "name": "test_put_contest_admin_wrong_time(start > end)",
+        "url": "/api/contest/",
+        "method": "put",
+        "payload": {
+            "token": "ADMIN@TOKEN",
+            "title": "change",
+            "start": str(datetime.datetime.now())[:-7],
+            "end": str(datetime.datetime.now() + datetime.timedelta(hours=-3))[:-7],
+            "freeze": 0,
+            "description": "XD"
+        }, 
+        "response_status": 400,
+        "response_data":{
+            "msg": "start cannot larger than end"
+        }
+    },
+    {
+        "name": "test_put_contest_admin_wrong_time(start + freeze > end)",
+        "url": "/api/contest/",
+        "method": "put",
+        "payload": {
+            "token": "ADMIN@TOKEN",
+            "title": "change",
+            "start": str(datetime.datetime.now())[:-7],
+            "end": str(datetime.datetime.now() + datetime.timedelta(hours=3))[:-7],
+            "freeze": 200,
+            "description": "XD"
+        }, 
+        "response_status": 400,
+        "response_data":{
+            "msg": "start + freeze cannot larger than end"
+        }
     }
+
 ]
