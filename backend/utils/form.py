@@ -27,12 +27,14 @@ def _form_validation(form, schema):
     dict
     datetime
     '''
-    new_form = {}
-    for item in form:
+    key = list(form.keys())
+    for item in key:
+        exist = False
         for x in schema:
             if x['name'] == item or (x['name'][0] == '+' and x['name'][1:] == item):
-                new_form[item] = form[item]
-    form = new_form
+                exist = True
+        if not exist:
+            del form[item]
 
 
     for item in schema:

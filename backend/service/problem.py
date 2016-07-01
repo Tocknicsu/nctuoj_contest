@@ -47,6 +47,7 @@ class Problem(BaseService):
             'name': '+pdf',
         }]
         err = self.form_validation(data, required_args)
+        self.log(data)
         if err: return (err, None)
         pdf = data.pop('pdf')
         sql, param = self.gen_insert_sql('problems', data)

@@ -83,23 +83,28 @@ class ProblemsMeta(ApiRequestHandler):
         ### parse meta file
         meta = open(meta_file_path, "r").read()
         try:
-            meta_json = json.loads(meta)
+            meta = json.loads(meta)
         except:
             self.render((400, "meta.json parse error"))
             return
-        self.log(meta_json)
         ### check basic in the meta
-        if "basic" not in meta or isinstance(meta['basic'], dict):
+        self.log(meta)
+        meta['basic']['pdf'] = {}
+        meta['basic']['pdf']['filename'] = meta['basic']['file']
+        meta['basic']['pdf']['body'] = open("%s/%s"%(unzip_path, meta['basic']['pdf']['filename']), "rb").read()
+        if "basic" not in meta or not isinstance(meta['basic'], dict):
             self.render((400, "meta.json not contain basic or basic is not a dict"))
             return
 
-        #err, res = yield from Service.Problem.post_problem(meta['basic'])
-        self.render()
+        err, res = yield from Service.Problem.post_problem(meta['basic'])
+        if err:
+            self.render(err)
         ### remove all tmp file
         try: os.remove(file_path)
         except: pass
         try: shutil.rmtree(unzip_path)
         except: pass
+        self.render()
 
 
 
