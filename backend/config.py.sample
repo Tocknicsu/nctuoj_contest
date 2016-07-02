@@ -29,6 +29,7 @@ URL_WHITE_LIST = [
     "/api/users/me/",
     "/api/users/signin/",
     "/api/contest/",
+    "/api/languages/",
 ]
 
 JUDGE_TOKEN_LIST = [

@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS languages CASCADE;
 DROP TABLE IF EXISTS execute_types CASCADE;
 DROP TABLE IF EXISTS execute_steps CASCADE;
 DROP TABLE IF EXISTS clarifications CASCADE;
@@ -11,6 +12,7 @@ DROP TABLE IF EXISTS scoreboard CASCADE;
 DROP TABLE IF EXISTS map_submission_testdata CASCADE;
 DROP TABLE IF EXISTS testdata CASCADE;
 DROP TABLE IF EXISTS map_verdict_string CASCADE;
+DROP TABLE IF EXISTS wait_submissions CASCADE;
 
 CREATE OR REPLACE FUNCTION updated_row() 
 RETURNS TRIGGER AS $$
@@ -67,21 +69,34 @@ INSERT INTO users (account, name, password, token, "type") VALUES ('unofficial',
 INSERT INTO users (account, name, password, token, "type") VALUES ('official', 'official', '194d8a3231a17c7b6c72407f9c1d0930', 'OFFICIAL@TOKEN', 3);
 
 
+CREATE TABLE languages (
+    id              serial          NOT NULL    PRIMARY KEY,
+    name            varchar(32)     NOT NULL    DEFAULT '',
+    created_at      timestamp       DEFAULT date_trunc('second', now()),
+    updated_at      timestamp       DEFAULT date_trunc('second', now())
+);
+CREATE TRIGGER languages_updated_row BEFORE UPDATE ON languages FOR EACH ROW EXECUTE PROCEDURE updated_row();
+INSERT INTO languages (name) values ('C');
+INSERT INTO languages (name) values ('C++');
+INSERT INTO languages (name) values ('Java');
+INSERT INTO languages (name) values ('Python2');
+INSERT INTO languages (name) values ('Python3');
 
 CREATE TABLE execute_types (
     id              serial          NOT NULL    PRIMARY KEY,
     description     varchar(255)    NOT NULL    DEFAULT '',
     file_name       varchar(255)    NOT NULL    DEFAULT '',
+    language_id     integer         NOT NULL    REFERENCES languages(id)        ON DELETE CASCADE,
     created_at      timestamp       DEFAULT date_trunc('second',now()),
     updated_at      timestamp       DEFAULT date_trunc('second',now())
 );
 CREATE TRIGGER execute_types_updated_row BEFORE UPDATE ON execute_types FOR EACH ROW EXECUTE PROCEDURE updated_row();
-INSERT INTO execute_types (description, file_name) values ('C', 'main.c');
-INSERT INTO execute_types (description, file_name) values ('C++11', 'main.cpp');
-INSERT INTO execute_types (description, file_name) values ('C++14', 'main.cpp');
-INSERT INTO execute_types (description, file_name) values ('Java', 'Main.java');
-INSERT INTO execute_types (description, file_name) values ('Python2', 'main.py');
-INSERT INTO execute_types (description, file_name) values ('Python3', 'main.py');
+INSERT INTO execute_types (description, file_name, language_id) values ('C', 'main.c', 1);
+INSERT INTO execute_types (description, file_name, language_id) values ('C++11', 'main.cpp', 2);
+INSERT INTO execute_types (description, file_name, language_id) values ('C++14', 'main.cpp', 2);
+INSERT INTO execute_types (description, file_name, language_id) values ('Java', 'Main.java', 3);
+INSERT INTO execute_types (description, file_name, language_id) values ('Python2', 'main.py', 4);
+INSERT INTO execute_types (description, file_name, language_id) values ('Python3', 'main.py', 5);
 
 CREATE TABLE execute_steps (
     id              serial          NOT NULL    PRIMARY KEY,
@@ -236,3 +251,9 @@ CREATE INDEX ON map_submission_testdata(submission_id);
 CREATE INDEX ON map_submission_testdata(time_usage);
 CREATE INDEX ON map_submission_testdata(memory_usage);
 CREATE INDEX ON map_submission_testdata(verdict_id);
+
+CREATE TABLE wait_submissions (
+    id              serial          NOT NULL    PRIMARY KEY,
+    submission_id   integer         NOT NULL    REFERENCES submissions(id) ON DELETE CASCADE
+);
+

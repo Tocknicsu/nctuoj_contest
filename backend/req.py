@@ -133,8 +133,10 @@ class RequestHandler(CorsMixin, tornado.web.RequestHandler):
             for x in map_users_type:
                 self.account['is' + x] = False
             self.account['isLOGIN'] = False
-        
 
+        if token in config.JUDGE_TOKEN_LIST:
+            self.account['isLOGIN'] = True
+            self.account['isADMIN'] = True
 
 class ApiRequestHandler(RequestHandler):
     def render(self, msg=""):

@@ -5,6 +5,7 @@ include(Handler, "./handler/")
 urls = [
     ('/', Handler.Index),
     ('/api/contest/', Handler.api.Contest),
+    ('/api/languages/', Handler.api.Languages),
     ('/api/users/', Handler.api.Users),
     ('/api/users/me/', Handler.api.UsersMe),
     ('/api/users/csv/', Handler.api.UsersCSV),
@@ -32,6 +33,7 @@ urls = [
     ('/api/verdicts/', Handler.api.Verdicts),
     ('/api/system/(\w*)/', Handler.api.System),
     ('/api/scoreboard/', Handler.api.Scoreboard),
+    #('/api/judge/', Handler.api.Judge),
     ('/file/test/(\w*)', Handler.file.Test, {'path': '/tmp/'}),
 ]
 """
