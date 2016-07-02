@@ -50,8 +50,6 @@ urls = [
     ('/api/submissions/', Handler.api.Submissions),
     ('/api/submissions/(\d+)/', Handler.api.Submission),
     #('/api/submissions/(\d+)/rejudge/', Handler.api.SubmissionRejudge),
-    ('/api/clarifications/', Handler.api.Clarifications),
-    ('/api/clarifications/(\d+)/', Handler.api.Clarification),
     ('/api/scoreboard/', Handler.api.Scoreboard),
     ('/file/test/(\w*)', Handler.file.Test, {'path': '/tmp/'}),
 """
