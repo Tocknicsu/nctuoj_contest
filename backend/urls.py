@@ -35,7 +35,6 @@ urls = [
     ('/file/test/(\w*)', Handler.file.Test, {'path': '/tmp/'}),
 ]
 """
-    ('/api/problems/', Handler.api.Problems),
     ('/api/problems/meta/', Handler.api.ProblemsMeta),
     ('/api/problems/(\d+)/', Handler.api.Problem),
     ('/api/problems/(\d+)/pdf/', Handler.api.ProblemPdf, {'path': '/mnt/oj/data/problems'}),
@@ -53,8 +52,6 @@ urls = [
     #('/api/submissions/(\d+)/rejudge/', Handler.api.SubmissionRejudge),
     ('/api/clarifications/', Handler.api.Clarifications),
     ('/api/clarifications/(\d+)/', Handler.api.Clarification),
-    ('/api/executes/', Handler.api.Executes),
-    ('/api/executes/(\d+)/', Handler.api.Execute),
     ('/api/scoreboard/', Handler.api.Scoreboard),
     ('/file/test/(\w*)', Handler.file.Test, {'path': '/tmp/'}),
 """
