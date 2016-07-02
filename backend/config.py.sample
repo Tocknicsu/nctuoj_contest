@@ -21,3 +21,16 @@ DB_SETTING['raise_connect_errors'] = False
 DB_SETTING['cursor_factory'] = psycopg2.extras.RealDictCursor
 
 DATA_ROOT = "/mnt/oj/"
+
+
+URL_WHITE_LIST = [
+    "/api/scoreboard/",
+    "/api/system/time/",
+    "/api/users/me/",
+    "/api/users/signin/",
+    "/api/contest/",
+]
+
+JUDGE_TOKEN_LIST = [
+    "",
+]
