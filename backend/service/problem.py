@@ -31,7 +31,7 @@ class Problem(BaseService):
         if err: return (err, None)
         res = yield self.db.execute("SELECT * FROM problems WHERE id=%s", (data['id'],))
         res = res.fetchone()
-        err, res['executes'] = yield from self.get_problem_execute(data)
+        err, res['executes'] = yield from self.get_problem_execute_list(data)
         err, res['testdata'] = yield from Service.Testdata.get_testdata_list(data)
         err, res['verdict'] = yield from self.get_problem_verdict(data)
         return (None, res)
@@ -100,7 +100,7 @@ class Problem(BaseService):
                 f.write(pdf['body'])
         return (None, None)
 
-    def get_problem_execute(self, data={}):
+    def get_problem_execute_list(self, data={}):
         required_args = [{
             'name': '+id',
             'type': int
@@ -111,21 +111,22 @@ class Problem(BaseService):
         res = res.fetchall()
         return (None, res)
 
-    def fine_problem_execute(self, data={}):
+    def get_problem_execute(self, data={}):
         required_args = [{
             'name': '+problem_id',
             'type': int
         }, {
-            'name': '+exeucte_type_id',
+            'name': '+execute_type_id',
             'type': int
         }]
         err = self.form_validation(data, required_args)
         if err: return (err, None)
-        res = yield self.db.execute("SELECT * FROM map_problem_execute WHERE problem_id=%s and exeucte_type_id=%s", (data['problem_id'], data['execute_type_id'],))
+        self.log(data)
+        res = yield self.db.execute("SELECT * FROM map_problem_execute WHERE problem_id=%s and execute_type_id=%s", (data['problem_id'], data['execute_type_id'],))
         res = res.fetchone()
         return (None, res)
 
-    def put_problem_execute(self, data={}):
+    def put_problem_execute_list(self, data={}):
         required_args = [{
             'name': '+id',
             'type': int

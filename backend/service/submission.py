@@ -26,11 +26,11 @@ class Submission(BaseService):
         err = self.form_validation(data, required_args)
         if err: return (err, None)
         where = {}
-        if data['user'] is not None:
+        if 'user' in data and data['user'] is not None:
             pass
-        if data['problem_id'] is not None:
+        if 'problem_id' in data and data['problem_id'] is not None:
             pass
-        if data['verdict_id'] is not None:
+        if 'verdict_id' in data and data['verdict_id'] is not None:
             pass
 
         self.log(data)
@@ -46,6 +46,9 @@ class Submission(BaseService):
             'type': int,
         }, {
             'name': '+page',
+            'type': int,
+        }, {
+            'name': '+user_id',
             'type': int,
         }]
         err = self.form_validation(data, required_args)
