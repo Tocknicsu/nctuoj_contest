@@ -20,7 +20,7 @@ class Submission(BaseService):
             'name': 'problem_id',
             'type': int,
         }, {
-            'name': 'verdict',
+            'name': 'verdict_id',
             'type': int,
         }]
         err = self.form_validation(data, required_args)
