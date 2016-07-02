@@ -209,14 +209,14 @@ class ProblemMeta(ApiRequestHandler):
             self.render(err)
         if 'testdata' in meta:
             if not isinstance(meta['testdata'], list):
-                errlist += "testdata not a list"
+                errlist.append("testdata not a list")
             else:
                 for x in meta['testdata']:
                     if 'input' not in x:
-                        errlist += "input not in %s"%(x)
+                        errlist.append("input not in %s"%(x))
                         continue
                     if 'output' not in x:
-                        errlist += "output not in %s"%(x)
+                        errlist.append("output not in %s"%(x))
                         continue
                     _input = x['input']
                     _output = x['output']
@@ -229,21 +229,21 @@ class ProblemMeta(ApiRequestHandler):
                     x['problem_id'] = problem_id
                     err, res = yield from Service.Testdata.post_testdata(x)
                     if err:
-                        errlist += err
+                        errlista.append(err)
         if 'executes' in meta:
             if not isinstance(meta['executes'], list):
-                errlist += "executes not a list"
+                errlist.append("executes not a list")
             else:
                 data = {}
                 data['id'] = problem_id
                 data['executes'] = meta['executes']
                 err, res = yield from Service.Problem.put_problem_execute(data)
                 if err:
-                    errlist += err
+                    errlist.append(err)
 
         if 'verdict' in meta:
             if not isinstance(meta['verdict'], dict):
-                errlist += 'verdict not a dict'
+                errlist.append('verdict not a dict')
             else:
                 _file = meta['verdict']['file']
                 meta['verdict']['file'] = {}
@@ -252,7 +252,7 @@ class ProblemMeta(ApiRequestHandler):
                 meta['verdict']['id'] = problem_id
                 err, res = yield from Service.Problem.put_problem_verdict(meta['verdict'])
                 if err:
-                    errlist += err + " in the verdict"
+                    errlist.append(err + " in the verdict")
 
         ### remove all tmp file
         try: os.remove(file_path)
