@@ -44,8 +44,9 @@ class Execute(BaseService):
             'type': int,
         }]
         err = self.form_validation(data, required_args)
-        if err: return (err, None)
-        res = yield self.db.execute("INSERT INTO execute_types (description, file_name) VALUES (%s, %s) RETURNING id", (data['description'],data['file_name']))
+        if err: return (err, None) 
+        res = yield self.db.execute("INSERT INTO execute_types (description, file_name, language_id) VALUES (%s, %s, %s) RETURNING id", 
+                (data['description'],data['file_name'],data['language_id'],))
         res = res.fetchone()
         for x in data['commands']:
             yield self.db.execute("INSERT INTO execute_steps (execute_type_id, command) VALUES (%s, %s)", (res['id'], x,))
@@ -70,7 +71,7 @@ class Execute(BaseService):
         }]
         err = self.form_validation(data, required_args)
         if err: return (err, None)
-        yield self.db.execute("UPDATE execute_types SET description=%s, file_name=%s WHERE id=%s", (data['description'], data['file_name'], data['id'],))
+        yield self.db.execute("UPDATE execute_types SET description=%s, file_name=%s, language_id=%s WHERE id=%s", (data['description'], data['file_name'], data['id'],data['language_id'],))
         res = yield self.db.execute("DELETE FROM execute_steps WHERE execute_type_id=%s", (data['id'],))
         for x in data['commands']:
             yield self.db.execute("INSERT INTO execute_steps (execute_type_id, command) VALUES (%s, %s)", (data['id'], x,))

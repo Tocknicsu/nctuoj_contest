@@ -17,6 +17,7 @@ class Executes(ApiRequestHandler):
     def post(self):
         args = ['description', 'commands[]', 'file_name', 'language_id']
         data = self.get_args(args)
+        self.log(data)
         err, res = yield from Service.Execute.post_execute(data)
         if err:
             self.render(err)

@@ -54,7 +54,8 @@ data = [
             "token": "ADMIN@TOKEN",
             "description": "NEW",
             "commands[]": ["NEW COMMAND1", "NEW COMMAND2"],
-            "file_name": "default.filename"
+            "file_name": "default.filename",
+            "language_id": 1,
         },
         "response_status": 200,
         "response_data": {
@@ -63,6 +64,7 @@ data = [
                 "description": "NEW", 
                 "id": 7,
                 "file_name": "default.filename",
+                "language_id": 1,
             }
         }
     }

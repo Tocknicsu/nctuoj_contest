@@ -67,6 +67,7 @@ data = [
             "description": "C",
             "commands[]": ["gcc -lm -std=c99 __FILE__", "./a.out"],
             "file_name": "main.c",
+            "language_id": 1,
         },
         "response_status": 200,
         "response_data": {
@@ -74,7 +75,8 @@ data = [
                 "id": 1,
                 "description": "C",
                 "commands": [{"command": "gcc -lm -std=c99 __FILE__"}, {"command": "./a.out"}],
-                "file_name": "main.c"
+                "file_name": "main.c",
+                "language_id": 1,
             }
         }
     },

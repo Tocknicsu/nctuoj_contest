@@ -11,7 +11,8 @@ data = [
                 "id": 1,
                 "description": "C",
                 "commands": [{"command": "gcc -lm -std=c99 __FILE__"}, {"command": "./a.out"}],
-                "file_name": "main.c"
+                "file_name": "main.c",
+                "language_id": 1,
             }
         }
     },
