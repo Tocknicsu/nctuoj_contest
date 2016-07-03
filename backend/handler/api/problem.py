@@ -131,7 +131,7 @@ class ProblemsMeta(ApiRequestHandler):
                 data = {}
                 data['id'] = problem_id
                 data['executes'] = meta['executes']
-                err, res = yield from Service.Problem.put_problem_execute(data)
+                err, res = yield from Service.Problem.put_problem_execute_list(data)
                 if err:
                     errlist += err
 
