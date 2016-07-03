@@ -23,8 +23,4 @@
             }
     ],
     "executes": [1, 2, 3, 4],
-    "verdict": {
-        "file": "verdict.cpp",
-        "execute_type_id": 2
-    }
 }
