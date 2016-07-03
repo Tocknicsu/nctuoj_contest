@@ -3,6 +3,9 @@ from service.base import BaseService
 import config
 import os
 import shutil
+import hashlib
+import zipfile
+import json
 
 
 class Problem(BaseService):
@@ -98,7 +101,7 @@ class Problem(BaseService):
             except: pass
             with open(file_path, 'wb+') as f:
                 f.write(pdf['body'])
-        return (None, None)
+        return (None, {'id': id})
 
     def get_problem_execute_list(self, data={}):
         required_args = [{
@@ -181,3 +184,258 @@ class Problem(BaseService):
             with open(file_path, 'wb+') as f:
                 f.write(code_file['body'])
         return (None, None)
+
+    def check_problem_meta(self, data={}):
+        required_args = [{
+            'name': '+zip',
+        }]
+        err = self.form_validation(data, required_args)
+        if err:
+            return (err, None)
+        filename = hashlib.md5(data['zip']['body']).hexdigest()
+        folder = os.path.join(config.DATA_ROOT, 'data/tmp')
+        ### zip file_path
+        file_path = os.path.join(folder, filename)
+        ### unzip file directory
+        unzip_path = os.path.join(folder, 'unzip_%s'%filename)
+        try: os.makedirs(folder)
+        except: pass
+        try: os.makedirs(unzip_path)
+        except: pass
+        ### save zip file 
+        with open(file_path, 'wb+') as f:
+            f.write(data['zip']['body'])
+        ### unzip 
+        with zipfile.ZipFile(file_path) as f:
+            f.extractall(unzip_path)
+        ### get meta file path
+        meta_file_path = os.path.join(unzip_path, 'meta.json')
+        if not os.path.exists(meta_file_path):
+            return ((400, "meta.json not in the zip"), None)
+        try:
+            meta = json.load(open(os.path.join(unzip_path, 'meta.json'), 'r'))
+        except:
+            return ((400, "meta.json parse error"), None)
+        # check basic
+        if "basic" not in meta or not isinstance(meta['basic'], dict):
+            return ((400, "meta.json does not contain basic or basic is not a dict"), None)
+        required_args = [{
+            'name': '+title',
+            'type': str,
+        }, {
+            'name': '+score_type',
+            'type': int
+        }, {
+            'name': '+file',
+            'type': str,
+        }]
+        err = self.form_validation(meta['basic'], required_args)
+        if err:
+            return ((err[0], 'basic: ' + err[1]), None)
+        if not os.path.exists(os.path.join(unzip_path, meta['basic']['file'])):
+            return ((400, 'basic: pdf %s does not exist'%meta['basic']['file']), None)
+        # check testdata
+        if 'testdata' not in meta or not isinstance(meta['testdata'], list):
+            return ((400, 'meta.json does not contain testdata or testdata is not a list'))
+        for testdatum in meta['testdata']:
+            required_args = [{
+                'name': '+score',
+                'type': int,
+            }, {
+                'name': '+time_limit',
+                'type': int,
+            }, {
+                'name': '+memory_limit',
+                'type': int,
+            }, {
+                'name': '+output_limit',
+                'type': int,
+            }, {
+                'name': '+input'
+            }, {
+                'name': '+output'
+            }]
+            err = self.form_validation(testdatum, required_args)
+            if err:
+                return ((err[0], 'testdata: ' + err[1]), None)
+            # check testdatum input
+            if not os.path.exists(os.path.join(unzip_path, testdatum['input'])):
+                return ((400, 'testdata: input %s does not exist'%testdatum['input']), none)
+            # check testdatum output
+            if not os.path.exists(os.path.join(unzip_path, testdatum['output'])):
+                return ((400, 'testdata: output %s does not exist'%testdatum['output']), none)
+        #check executes
+        if 'executes' not in meta or not isinstance(meta['executes'], list):
+            return ((400, 'meta.json does not contain executes or executes is not a list'))
+        #check verdict(can be ignored)
+        if 'verdict' in meta:
+            if not isinstance(meta['verdict'], dict):
+                return ((400, 'verdict is not a dict'), None)
+            required_args = [{
+                'name': '+execute_type_id',
+                'type': int,
+            }]
+            rer = self.form_validation(meta['verdict'], required_args)
+            if err:
+                return ((err[0], 'verdict: ' + err[1]))
+        #remove temp file
+        try: os.remove(file_path)
+        except: pass
+        try: shutil.rmtree(unzip_path)
+        except: pass
+        return (None, None)
+    
+    def post_problem_meta(self, data={}):
+        required_args = [{
+            'name': '+zip',
+        }]
+        err = self.form_validation(data, required_args)
+        if err:
+            return (err, None)
+        filename = hashlib.md5(data['zip']['body']).hexdigest()
+        folder = os.path.join(config.DATA_ROOT, 'data/tmp')
+        ### zip file_path
+        file_path = os.path.join(folder, filename)
+        ### unzip file directory
+        unzip_path = os.path.join(folder, 'unzip_%s'%filename)
+        try: os.makedirs(folder)
+        except: pass
+        try: os.makedirs(unzip_path)
+        except: pass
+        ### save zip file 
+        with open(file_path, 'wb+') as f:
+            f.write(data['zip']['body'])
+        ### unzip 
+        with zipfile.ZipFile(file_path) as f:
+            f.extractall(unzip_path)
+        meta = json.load(open(os.path.join(unzip_path, 'meta.json'), 'r'))
+        #proccess basic
+        basic = meta['basic']
+        basic['pdf'] = {}
+        basic['pdf']['filename'] = basic['file']
+        basic['pdf']['body'] = open(os.path.join(unzip_path, basic['pdf']['filename']), 'rb').read()
+        err, res = yield from Service.Problem.post_problem(meta['basic'])
+        if err:
+            return ((err[0], 'basic: ' + err[1]), None)
+        problem_id = res['id']
+        errlist = []
+        #proccess testdata
+        yield self.db.execute('DELETE FROM testdata WHERE problem_id = %s;', (problem_id,))
+        for testdatum in meta['testdata']:
+            _input = testdatum['input']
+            testdatum['input'] = {}
+            testdatum['input']['filename'] = _input
+            testdatum['input']['body'] = open(os.path.join(unzip_path, testdatum['input']['filename']), 'rb').read()
+            _output = testdatum['output']
+            testdatum['output'] = {}
+            testdatum['output']['filename'] = _output
+            testdatum['output']['body'] = open(os.path.join(unzip_path, testdatum['output']['filename']), 'rb').read()
+            testdatum['problem_id'] = problem_id
+            err, res = yield from Service.Testdata.post_testdata(testdatum)
+            if err:
+                errlist.append('testdata: ' + err[1])
+        #proccess executes
+        data = {}
+        data['id'] = problem_id
+        data['executes'] = meta['executes']
+        err, res = yield from Service.Problem.put_problem_execute_list(data)
+        if err:
+            errlist.append('execute: ' + err[1])
+        #proccess verdict
+        verdict = meta['verdict']
+        verdict['file'] = {'filename': verdict['file']}
+        verdict['file']['body'] = open(os.path.join(unzip_path, verdict['file']['filename']), 'rb').read()
+        verdict['id'] = problem_id
+        err, res = yield from Service.Problem.put_problem_verdict(verdict)
+        if err:
+            errlist.append('verdict: ' + err[1])
+        #remove temp file
+        try: os.remove(file_path)
+        except: pass
+        try: shutil.rmtree(unzip_path)
+        except: pass
+        if len(errlist) == 0:
+            return (None, {'id': problem_id})
+        else:
+            return (errlist, None)
+
+
+    def put_problem_meta(self, data={}):
+        required_args = [{
+            'name': '+zip',
+        }, {
+            'name': '+id',
+            'type': int,
+        }]
+        err = self.form_validation(data, required_args)
+        if err:
+            return (err, None)
+        filename = hashlib.md5(data['zip']['body']).hexdigest()
+        folder = os.path.join(config.DATA_ROOT, 'data/tmp')
+        ### zip file_path
+        file_path = os.path.join(folder, filename)
+        ### unzip file directory
+        unzip_path = os.path.join(folder, 'unzip_%s'%filename)
+        try: os.makedirs(folder)
+        except: pass
+        try: os.makedirs(unzip_path)
+        except: pass
+        ### save zip file 
+        with open(file_path, 'wb+') as f:
+            f.write(data['zip']['body'])
+        ### unzip 
+        with zipfile.ZipFile(file_path) as f:
+            f.extractall(unzip_path)
+        meta = json.load(open(os.path.join(unzip_path, 'meta.json'), 'r'))
+        #proccess basic
+        basic = meta['basic']
+        basic['id'] = data['id']
+        basic['pdf'] = {}
+        basic['pdf']['filename'] = basic['file']
+        basic['pdf']['body'] = open(os.path.join(unzip_path, basic['pdf']['filename']), 'rb').read()
+        err, res = yield from Service.Problem.put_problem(meta['basic'])
+        if err:
+            return ((err[0], 'basic: ' + err[1]), None)
+        problem_id = res['id']
+        errlist = []
+        #proccess testdata
+        yield self.db.execute('DELETE FROM testdata WHERE problem_id = %s;', (problem_id,))
+        for testdatum in meta['testdata']:
+            _input = testdatum['input']
+            testdatum['input'] = {}
+            testdatum['input']['filename'] = _input
+            testdatum['input']['body'] = open(os.path.join(unzip_path, testdatum['input']['filename']), 'rb').read()
+            _output = testdatum['output']
+            testdatum['output'] = {}
+            testdatum['output']['filename'] = _output
+            testdatum['output']['body'] = open(os.path.join(unzip_path, testdatum['output']['filename']), 'rb').read()
+            testdatum['problem_id'] = problem_id
+            err, res = yield from Service.Testdata.post_testdata(testdatum)
+            if err:
+                errlist.append('testdata: ' + err[1])
+        #proccess executes
+        data = {}
+        data['id'] = problem_id
+        data['executes'] = meta['executes']
+        err, res = yield from Service.Problem.put_problem_execute_list(data)
+        if err:
+            errlist.append('execute: ' + err[1])
+        #proccess verdict
+        verdict = meta['verdict']
+        verdict['file'] = {'filename': verdict['file']}
+        verdict['file']['body'] = open(os.path.join(unzip_path, verdict['file']['filename']), 'rb').read()
+        verdict['id'] = problem_id
+        err, res = yield from Service.Problem.put_problem_verdict(verdict)
+        if err:
+            errlist.append('verdict: ' + err[1])
+        #remove temp file
+        try: os.remove(file_path)
+        except: pass
+        try: shutil.rmtree(unzip_path)
+        except: pass
+        if len(errlist) == 0:
+            return (None, {'id': problem_id})
+        else:
+            return (errlist, None)
+
+

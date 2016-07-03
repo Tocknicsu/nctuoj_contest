@@ -39,6 +39,6 @@ class ProblemMeta(BasePermission):
         if res is None:
             return (404, "Not Found")
 
-    def put(self, req):
+    def put(self, req, id):
         if not req.account['isADMIN']:
             return (403, "Permission Denied")
