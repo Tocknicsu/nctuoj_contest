@@ -33,7 +33,8 @@ urls = [
     ('/api/verdicts/', Handler.api.Verdicts),
     ('/api/system/(\w*)/', Handler.api.System),
     ('/api/scoreboard/', Handler.api.Scoreboard),
-    #('/api/judge/', Handler.api.Judge),
+    ('/api/judge/', Handler.api.JudgeSubmission),
+    ('/api/judge/testdata/', Handler.api.JudgeSubmissionTestdata),
     ('/file/test/(\w*)', Handler.file.Test, {'path': '/tmp/'}),
 ]
 """

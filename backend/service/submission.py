@@ -108,6 +108,7 @@ class Submission(BaseService):
         except: pass
         with open(file_path, 'w+') as f:
             f.write(code)
+        yield self.db.execute("INSERT INTO wait_submissions (submission_id) VALUES (%s)", (res['id'],))
         return (None, res)
 
     def post_submission_file(self, data={}):

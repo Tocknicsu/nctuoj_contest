@@ -106,6 +106,7 @@ def query_submissions():
     return data
 
 data = []
+data += set_contest()
 data += problem_data()
 data += post_submission()
 data += query_submissions()
