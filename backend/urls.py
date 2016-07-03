@@ -25,6 +25,7 @@ urls = [
     #('/api/problems/(\d+)/testdata/(\d+)/(\w*)/', Handler.api.TestdatumFile),
     ('/api/submissions/', Handler.api.Submissions),
     ('/api/submissions/(\d+)/', Handler.api.Submission),
+    ('/api/submissions/(\d+)/file/', Handler.api.SubmissionFile, {'path': '/mnt/oj/data/submissions'}),
     #('/api/submissions/(\d+)/rejudge/', Handler.api.SubmissionRejudge),
     ('/api/clarifications/', Handler.api.Clarifications),
     ('/api/clarifications/(\d+)/', Handler.api.Clarification),

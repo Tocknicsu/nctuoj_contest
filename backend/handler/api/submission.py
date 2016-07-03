@@ -3,6 +3,7 @@ import tornado.gen
 
 from req import Service
 from req import ApiRequestHandler
+from req import StaticFileHandler
 
 class Submissions(ApiRequestHandler):
     @tornado.gen.coroutine
@@ -49,3 +50,11 @@ class Submission(ApiRequestHandler):
         else:
             self.render(res)
 
+class SubmissionFile(StaticFileHandler):
+    @tornado.gen.coroutine
+    def get(self, id, include_body=True):
+        path = ''
+        err, res = yield from Service.Problem.get_problem_verdict({'id': id})
+        err, res = yield from Service.Submission.get_submission({'id': id})
+        path = '%s/%s' % (id, res['file_name'])
+        yield super().get(path, include_body)
