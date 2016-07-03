@@ -84,8 +84,9 @@ class ProblemsMeta(ApiRequestHandler):
         meta = open(meta_file_path, "r").read()
         try:
             meta = json.loads(meta)
-        except:
-            self.render((400, "meta.json parse error"))
+        except Exception as e:
+            self.log(e)
+            self.render((400, "meta.json parse error"+str(e)))
             return
         ### check basic in the meta
         meta['basic']['pdf'] = {}
@@ -237,7 +238,7 @@ class ProblemMeta(ApiRequestHandler):
                 data = {}
                 data['id'] = problem_id
                 data['executes'] = meta['executes']
-                err, res = yield from Service.Problem.put_problem_execute(data)
+                err, res = yield from Service.Problem.put_problem_execute_list(data)
                 if err:
                     errlist.append(err)
 
