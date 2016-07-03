@@ -55,8 +55,6 @@ class RequestHandler(CorsMixin, tornado.web.RequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.log = log
-        self.log(self.CORS_HEADERS)
-        self.log(self.CORS_METHODS)
 
 
     def get_args(self, name):
@@ -78,7 +76,6 @@ class RequestHandler(CorsMixin, tornado.web.RequestHandler):
     def check_permission(self):
         err, res = yield from Service.Util.contest_status()
         uri = self.request.uri.split('?')[0]
-        self.log(uri)
         if res == -1 and self.account['isADMIN'] == False and uri not in config.URL_WHITE_LIST:
             self.render((403, "Permission Denied"))
         now = Service.Permission
