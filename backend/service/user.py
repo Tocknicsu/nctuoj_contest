@@ -81,7 +81,7 @@ class User(BaseService):
             res['isLOGIN'] = res['isLOGIN'] or res['is'+x]
         return (None, res)
     
-    def get_users(self, data={}):
+    def get_user_list(self, data={}):
         required_args = [{
             'name': '+account',
             'type': dict,

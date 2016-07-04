@@ -9,7 +9,7 @@ class Users(ApiRequestHandler):
     def get(self):
         data = {}
         data['account'] = self.account
-        err, res = yield from Service.User.get_users(data)
+        err, res = yield from Service.User.get_user_list(data)
         self.render(res)
 
     @tornado.gen.coroutine
