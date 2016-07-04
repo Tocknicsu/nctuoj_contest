@@ -102,8 +102,8 @@ class Submission(BaseService):
         sql, param = self.gen_insert_sql("submissions", data)
         res = yield self.db.execute(sql, param)
         res = res.fetchone()
-        folder = '%s/data/submissions/%s/'%(config.DATA_ROOT, res['id'])
-        file_path = '%s/%s'%(folder, data['file_name'])
+        folder = os.path.join(config.DATA_ROOT, 'data/submissions' , str(res['id']))
+        file_path = os.path.join(folder, data['file_name'])
         try: os.makedirs(folder)
         except: pass
         with open(file_path, 'w+') as f:
@@ -134,8 +134,8 @@ class Submission(BaseService):
         sql, param = self.gen_insert_sql("submissions", data)
         res = yield self.db.execute(sql, param)
         res = res.fetchone()
-        folder = '%s/data/submissions/%s/'%(config.DATA_ROOT, res['id'])
-        file_path = '%s/%s'%(folder, data['file_name'])
+        folder = os.path.join(config.DATA_ROOT, 'data/submissions', str(res['id']))
+        file_path = os.path.join(folder, data['file_name'])
         try: os.makedirs(folder)
         except: pass
         with open(file_path, 'wb+') as f:

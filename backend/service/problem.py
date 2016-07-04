@@ -56,8 +56,8 @@ class Problem(BaseService):
         res = yield self.db.execute(sql, param)
         res = res.fetchone()
         ### Save File
-        folder = '%s/data/problems/%s'%(config.DATA_ROOT, str(res['id']))
-        file_path = '%s/pdf.pdf'%(folder)
+        folder = os.path.join(config.DATA_ROOT, 'data/problems', str(res['id']))
+        file_path = os.path.join(folder, 'pdf.pdf')
         try: os.makedirs(folder)
         except: pass
         with open(file_path, 'wb+') as f:
@@ -65,8 +65,8 @@ class Problem(BaseService):
         ### Add default verdict
         yield self.db.execute("INSERT INTO verdicts (id, file_name, execute_type_id) VALUES (%s, %s, %s)", (res['id'], "main.cpp", 2,))
         ### copy default verdict file
-        folder = '%s/data/verdicts/%s/'%(config.DATA_ROOT, str(res['id']))
-        file_path = '%s/%s'%(folder, "main.cpp")
+        folder = os.path.join(config.DATA_ROOT, 'data/verdicts', str(res['id']))
+        file_path = os.path.join(folder, 'main.cpp')
         try: os.makedirs(folder)
         except: pass
         shutil.copyfile("./default/verdict/main.cpp", file_path)
@@ -95,8 +95,8 @@ class Problem(BaseService):
         sql, param = self.gen_update_sql('problems', data)
         res = yield self.db.execute(sql + ' WHERE id = %s', param + (id,))
         if pdf:
-            folder = '%s/data/problems/%s'%(config.DATA_ROOT, str(id))
-            file_path = '%s/pdf.pdf'%(folder)
+            folder = os.path.join(config.DATA_ROOT, 'data/problems', str(id))
+            file_path = os.path.join(folder, 'pdf.pdf')
             try: os.makedirs(folder)
             except: pass
             with open(file_path, 'wb+') as f:
@@ -175,8 +175,8 @@ class Problem(BaseService):
             code_file = data.pop('file')
             data['file_name'] = code_file['filename']
             yield self.db.execute("UPDATE verdicts SET file_name=%s WHERE id=%s",(data['file_name'], data['id'],))
-            folder = '%s/data/verdicts/%s/'%(config.DATA_ROOT, id)
-            file_path = '%s/%s'%(folder, data['file_name'])
+            folder = os.path.join(config.DATA_ROOT, 'data/verdicts', str(id))
+            file_path = os.path.join(folder, data['file_name'])
             try: shutil.rmtree(folder)
             except: pass
             try: os.makedirs(folder)
