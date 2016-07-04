@@ -35,6 +35,7 @@ urls = [
     ('/api/executes/(\d+)/', Handler.api.Execute),
     ('/api/verdicts/', Handler.api.Verdicts),
     ('/api/system/(\w*)/', Handler.api.System),
+    ('/api/system/', Handler.api.System),
     ('/api/scoreboard/', Handler.api.Scoreboard),
     ('/api/judge/', Handler.api.JudgeSubmission),
     ('/api/judge/testdata/', Handler.api.JudgeSubmissionTestdata),

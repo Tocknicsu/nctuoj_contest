@@ -7,10 +7,17 @@ from req import ApiRequestHandler
 
 class System(ApiRequestHandler):
     @tornado.gen.coroutine
-    def get(self, resource):
+    def get(self, resource=None):
         print(resource)
         if resource == "time":
-            self.render(datetime.datetime.now())
+            err, res = Service.System.get_time()
+        elif resource == 'cpu':
+            err, res = Service.System.get_cpu()
+        elif resource == 'memory':
+            err, res = Service.System.get_memory()
+        elif resource == 'network':
+            err, res = Service.System.get_network()
         else:
-            self.write_error(404)
+            err, res = Service.System.get_all()
+        self.render(res)
 
