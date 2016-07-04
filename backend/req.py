@@ -143,10 +143,13 @@ class ApiRequestHandler(RequestHandler):
         if isinstance(msg, tuple): code, msg = msg
         else: code = 200
         self.set_status(code)
-        self.finish(json.dumps({
-                'msg': msg
-            },
-            cls=DatetimeEncoder))
+        try:
+            msg = json.dumps({
+                    'msg': msg
+                }, cls=DatetimeEncoder)
+        except:
+            msg = str(msg)
+        self.finish(msg)
 
     def write_error(self, err, **kwargs):
         self.render((err, kwargs))
