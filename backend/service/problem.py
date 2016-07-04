@@ -205,8 +205,11 @@ class Problem(BaseService):
         with open(file_path, 'wb+') as f:
             f.write(data['zip']['body'])
         ### unzip 
-        with zipfile.ZipFile(file_path) as f:
-            f.extractall(unzip_path)
+        try:
+            with zipfile.ZipFile(file_path) as f:
+                f.extractall(unzip_path)
+        except:
+            return ((400, 'not a zip file'), None)
         ### get meta file path
         meta_file_path = os.path.join(unzip_path, 'meta.json')
         if not os.path.exists(meta_file_path):
