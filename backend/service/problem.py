@@ -124,7 +124,6 @@ class Problem(BaseService):
         }]
         err = self.form_validation(data, required_args)
         if err: return (err, None)
-        self.log(data)
         res = yield self.db.execute("SELECT * FROM map_problem_execute WHERE problem_id=%s and execute_type_id=%s", (data['problem_id'], data['execute_type_id'],))
         res = res.fetchone()
         return (None, res)
@@ -342,13 +341,14 @@ class Problem(BaseService):
         if err:
             errlist.append('execute: ' + err[1])
         #proccess verdict
-        verdict = meta['verdict']
-        verdict['file'] = {'filename': verdict['file']}
-        verdict['file']['body'] = open(os.path.join(unzip_path, verdict['file']['filename']), 'rb').read()
-        verdict['id'] = problem_id
-        err, res = yield from Service.Problem.put_problem_verdict(verdict)
-        if err:
-            errlist.append('verdict: ' + err[1])
+        if 'verdict' in meta:
+            verdict = meta['verdict']
+            verdict['file'] = {'filename': verdict['file']}
+            verdict['file']['body'] = open(os.path.join(unzip_path, verdict['file']['filename']), 'rb').read()
+            verdict['id'] = problem_id
+            err, res = yield from Service.Problem.put_problem_verdict(verdict)
+            if err:
+                errlist.append('verdict: ' + err[1])
         #remove temp file
         try: os.remove(file_path)
         except: pass
@@ -421,13 +421,14 @@ class Problem(BaseService):
         if err:
             errlist.append('execute: ' + err[1])
         #proccess verdict
-        verdict = meta['verdict']
-        verdict['file'] = {'filename': verdict['file']}
-        verdict['file']['body'] = open(os.path.join(unzip_path, verdict['file']['filename']), 'rb').read()
-        verdict['id'] = problem_id
-        err, res = yield from Service.Problem.put_problem_verdict(verdict)
-        if err:
-            errlist.append('verdict: ' + err[1])
+        if 'verdict' in meta:
+            verdict = meta['verdict']
+            verdict['file'] = {'filename': verdict['file']}
+            verdict['file']['body'] = open(os.path.join(unzip_path, verdict['file']['filename']), 'rb').read()
+            verdict['id'] = problem_id
+            err, res = yield from Service.Problem.put_problem_verdict(verdict)
+            if err:
+                errlist.append('verdict: ' + err[1])
         #remove temp file
         try: os.remove(file_path)
         except: pass
