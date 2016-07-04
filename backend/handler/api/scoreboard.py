@@ -11,6 +11,7 @@ class Scoreboard(ApiRequestHandler):
             role = 2
         else:
             role = self.account['type']
+        self.log(role)
         err, res = yield from Service.Scoreboard.get_scoreboard({'type': role})
         if err:
             self.render(err)
@@ -19,10 +20,12 @@ class Scoreboard(ApiRequestHandler):
 
     @tornado.gen.coroutine
     def put(self):
-        err, res = yield from Service.Contest.put_contest()
+        args = ['type']
+        data = self.get_args(args)
+        err, res = yield from Service.Scoreboard.put_scoreboard(data)
         if err:
             self.render(err)
         else:
-            err, res = yield from Service.Scoreboard.get_scoreboard()
+            err, res = yield from Service.Scoreboard.get_scoreboard(data)
             self.render(res)
         

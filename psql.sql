@@ -205,15 +205,15 @@ CREATE INDEX ON submissions (length);
 CREATE INDEX ON submissions (created_at);
 
 CREATE TABLE scoreboard (
-    id              serial          NOT NULL    PRIMARY KEY,
-    data            json            NOT NULL,
+    id              integer         NOT NULL    PRIMARY KEY,
+    data            jsonb           NOT NULL,
     created_at      timestamp       DEFAULT date_trunc('second',now()),
     updated_at      timestamp       DEFAULT date_trunc('second',now())
 );
-INSERT INTO scoreboard (data) VALUES ('{}'::json);
-INSERT INTO scoreboard (data) VALUES ('{}'::json);
-INSERT INTO scoreboard (data) VALUES ('{}'::json);
-INSERT INTO scoreboard (data) VALUES ('{}'::json);
+INSERT INTO scoreboard (id, data) VALUES (0, '{}'::json);
+INSERT INTO scoreboard (id, data) VALUES (1, '{}'::json);
+INSERT INTO scoreboard (id, data) VALUES (2, '{}'::json);
+INSERT INTO scoreboard (id, data) VALUES (3, '{}'::json);
 
 CREATE TABLE map_verdict_string (
     id              serial          NOT NULL    PRIMARY KEY,
