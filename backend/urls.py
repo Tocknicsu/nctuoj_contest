@@ -1,4 +1,5 @@
 from include import include
+import config
 class Handler:
     pass
 include(Handler, "./handler/")
@@ -13,15 +14,15 @@ urls = [
     ('/api/problems/', Handler.api.Problems),
     ('/api/problems/meta/', Handler.api.ProblemsMeta),
     ('/api/problems/(\d+)/', Handler.api.Problem),
-    ('/api/problems/(\d+)/pdf/', Handler.api.ProblemPdf, {'path': '/mnt/oj/data/problems'}),
+    ('/api/problems/(\d+)/pdf/', Handler.api.ProblemPdf, {'path': config.DATA_ROOT + 'data/problems'}),
     ('/api/problems/(\d+)/meta/', Handler.api.ProblemMeta),
     ('/api/problems/(\d+)/executes/', Handler.api.ProblemExecutes),
     #('/api/problems/(\d+)/rejudge/', Handler.api.ProblemRejudge),
     ('/api/problems/(\d+)/testdata/', Handler.api.Testdata),
     ('/api/problems/(\d+)/testdata/(\d+)/', Handler.api.Testdatum),
-    ('/api/problems/(\d+)/testdata/(\d+)/(\w+)/', Handler.api.TestdatumFile, {'path': '/mnt/oj/data/testdata'}),
+    ('/api/problems/(\d+)/testdata/(\d+)/(\w+)/', Handler.api.TestdatumFile, {'path': config.DATA_ROOT + 'data/testdata'}),
     ('/api/problems/(\d+)/verdict/', Handler.api.ProblemVerdict),
-    ('/api/problems/(\d+)/verdict/file/', Handler.api.ProblemVerdictFile, {'path': '/mnt/oj/data/verdicts'}),
+    ('/api/problems/(\d+)/verdict/file/', Handler.api.ProblemVerdictFile, {'path': config.DATA_ROOT + 'data/verdicts'}),
     #('/api/problems/(\d+)/testdata/(\d+)/(\w*)/', Handler.api.TestdatumFile),
     ('/api/submissions/', Handler.api.Submissions),
     ('/api/submissions/(\d+)/', Handler.api.Submission),
