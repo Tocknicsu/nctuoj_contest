@@ -127,17 +127,16 @@ class User(BaseService):
         required_args = [{
             'name': '+account',
             'type': str,
+            'non_empty': str,
         }, {
             'name': '+name',
             'type': str,
+            'non_empty': str,
         }, {
             'name': '+password',
             'type': str,
         }, {
-            'name': '+repassword',
-            'type': str,
-        }, {
-            'name': 'type',
+            'name': '+type',
             'type': int,
         }]
         err = self.form_validation(data, required_args)
@@ -145,15 +144,22 @@ class User(BaseService):
         res = yield self.db.execute('SELECT 1 FROM users WHERE account = %s OR name = %s;', (data['account'], data['name'],))
         if res.rowcount != 0:
             return ((400, 'account or name exists'), None)
-        if data['password'] != data['repassword']:
-            return ((400, 'confirm your password'), None)
-        data.pop('repassword')
         data['password'] = HashPassword(data['password'])
         data['token'] = GenToken(data)
         sql, param = self.gen_insert_sql('users', data)
         res = yield self.db.execute(sql, param)
-        return (None, res.fetchone()['id'])
+        return (None, {'id': res.fetchone()['id']})
 
+    def delete_user(self, data={}):
+        required_args = [{
+            'name': '+id',
+            'type': int,
+        }]
+        err = self.form_validation(data, required_args)
+        if err:
+            return (err, None)
+        yield self.db.execute('DELETE FROM users WHERE id = %s;', (data['id'],))
+        return (None, data)
 
     def gen_users_by_csv(self, data={}):
         '''
@@ -164,12 +170,15 @@ class User(BaseService):
         },]
         err = self.form_validation(data, required_args)
         if err: return (err, None)
-        users = list(csv.DictReader(io.StringIO(data['users_file']['body'].decode()), ['account', 'name', 'password', 'type']))
+        try:
+            users = list(csv.DictReader(io.StringIO(data['users_file']['body'].decode()), ['account', 'name', 'password', 'type']))
+        except:
+            return ((400, 'csv file broken'), None)
+        yield self.db.execute('DELETE FROM users WHERE "type" != 0;')
         res = {}
         res['error'] = []
         res['success'] = []
         for user in users:
-            user['repassword'] = user['password']
             try:
                 err, id = yield from self.post_user(user)
             except Exception as e:
