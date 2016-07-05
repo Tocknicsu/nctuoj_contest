@@ -255,6 +255,8 @@ CREATE INDEX ON map_submission_testdata(verdict_id);
 
 CREATE TABLE wait_submissions (
     id              serial          NOT NULL    PRIMARY KEY,
-    submission_id   integer         NOT NULL    REFERENCES submissions(id) ON DELETE CASCADE
+    submission_id   integer         NOT NULL    REFERENCES submissions(id) ON DELETE CASCADE,
+    created_at      timestamp       DEFAULT date_trunc('second',now())
 );
+CREATE INDEX ON wait_submissions(created_at);
 
