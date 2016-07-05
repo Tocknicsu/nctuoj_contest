@@ -87,9 +87,11 @@ class User(BaseService):
             'type': int,
         },{
             'name': '+account',
+            'non_empty': True,
             'type': str,
         }, {
             'name': '+name',
+            'non_empty': True,
             'type': str,
         }, {
             'name': '+type',
