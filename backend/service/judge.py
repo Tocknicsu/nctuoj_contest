@@ -40,3 +40,18 @@ class Judge(BaseService):
         yield self.db.execute(sql, param)
         return (None, None)
 
+    def post_submission(self, data):
+        required_args [{
+            'name': '+submission_id',
+            'type': int,
+        }]
+        err = self.form_validation(data, required_args)
+        if err: return (err, None)
+        submission_testdata = (yield self.db.execute("SELECT * FROM map_submission_testdata WHERE submission_id=%s", (data['submission_id'],))).fetchall()
+        time = 0
+        memory = 0
+        verdict = 10
+        for x in submission_testdata:
+            if x['time_usage'] is not None: time = max(time, x['time_usage'])
+            if x['memory_usage'] is not None: memory = max(memory, x['memory_usage'])
+
