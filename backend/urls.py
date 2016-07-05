@@ -9,6 +9,7 @@ urls = [
     ('/api/contest/', Handler.api.Contest),
     ('/api/languages/', Handler.api.Languages),
     ('/api/users/', Handler.api.Users),
+    ('/api/users/(\d+)/', Handler.api.User),
     ('/api/users/me/', Handler.api.UsersMe),
     ('/api/users/csv/', Handler.api.UsersCSV),
     ('/api/users/signin/', Handler.api.UserSignIn),
@@ -40,6 +41,7 @@ urls = [
     ('/api/judge/testdata/', Handler.api.JudgeSubmissionTestdata),
 ]
 """
+    ('/api/users/(\d+)/', Handler.api.User),
     ('/api/problems/meta/', Handler.api.ProblemsMeta),
     ('/api/problems/(\d+)/', Handler.api.Problem),
     ('/api/problems/(\d+)/pdf/', Handler.api.ProblemPdf, {'path': '/mnt/oj/data/problems'}),

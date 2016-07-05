@@ -73,13 +73,42 @@ class User(BaseService):
             return ((403, 'no such user'), None)
         res = res.fetchone()
         res.pop('password')
-        if not data['account']['idADMIN']:
+        if not data['account']['isADMIN']:
             res.pop('token')
         res['isLOGIN'] = False
         for x in map_users_type:
             res['is'+x] = 'type' in res and res['type'] == map_users_type[x]
             res['isLOGIN'] = res['isLOGIN'] or res['is'+x]
         return (None, res)
+
+    def put_user(self, data={}):
+        required_args = [{
+            'name': '+id',
+            'type': int,
+        },{
+            'name': '+account',
+            'type': str,
+        }, {
+            'name': '+name',
+            'type': str,
+        }, {
+            'name': '+type',
+            'type': int,
+        }, {
+            'name': 'password',
+            'type': str,
+        }]
+        err = self.form_validation(data, required_args)
+        if err:
+            return (err, None)
+        id = data.pop('id')
+        if data['password']:
+            data['password'] = HashPassword(data['password'])
+            data['token'] = GenToken(data)
+
+        sql, param = self.gen_update_sql('users', data)
+        yield self.db.execute(sql + ' WHERE id = %s;', param + (id,))
+        return (None, None)
     
     def get_user_list(self, data={}):
         required_args = [{

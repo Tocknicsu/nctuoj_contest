@@ -22,6 +22,33 @@ class Users(ApiRequestHandler):
         else:
             self.render(res)
 
+class User(ApiRequestHandler):
+    @tornado.gen.coroutine
+    def get(self, id):
+        data = {}
+        data['id'] = id
+        data['account'] = self.account
+        err, res = yield from Service.User.get_user(data)
+        if err:
+            self.render(err)
+        else:
+            self.render(res)
+
+    @tornado.gen.coroutine
+    def put(self, id):
+        args = ['account', 'name', 'password', 'type']
+        data = self.get_args(args)
+        data['id'] = id
+        err, res = yield from Service.User.put_user(data)
+        if err:
+            self.render(err)
+        else:
+            data = {}
+            data['id'] = id
+            data['account'] = self.account
+            err, res = yield from Service.User.get_user(data)
+            self.render(res)
+
 class UsersMe(ApiRequestHandler):
     @tornado.gen.coroutine
     def get(self):
