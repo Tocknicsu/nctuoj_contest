@@ -11,7 +11,6 @@ class Scoreboard(ApiRequestHandler):
             role = 2
         else:
             role = self.account['type']
-        self.log(role)
         err, res = yield from Service.Scoreboard.get_scoreboard({'type': role})
         if err:
             self.render(err)
