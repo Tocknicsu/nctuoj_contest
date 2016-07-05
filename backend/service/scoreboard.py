@@ -19,6 +19,7 @@ class Scoreboard(BaseService):
 
     def put_scoreboard(self, data={}):
         VERDICT_AC = 10
+        PENALTY = 20
         required_args = [{
             'name': '+type',
             'type': int,
@@ -36,7 +37,6 @@ class Scoreboard(BaseService):
             for problem_id in problems:
                 users[user_id]['problems'][problem_id] = {
                             'verdict_id': 0, 
-                            'penalty': 0,
                             'attempt': 0,
                             'ac_time': None,
                         }
@@ -72,6 +72,7 @@ class Scoreboard(BaseService):
             users[user_id]['penalty'] = 0
             users[user_id]['ac'] = 0
             for problem_id in users[user_id]['problems']:
+                users[user_id]['problems'][problem_id]['penalty'] = users[user_id]['problems'][problem_id]['ac_time'] + (users[user_id]['problems'][problem_id]['attempt'] - 1) * PENALTY
                 users[user_id]['attempt'] += users[user_id]['problems'][problem_id]['attempt']
                 users[user_id]['penalty'] += users[user_id]['problems'][problem_id]['penalty']
                 users[user_id]['ac'] += users[user_id]['problems'][problem_id]['verdict_id'] == VERDICT_AC
