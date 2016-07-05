@@ -8,14 +8,17 @@ class JudgeSubmission(ApiRequestHandler):
     @tornado.gen.coroutine
     def get(self):
         err, res = yield from Service.Judge.get_submission()
-        self.log(res)
         if err:
             self.render(err)
         else:
             self.render(res)
 
+    @tornado.gen.coroutine
     def post(self):
-        pass
+        args = ['submission_id']
+        data = self.get_args(args)
+        self.log(data)
+        self.render()
 
 class JudgeSubmissionTestdata(ApiRequestHandler):
     @tornado.gen.coroutine
