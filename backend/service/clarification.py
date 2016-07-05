@@ -31,6 +31,7 @@ class Clarification(BaseService):
             'type': int,
         }, {
             'name': '+question',
+            'non_empty': True,
             'type': str,
         }]
         err = self.form_validation(data, required_args)
