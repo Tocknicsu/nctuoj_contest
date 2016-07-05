@@ -24,7 +24,6 @@ urls = [
     ('/api/problems/(\d+)/testdata/(\d+)/(\w+)/', Handler.api.TestdatumFile, {'path': os.path.join(config.DATA_ROOT, 'data/testdata')}),
     ('/api/problems/(\d+)/verdict/', Handler.api.ProblemVerdict),
     ('/api/problems/(\d+)/verdict/file/', Handler.api.ProblemVerdictFile, {'path': os.path.join(config.DATA_ROOT, 'data/verdicts')}),
-    #('/api/problems/(\d+)/testdata/(\d+)/(\w*)/', Handler.api.TestdatumFile),
     ('/api/submissions/', Handler.api.Submissions),
     ('/api/submissions/(\d+)/', Handler.api.Submission),
     ('/api/submissions/(\d+)/file/', Handler.api.SubmissionFile, {'path': os.path.join(config.DATA_ROOT, 'data/submissions')}),

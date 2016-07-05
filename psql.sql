@@ -243,6 +243,7 @@ CREATE TABLE map_submission_testdata (
     memory_usage    integer,
     score           integer,
     verdict_id      integer         DEFAULT 1   REFERENCES map_verdict_string(id)   ON DELETE CASCADE,
+    note            text            DEFAULT '',
     created_at      timestamp       DEFAULT date_trunc('second',now()),
     updated_at      timestamp       DEFAULT date_trunc('second',now())
 );
