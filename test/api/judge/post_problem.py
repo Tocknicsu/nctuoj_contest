@@ -23,7 +23,7 @@ data = [
         },
         "payload": {
             "problem_id": 1,
-            "execute_type_id": 1,
+            "execute_type_id": 2,
             "token": "ADMIN@TOKEN",
         },
         "ignore": ["id", "user_id"],
