@@ -14,7 +14,7 @@ class Submission(BaseService):
             'name': '+page',
             'type': int,
         }, {
-            'name': 'user',
+            'name': 'user_id',
             'type': str,
         }, {
             'name': 'problem_id',
@@ -23,21 +23,25 @@ class Submission(BaseService):
             'name': 'verdict_id',
             'type': int,
         }]
+        self.log(data)
         err = self.form_validation(data, required_args)
         if err: return (err, None)
         where = {}
-        if 'user' in data and data['user'] is not None:
-            pass
+        cond_sql, param = ' WHERE 1=1 ', ()
+        if 'user_id' in data and data['user_id'] is not None:
+            cond_sql += ' AND user_id = %s'
+            param = param + (data['user_id'],)
         if 'problem_id' in data and data['problem_id'] is not None:
-            pass
+            cond_sql += ' AND problem_id = %s'
+            param = param + (data['problem_id'],)
         if 'verdict_id' in data and data['verdict_id'] is not None:
-            pass
+            cond_sql += ' AND verdict_id = %s'
+            param = param + (data['verdict_id'],)
 
-        self.log(data)
         limit, offset = self.calc_limit_offset(data['page'], data['count'])
         res = {}
-        res['data'] = (yield self.db.execute("SELECT * FROM submissions ORDER BY id DESC LIMIT %s OFFSET %s", (limit, offset,))).fetchall()
-        res['count'] = (yield self.db.execute("SELECT COUNT(*) as count FROM submissions")).fetchone()['count']
+        res['data'] = (yield self.db.execute("SELECT * FROM submissions " + cond_sql + " ORDER BY id DESC LIMIT %s OFFSET %s", param + (limit, offset,))).fetchall()
+        res['count'] = (yield self.db.execute("SELECT COUNT(*) as count FROM submissions " + cond_sql, param)).fetchone()['count']
         return (None, res)
 
     def get_submission_list(self, data={}):

@@ -9,7 +9,7 @@ class Submissions(ApiRequestHandler):
     @tornado.gen.coroutine
     def get(self):
         if self.account['isADMIN']:
-            args = ['problem_id', 'user', 'verdict_id', 'count', 'page']
+            args = ['problem_id', 'user_id', 'verdict_id', 'count', 'page']
             data = self.get_args(args)
             err, res = yield from Service.Submission.get_submission_list_admin(data)
         else:
