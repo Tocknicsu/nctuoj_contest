@@ -54,7 +54,7 @@ class User(BaseService):
             return ((403, 'no such user'), None)
         res = res.fetchone()
         res.pop('password')
-        res['isLOGIN'] = False
+        res['isLOGIN'] = True
         for x in map_users_type:
             res['is'+x] = 'type' in res and res['type'] == map_users_type[x]
         return (None, res)
