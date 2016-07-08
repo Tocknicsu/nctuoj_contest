@@ -104,9 +104,9 @@ class UserUpload(ApiRequestHandler):
     @tornado.gen.coroutine
     def put(self):
         args = ['file[file]']
-        data = self.args(args)
+        data = self.get_args(args)
         data['id'] = self.account['id']
-        err, res = yield from Service.User.UploadFile(data)
+        err, res = Service.User.UploadFile(data)
         if err:
             self.render(err)
         else:

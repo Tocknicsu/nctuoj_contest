@@ -4,6 +4,9 @@ import hashlib
 import csv
 import io
 import time
+import os
+import shutil
+import zipfile
 from service.base import BaseService
 from map import *
 
@@ -205,5 +208,12 @@ class User(BaseService):
         }]
         err = self.form_validation(data, required_args)
         if err: return (err, None)
-        ### Save file here
-        ### Upload File Name
+        folder = os.path.join(config.DATA_ROOT, 'data/users', str(data['id']))
+        try: shutil.rmtree(folder)
+        except: pass
+        try: os.makedirs(folder)
+        except: pass
+        file_path = os.path.join(folder, data['file']['filename'])
+        with open(file_path, 'wb+') as f:
+            f.write(data['file']['body'])
+        return (None, None)
