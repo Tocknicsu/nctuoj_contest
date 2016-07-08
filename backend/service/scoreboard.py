@@ -35,6 +35,7 @@ class Scoreboard(BaseService):
             users[user_id]['problems'] = {}
             for problem_id in problems:
                 users[user_id]['problems'][problem_id] = {
+                            'id': problem_id,
                             'verdict_id': 0, 
                             'attempt': 0,
                             'ac_time': None,
