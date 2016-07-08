@@ -39,6 +39,7 @@ class User(BaseService):
         if res['password'] != HashPassword(data['password']):
             return ((403, "Wrong Password"), None)
         err, res = yield from self.get_user_by_token(res)
+        res['isLOGIN'] = True
         return (None, res)
 
     def get_user_by_token(self, data={}):
@@ -56,7 +57,6 @@ class User(BaseService):
         res['isLOGIN'] = False
         for x in map_users_type:
             res['is'+x] = 'type' in res and res['type'] == map_users_type[x]
-            res['isLOGIN'] = res['isLOGIN'] or res['is'+x]
         return (None, res)
 
     def get_user(self, data={}):
@@ -73,12 +73,13 @@ class User(BaseService):
             return ((403, 'no such user'), None)
         res = res.fetchone()
         res.pop('password')
-        if not data['account']['isADMIN']:
+        if data['account']['isADMIN'] or (data['account']['isLOGIN'] and int(data['account']['id']) == int(id)):
+            pass
+        else:
             res.pop('token')
         res['isLOGIN'] = False
         for x in map_users_type:
             res['is'+x] = 'type' in res and res['type'] == map_users_type[x]
-            res['isLOGIN'] = res['isLOGIN'] or res['is'+x]
         return (None, res)
 
     def put_user(self, data={}):
@@ -119,7 +120,10 @@ class User(BaseService):
         },]
         err = self.form_validation(data, required_args)
         if err: return (err, None)
-        res = yield self.db.execute('SELECT * FROM users WHERE "type" >= %s;', (data['account']['type'],))
+        if data['account']['isADMIN']:
+            res = yield self.db.execute('SELECT * FROM users WHERE "type" >= %s;', (data['account']['type'],))
+        else:
+            res = yield self.db.execute('SELECT id, account, name FROM users WHERE "type" >= %s;', (data['account']['type'],))
         res = res.fetchall()
         return (None, res)
 
