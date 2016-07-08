@@ -126,10 +126,11 @@ class RequestHandler(CorsMixin, tornado.web.RequestHandler):
         else:
             self.account = {}
         
-        if 'isLOGIN' not in self.account:
+        if 'id' not in self.account:
             for x in map_users_type:
                 self.account['is' + x] = False
             self.account['isLOGIN'] = False
+            self.account['type'] = -1
 
         if token in config.JUDGE_TOKEN_LIST:
             self.account['isLOGIN'] = True
