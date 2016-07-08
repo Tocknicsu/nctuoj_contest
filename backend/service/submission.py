@@ -1,7 +1,10 @@
 from req import Service
 from service.base import BaseService
 import config
+import time
+import hashlib
 import os
+import zipfile
 import re
 
 
@@ -148,4 +151,26 @@ class Submission(BaseService):
             f.write(code_file['body'])
         yield self.db.execute("INSERT INTO wait_submissions (submission_id) VALUES (%s)", (res['id'],))
         return (None, res)
+
+    def get_submission_zip(self, data={}):
+        required_args = [{
+            'name': '+user_id',
+            'type': int,
+        }]
+        err = self.form_validation(data, required_args)
+        if err:
+            return (err, None)
+        res = yield self.db.execute('SELECT id, file_name FROM submissions WHERE user_id = %s;', (data['user_id'],))
+        submissions = res.fetchall()
+        temp_file_name = '%s.zip' % hashlib.md5(str(time.time()).encode()).hexdigest()
+        temp_file_path = os.path.join('/tmp', temp_file_name)
+        with zipfile.ZipFile(temp_file_path, 'w', zipfile.ZIP_DEFLATED) as z:
+            for submission in submissions:
+                file_path = os.path.join(config.DATA_ROOT, 'data/submissions', str(submission['id']), submission['file_name'])
+                zip_path = os.path.join(str(submission['id']), submission['file_name'])
+                try:
+                    z.write(file_path, zip_path)
+                except Exception as e:
+                    self.log(e)
+        return (None, temp_file_name)
 

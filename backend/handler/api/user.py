@@ -1,8 +1,10 @@
 import tornado
 import tornado.gen
+import os
 
 from req import Service
 from req import ApiRequestHandler
+from req import StaticFileHandler
 
 class Users(ApiRequestHandler):
     @tornado.gen.coroutine
@@ -65,6 +67,16 @@ class UsersMe(ApiRequestHandler):
     @tornado.gen.coroutine
     def get(self):
         self.render(self.account)
+
+class UsersCode(StaticFileHandler):
+    @tornado.gen.coroutine
+    def get(self, include_body=True):
+        data = {}
+        data['user_id'] = self.account['id']
+        err, res = yield from Service.Submission.get_submission_zip(data)
+        super().get(res, include_body)
+        os.remove(os.path.join('/tmp', res))
+
 
 class UsersCSV(ApiRequestHandler):
     @tornado.gen.coroutine
