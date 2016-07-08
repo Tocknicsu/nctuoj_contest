@@ -162,8 +162,12 @@ class Submission(BaseService):
             return (err, None)
         res = yield self.db.execute('SELECT id, file_name FROM submissions WHERE user_id = %s;', (data['user_id'],))
         submissions = res.fetchall()
+        try:
+            os.makedirs(os.path.join(config.DATA_ROOT, 'data/tmp'))
+        except:
+            pass
         temp_file_name = '%s.zip' % hashlib.md5(str(time.time()).encode()).hexdigest()
-        temp_file_path = os.path.join('/tmp', temp_file_name)
+        temp_file_path = os.path.join(config.DATA_ROOT, 'data/tmp', temp_file_name)
         with zipfile.ZipFile(temp_file_path, 'w', zipfile.ZIP_DEFLATED) as z:
             for submission in submissions:
                 file_path = os.path.join(config.DATA_ROOT, 'data/submissions', str(submission['id']), submission['file_name'])

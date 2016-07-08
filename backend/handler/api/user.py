@@ -1,6 +1,7 @@
 import tornado
 import tornado.gen
 import os
+import config
 
 from req import Service
 from req import ApiRequestHandler
@@ -75,7 +76,7 @@ class UsersCode(StaticFileHandler):
         data['user_id'] = self.account['id']
         err, res = yield from Service.Submission.get_submission_zip(data)
         super().get(res, include_body)
-        os.remove(os.path.join('/tmp', res))
+        os.remove(os.path.join(config.DATA_ROOT, 'data/tmp', res))
 
 
 class UsersCSV(ApiRequestHandler):
