@@ -40,22 +40,3 @@ urls = [
     ('/api/judge/', Handler.api.JudgeSubmission),
     ('/api/judge/testdata/', Handler.api.JudgeSubmissionTestdata),
 ]
-"""
-    ('/api/users/(\d+)/', Handler.api.User),
-    ('/api/problems/meta/', Handler.api.ProblemsMeta),
-    ('/api/problems/(\d+)/', Handler.api.Problem),
-    ('/api/problems/(\d+)/pdf/', Handler.api.ProblemPdf, {'path': '/mnt/oj/data/problems'}),
-    ('/api/problems/(\d+)/meta/', Handler.api.ProblemMeta),
-    ('/api/problems/(\d+)/executes/', Handler.api.ProblemExecutes),
-    #('/api/problems/(\d+)/rejudge/', Handler.api.ProblemRejudge),
-    ('/api/problems/(\d+)/testdata/', Handler.api.Testdata),
-    ('/api/problems/(\d+)/testdata/(\d+)/', Handler.api.Testdatum),
-    ('/api/problems/(\d+)/testdata/(\d+)/(\w+)/', Handler.api.TestdatumFile, {'path': '/mnt/oj/data/testdata'}),
-    ('/api/problems/(\d+)/verdict/', Handler.api.ProblemVerdict),
-    ('/api/problems/(\d+)/verdict/file/', Handler.api.ProblemVerdictFile, {'path': '/mnt/oj/data/verdicts'}),
-    #('/api/problems/(\d+)/testdata/(\d+)/(\w*)/', Handler.api.TestdatumFile),
-    ('/api/submissions/', Handler.api.Submissions),
-    ('/api/submissions/(\d+)/', Handler.api.Submission),
-    #('/api/submissions/(\d+)/rejudge/', Handler.api.SubmissionRejudge),
-    ('/api/scoreboard/', Handler.api.Scoreboard),
-"""
