@@ -11,6 +11,7 @@ urls = [
     ('/api/users/', Handler.api.Users),
     ('/api/users/(\d+)/', Handler.api.User),
     ('/api/users/me/', Handler.api.UsersMe),
+    ('/api/users/upload/', Handler.api.UserUpload),
     ('/api/users/csv/', Handler.api.UsersCSV),
     ('/api/users/signin/', Handler.api.UserSignIn),
     ('/api/problems/', Handler.api.Problems),

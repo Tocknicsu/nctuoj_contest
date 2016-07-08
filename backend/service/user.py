@@ -195,3 +195,15 @@ class User(BaseService):
                 res['success'].append(user)
 
         return (None, res)
+    
+    def UploadFile(self, data={}):
+        required_args = [{
+            'name': '+id',
+            'type': int
+        }, {
+            'name': '+file',
+        }]
+        err = self.form_validation(data, required_args)
+        if err: return (err, None)
+        ### Save file here
+        ### Upload File Name
