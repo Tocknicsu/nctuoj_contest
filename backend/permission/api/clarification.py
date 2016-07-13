@@ -16,8 +16,9 @@ class Clarifications(BasePermission):
             return (403, "Permission Denied")
         args = ['problem_id']
         data = req.get_args(args)
-        id = data.pop('problem_id')
-        data['id'] = id
+        data = {
+            'id': data['id']
+        }
         err = yield from self.exist(data)
         if err:
             return err
