@@ -17,7 +17,7 @@ class Clarifications(BasePermission):
         args = ['problem_id']
         data = req.get_args(args)
         data = {
-            'id': data['id']
+            'id': data['problem_id']
         }
         err = yield from self.exist(data)
         if err:

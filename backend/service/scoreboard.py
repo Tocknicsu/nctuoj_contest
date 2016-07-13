@@ -27,7 +27,7 @@ class Scoreboard(BaseService):
         if err:
             return (rer, None)
         err, contest = yield from Service.Contest.get_contest()
-        err, users = yield from Service.User.get_user_list({'account': {'type': data['type']}})
+        err, users = yield from Service.User.get_user_list(data)
         users = dict({x['id']: x for x in users})
         err, problems = yield from Service.Problem.get_problem_list()
         problems = dict({x['id']: x for x in problems})
@@ -68,8 +68,6 @@ class Scoreboard(BaseService):
         users = list(users[x] for x in users)
         for user in users:
             # remove personal info
-            user.pop('token')
-            user.pop('password')
             user['attempt'] = 0
             user['penalty'] = 0
             user['ac'] = 0

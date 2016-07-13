@@ -118,15 +118,12 @@ class User(BaseService):
     
     def get_user_list(self, data={}):
         required_args = [{
-            'name': '+account',
-            'type': dict,
+            'name': '+type',
+            'type': int,
         },]
         err = self.form_validation(data, required_args)
         if err: return (err, None)
-        if data['account']['isADMIN']:
-            res = yield self.db.execute('SELECT * FROM users WHERE "type" >= %s;', (data['account']['type'],))
-        else:
-            res = yield self.db.execute('SELECT id, account, name FROM users WHERE "type" >= %s;', (data['account']['type'],))
+        res = yield self.db.execute('SELECT id, account, name FROM users WHERE "type" >= %s;', (data['type'],))
         res = res.fetchall()
         return (None, res)
 

@@ -10,9 +10,11 @@ from req import StaticFileHandler
 class Users(ApiRequestHandler):
     @tornado.gen.coroutine
     def get(self):
-        data = {}
-        data['account'] = self.account
+        data = {
+            'type': self.account['type']
+        }
         err, res = yield from Service.User.get_user_list(data)
+        self.log(res)
         self.render(res)
 
     @tornado.gen.coroutine
