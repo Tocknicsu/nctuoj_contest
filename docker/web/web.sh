@@ -1,10 +1,11 @@
 #!/bin/bash
-ls /nctuoj_contest_web
 if [ ! -e "/nctuoj_contest_web" ]; then
     curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.2/install.sh | bash
     . /root/.nvm/nvm.sh
     nvm install v6.3.0
     git clone https://github.com/allenwhale/nctuoj_contest_web.git
+    cd /nctuoj_contest_web
+    awk '{new=$0; print old; old=new}END{print "Config.baseUrl = \"'"$BASE_URL"'\""; print old}' src/js/utils/Config.js > src/js/utils/Config.js
 else
     cd /nctuoj_contest_web
     git pull --rebase
