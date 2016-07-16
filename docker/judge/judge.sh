@@ -20,26 +20,22 @@ cgroupfs_mount() {
         done
     )
 }
-if [ ! -e "/built" ]; then
-    touch /built
+if [ ! -d "/nctuoj_contest_judge" ]; then
     set -e
-    if [ "$docker_host" = "" ]; then
-        docker_host="172.17.42.1"
+    if [ "$BASE_URL" = "" ]; then
+        BASE_URL="172.17.0.1"
     fi
-    if [ "$judgecenter_host" = "" ]; then
-        judgecenter_port="$docker_host"
-    fi 
-    ### install java8
     git clone https://github.com/Tocknicsu/nctuoj_contest_judge.git
     cd nctuoj_contest_judge
     cp config.py.sample config.py
-    ### cgroup
+    echo "base_url = \"$BASE_URL\"" >> config.py
 else
-    cd /judge-client
+    cd /nctuoj_contest_judge
     git pull --rebase
 fi
 cgroupfs_mount
-cd /judge-client
+cd /nctuoj_contest_judge
+pip3 install --upgrade -r requirements.txt
 python3 judge.py
 # docker run -itd --privileged --name oj_judge_client --link oj_judge_center:oj_judge_center -e judgecenter_host=oj_judge_center -P -v /mnt/nctuoj:/mnt/nctuoj judge_client
 # --privileged 是為了讓container有權限mount cgroupfs才能跑isolate

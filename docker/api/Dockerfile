@@ -4,15 +4,12 @@ ENV LANG en_US.UTF-8
 ENV TZ=Asia/Taipei
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN apt -y update && apt -y upgrade
+RUN apt -y install git 
 RUN apt -y install \
         build-essential \
-        curl \
-        git \
-        wget \
         python3 \
         python3-pip \
         postgresql-client \
-        libpq-dev \
         && apt clean \
         && apt autoclean \
         && apt autoremove 
