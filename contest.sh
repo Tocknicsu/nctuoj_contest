@@ -1,4 +1,4 @@
-if [ ! -d "/nctuoj" ]; then
+if [ ! -d "/nctuoj_contest" ]; then
     set -e
     if [ "$DOCKERHOST" = "" ]; then
         DOCKERHOST="172.17.0.1";

@@ -11,11 +11,11 @@ ENV DB_NAME=nctuoj_contest
 ENV DB_PASSWORD=nctuoj_contest
 VOLUME ["/mnt/nctuoj_contest"]
 EXPOSE $PORT
-RUN apt -y update && apt -y upgrade
-RUN apt -y install build-essential curl git wget python3 python3-pip postgresql-server-dev-all \
-&& apt clean \
-&& apt autoclean \
-&& apt autoremove \
+RUN apt-get -y update && apt -y upgrade
+RUN apt-get -y install build-essential curl git wget python3 python3-pip postgresql-server-dev-all \
+&& apt-get clean \
+&& apt-get autoclean \
+&& apt-get autoremove \
 && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 RUN pip3 install --upgrade pip
 COPY contest.sh ./contest.sh
