@@ -132,7 +132,7 @@ class RequestHandler(CorsMixin, tornado.web.RequestHandler):
             self.account['isLOGIN'] = False
             self.account['type'] = -1
 
-        if token in config.JUDGE_TOKEN_LIST:
+        if token == config.JUDGE_TOKEN:
             self.account['isLOGIN'] = True
             self.account['isADMIN'] = True
             self.account['isJUDGE'] = True

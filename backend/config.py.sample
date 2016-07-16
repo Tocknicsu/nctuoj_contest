@@ -32,6 +32,4 @@ URL_WHITE_LIST = [
     "/api/languages/",
 ]
 
-JUDGE_TOKEN_LIST = [
-    "",
-]
+JUDGE_TOKEN = "token"
