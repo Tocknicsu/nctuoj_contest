@@ -60,6 +60,7 @@ def build_images():
     build_image("%s_db"%(config["prefix"]), "./db/")
     build_image("%s_api"%(config['prefix']), "./api/")
     build_image("%s_judge"%(config['prefix']), "./judge/")
+    build_image("%s_web"%(config['prefix']), "./web/")
     print("=====>Docker Build Done.")
 
 def print_config():
