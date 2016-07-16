@@ -10,6 +10,7 @@ RUN apt -y install \
         python3 \
         python3-pip \
         postgresql-client \
+        libpq-dev \
         && apt clean \
         && apt autoclean \
         && apt autoremove 
