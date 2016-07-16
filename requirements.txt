@@ -3,3 +3,4 @@ psycopg2==2.6.1
 python-dateutil==2.5.3
 tornado==4.3
 tornado_cors==0.6.0
+psutil==4.3.0
