@@ -32,3 +32,4 @@ else
 fi
 cd /nctuoj_contest/backend
 python3 server.py
+sh
