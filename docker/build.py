@@ -77,10 +77,10 @@ def build_image(name, directory):
 def build_images():
     print("=====>Building Docker...")
     config = json.load(open(CONFIG_FILE, 'r'))
-    # build_image("%s_db"%(config["prefix"]), "./db/")
-    # build_image("%s_api"%(config['prefix']), "./api/")
+    build_image("%s_db"%(config["prefix"]), "./db/")
+    build_image("%s_api"%(config['prefix']), "./api/")
     build_image("%s_judge"%(config['prefix']), "./judge/")
-    # build_image("%s_web"%(config['prefix']), "./web/")
+    build_image("%s_web"%(config['prefix']), "./web/")
     print("=====>Docker Build Done.")
 
 def print_config():
