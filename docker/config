@@ -1,0 +1,20 @@
+{
+    "prefix": "contest",
+    "DB": {
+        "POSTGRES_USER": "nctuoj_contest",
+        "POSTGRES_DB": "nctuoj_contest",
+        "POSTGRES_PASSWORD": "nctuoj_contest"
+    }, 
+    "api": {
+        "host": [],
+        "number": 4,
+        "DATA_ROOT": "/mnt/nctuoj_contest/"
+    },
+    "web": {
+        "host": "127.0.0.1"
+    },
+    "judge": {
+        "host": "127.0.0.1",
+        "number": 4
+    }
+}

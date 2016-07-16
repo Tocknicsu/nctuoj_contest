@@ -26,4 +26,4 @@ libpq-dev \
 && apt autoremove 
 RUN pip3 install --upgrade pip
 COPY contest.sh ./contest.sh
-ENTRYPOINT ["bash", "contest.sh"]
+ENTRYPOINT ["bash"]
