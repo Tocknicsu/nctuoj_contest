@@ -64,9 +64,6 @@ CREATE UNIQUE INDEX on users (name);
 CREATE UNIQUE INDEX on users (token);
 CREATE INDEX on users ("type");
 INSERT INTO users (account, name, password, token, "type") VALUES ('admin', 'admin', '00b93578e0284e8a4b92fec5f386cbb5', 'ADMIN@TOKEN', 0);
-INSERT INTO users (account, name, password, token, "type") VALUES ('test', 'test', '1dfb827eee41585df6d883ecffc2977a', 'TEST@TOKEN', 1);
-INSERT INTO users (account, name, password, token, "type") VALUES ('unofficial', 'unofficial', '34ac961dc46e7be7bf46937a7f02f00d', 'UNOFFICIAL@TOKEN', 2);
-INSERT INTO users (account, name, password, token, "type") VALUES ('official', 'official', '194d8a3231a17c7b6c72407f9c1d0930', 'OFFICIAL@TOKEN', 3);
 
 
 CREATE TABLE languages (
