@@ -1,16 +1,13 @@
 if [ ! -d "/nctuoj_contest" ]; then
     set -e
     if [ "$DB_HOST" = "" ]; then
-        DBHOST="172.17.0.1";
+        DB_HOST="172.17.0.1";
     fi
     if [ "$DB_USER" = "" ]; then
-        DBUSER="postgres";
+        DB_USER="postgres";
     fi
     if [ "$DB_PORT" = "" ]; then
-        DBPORT="5432";
-    fi
-    if [ "$PORT" = "" ]; then
-        PORT="3019";
+        DB_PORT="5432";
     fi
     if [ "$DB_NAME" = "" ]; then
         DBNAME="$DB_USER";
