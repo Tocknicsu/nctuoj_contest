@@ -26,6 +26,18 @@ class Clarifications(BasePermission):
 
 
 class Clarification(BasePermission):
+    def get(self, req, id):
+        err, res = yield from Service.Clarification.get_clarification({"id": id})
+        if res is None:
+            return (404, "Not Found")
+        if req.account['isADMIN']:
+            return
+        if req.account['isLOGIN'] and int(req.account['id']) == int(res['user_id']):
+            return
+        if len(res['reply']) and int(res['reply_type']) == 1:
+            return
+        return (403, "Permission Denied")
+        
     def put(self, req, id):
         if not req.account['isADMIN']:
             return (403, "Permission Denied")
