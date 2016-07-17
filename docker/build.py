@@ -41,6 +41,7 @@ def build_web():
         pass
     cmd = [
         "docker", "run", "-itd", "--name", "%s_web"%(config['prefix']),
+        "-e", "BASE_URL=%s"%(config["web"]['BASE_URL']),
         "-v", "%s:/mnt/oj_web/"%(config['web']['DATA_ROOT']),
         "%s_web"%(config['prefix']),
     ]
