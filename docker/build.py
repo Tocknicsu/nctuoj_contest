@@ -5,6 +5,7 @@ import os
 import json
 import subprocess as sp
 
+CONFIG_FILE = "./config.json"
 
 def get_container_info(name):
     p = sp.Popen(["docker", "inspect", name], stdout=sp.PIPE)
@@ -13,7 +14,7 @@ def get_container_info(name):
     return result[0]
 
 def build_api():
-    config = json.loads(open('config', 'r').read())
+    config = json.load(open(CONFIG_FILE, 'r'))
     try:
         os.makedirs(config['api']['DATA_ROOT'])
     except:
@@ -33,10 +34,21 @@ def build_api():
         sp.call(cmd)
 
 def build_web():
-    pass
+    config = json.load(open(CONFIG_FILE, 'r'))
+    try:
+        os.makedirs(config['web']['DATA_ROOT'])
+    except:
+        pass
+    cmd = [
+        "docker", "run", "-itd", "--name", "%s_web"%(config['prefix']),
+        "-v", "%s:/mnt/oj_web/"%(config['web']['DATA_ROOT']),
+        "%s_web"%(config['prefix']),
+    ]
+    print(cmd)
+    sp.call(cmd)
 
 def build_db():
-    config = json.loads(open('config', 'r').read())
+    config = json.load(open(CONFIG_FILE, 'r'))
     cmd = [
         "docker", "run", "-itd", "--name", "%s_db"%(config['prefix']),
     ]
@@ -47,7 +59,15 @@ def build_db():
     sp.call(cmd)
 
 def build_judge():
-    pass
+    config = json.load(open(CONFIG_FILE, 'r'))
+    for x in range(config['judge']['number']):
+        cmd = ["docker", "run", "-itd", "--privileged",
+                "--name", "%s_judge_%d"%(config['prefix'], x),
+                "--link", "%s_db:%s_db"%(config["prefix"], config['prefix']),
+                "-e", "BASE_URL=%s"%(config['judge']['BASE_URL']),
+                "%s_judge"%(config["prefix"])]
+        print(cmd)
+        sp.call(cmd)
 
 def build_image(name, directory):
     if sp.call(["docker", "build", "-t", name, directory]):
@@ -56,14 +76,15 @@ def build_image(name, directory):
 
 def build_images():
     print("=====>Building Docker...")
-    config = json.loads(open('config', 'r').read())
+    config = json.load(open(CONFIG_FILE, 'r'))
     build_image("%s_db"%(config["prefix"]), "./db/")
     build_image("%s_api"%(config['prefix']), "./api/")
     build_image("%s_judge"%(config['prefix']), "./judge/")
+    build_image("%s_web"%(config['prefix']), "./web/")
     print("=====>Docker Build Done.")
 
 def print_config():
-    config = json.loads(open('config', 'r').read())
+    config = json.load(open(CONFIG_FILE, 'r'))
     print(config)
     db = get_container_info('%s_db'%(config['prefix']))
     print(db['NetworkSettings']['IPAddress'])
@@ -78,22 +99,30 @@ if __name__ == "__main__":
     parser.add_argument("-api", help="create api", action="store_true")
     parser.add_argument("-web", help="create web", action="store_true")
     parser.add_argument("-judge", help="create judge", action="store_true")
+    parser.add_argument("-images", help="build images(db, api, web, judge)", action="store_true")
     parser.add_argument("-all", help="create db api web judge", action="store_true")
     parser.add_argument("-config", help="print config", action="store_true")
+    parser.add_argument("-file", help="specify config file", nargs="?", default="./config.json")
     args = parser.parse_args()
+    CONFIG_FILE = args.file
     if(os.getuid() != 0):
         print("This program need root! Do you want to run it as root?(Y/n)")
         x = input().lower()
-        if x == "y" or x == '':
-            os.execv("/usr/bin/sudo", ["sudo", "-E",]+sys.argv)
+        if x == "y" or x == "":
+            os.execv("/usr/bin/sudo", ["sudo", "-E",] + sys.argv)
         else:
             sys.exit(0)
-    build_images()
+    if args.images:
+        build_images()
     if args.config:
         print_config()
-    if args.db:
+    if args.db or args.all:
         build_db()
-    if args.api:
+    if args.api or args.all:
         build_api()
+    if args.web or args.all:
+        build_web()
+    if args.judge or args.all:
+        build_judge()
 
 

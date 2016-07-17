@@ -11,10 +11,13 @@
         "DATA_ROOT": "/mnt/nctuoj_contest/"
     },
     "web": {
-        "host": "127.0.0.1"
+        "host": "127.0.0.1",
+        "BASE_URL": "https://contest.oj.nctu.me",
+        "DATA_ROOT": "/mnt/nctuoj_contest_web/"
     },
     "judge": {
         "host": "127.0.0.1",
-        "number": 4
+        "number": 4,
+        "BASE_URL": "https://oj.nctu.me"
     }
 }
