@@ -123,7 +123,7 @@ class User(BaseService):
         },]
         err = self.form_validation(data, required_args)
         if err: return (err, None)
-        res = yield self.db.execute('SELECT id, account, name FROM users WHERE "type" >= %s;', (data['type'],))
+        res = yield self.db.execute('SELECT id, account, name, type FROM users WHERE "type" >= %s;', (data['type'],))
         res = res.fetchall()
         return (None, res)
 
