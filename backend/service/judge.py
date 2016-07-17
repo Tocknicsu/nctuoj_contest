@@ -53,7 +53,7 @@ class Judge(BaseService):
         data = {}
         data['time_usage'] = max((x['time_usage'] for x in submission_testdata if x['time_usage'] is not None), default=0)
         data['memory_usage'] = max((x['memory_usage'] for x in submission_testdata if x['memory_usage'] is not None), default=0)
-        data['verdict_id'] = min(x['verdict_id'] for x in submission_testdata)
+        data['verdict_id'] = min((x['verdict_id'] for x in submission_testdata), default=10)
         if problem['score_type'] == 0: #sum
             data['score'] = sum(x['score'] for x in submission_testdata)
         elif problem['score_type'] == 1: #min
