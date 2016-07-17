@@ -31,6 +31,5 @@ class JudgeSubmissionTestdata(ApiRequestHandler):
         if err:
             self.render(err)
         else:
-            self.render(res)
-            return res
+            self.render()
 
