@@ -7,4 +7,5 @@ __pycache__
 data
 client.ovpn
 build/
+config.json
 
