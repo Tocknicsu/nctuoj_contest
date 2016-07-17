@@ -17,8 +17,8 @@ cd /nctuoj_contest_web
 nvm use 6.3.0
 npm install
 rm dist/* || true
-rm /mnt/oj_web/* || true
 npm run build
+rm /mnt/oj_web/* || true
 cp dist/* /mnt/oj_web
 sh
 
