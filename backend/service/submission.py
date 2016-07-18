@@ -26,7 +26,6 @@ class Submission(BaseService):
             'name': 'verdict_id',
             'type': int,
         }]
-        self.log(data)
         err = self.form_validation(data, required_args)
         if err: return (err, None)
         where = {}
