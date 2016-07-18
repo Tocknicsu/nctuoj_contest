@@ -64,7 +64,6 @@ def build_judge():
     for x in range(config['judge']['number']):
         cmd = ["docker", "run", "-itd", "--privileged",
                 "--name", "%s_judge_%d"%(config['prefix'], x),
-                "--link", "%s_db:%s_db"%(config["prefix"], config['prefix']),
                 "-e", "BASE_URL=%s"%(config['judge']['BASE_URL']),
                 "%s_judge"%(config["prefix"])]
         print(cmd)
