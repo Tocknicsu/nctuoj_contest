@@ -8,7 +8,6 @@ from req import ApiRequestHandler
 class System(ApiRequestHandler):
     @tornado.gen.coroutine
     def get(self, resource=None):
-        print(resource)
         if resource == "time":
             err, res = Service.System.get_time()
         elif resource == 'cpu':
