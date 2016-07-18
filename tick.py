@@ -15,8 +15,11 @@ def tick_user(Type):
 
 if __name__ == "__main__":
     while True:
-        for i in range(4):
-            tick_user(i)
+        try:
+            for i in range(4):
+                tick_user(i)
+        except Exception as e:
+            print(e)
         time.sleep(3)
 
 
