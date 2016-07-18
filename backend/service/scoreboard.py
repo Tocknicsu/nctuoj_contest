@@ -86,8 +86,6 @@ class Scoreboard(BaseService):
         now_rank = 0
         now_rank_idx = (1, 0)
         for user in users:
-            self.log(now_rank_idx)
-            self.log((-user['ac'], user['penalty']))
             if now_rank_idx != (-user['ac'], user['penalty']):
                 now_rank += 1
                 now_rank_idx = (-user['ac'], user['penalty'])
