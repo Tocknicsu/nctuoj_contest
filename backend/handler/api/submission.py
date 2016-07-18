@@ -13,8 +13,7 @@ class Submissions(ApiRequestHandler):
             data = self.get_args(args)
             err, res = yield from Service.Submission.get_submission_list_admin(data)
         else:
-            args = ['count', 'page']
-            data = self.get_args(args)
+            data = {}
             data['user_id'] = self.account['id']
             err, res = yield from Service.Submission.get_submission_list(data)
         if err:
