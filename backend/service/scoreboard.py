@@ -75,10 +75,9 @@ class Scoreboard(BaseService):
             for problem in user['problems']:
                 if problem['ac_time']:
                     problem['penalty'] = problem['ac_time']
+                    problem['penalty'] += (problem['attempt'] - 1) * PENALTY
                 else:
                     problem['penalty'] = 0
-                if problem['attempt'] > 0:
-                    problem['penalty'] += (problem['attempt'] - 1) * PENALTY
                 user['attempt'] += problem['attempt']
                 user['penalty'] += problem['penalty']
                 user['ac'] += problem['verdict_id'] == VERDICT_AC
