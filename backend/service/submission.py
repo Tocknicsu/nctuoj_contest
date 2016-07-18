@@ -49,20 +49,13 @@ class Submission(BaseService):
 
     def get_submission_list(self, data={}):
         required_args = [{
-            'name': '+count',
-            'type': int,
-        }, {
-            'name': '+page',
-            'type': int,
-        }, {
             'name': '+user_id',
             'type': int,
         }]
         err = self.form_validation(data, required_args)
         if err: return (err, None)
-        limit, offset = self.calc_limit_offset(data['page'], data['count'])
         res = {}
-        res['data'] = (yield self.db.execute("SELECT * FROM submissions WHERE user_id=%s ORDER BY id DESC LIMIT %s OFFSET %s", (data['user_id'], limit, offset,))).fetchall()
+        res['data'] = (yield self.db.execute("SELECT * FROM submissions WHERE user_id=%s ORDER BY id DESC", (data['user_id'], ))).fetchall()
         res['count'] = (yield self.db.execute("SELECT COUNT(*) as count FROM submissions WHERE user_id=%s", (data['user_id'],))).fetchone()['count']
         return (None, res)
 

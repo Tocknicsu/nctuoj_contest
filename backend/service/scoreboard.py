@@ -48,9 +48,8 @@ class Scoreboard(BaseService):
                 'page': 1,
             })
         submissions = submissions['data']
-        self.log(submissions)
         # iterate submission list
-        for submission in submissions:
+        for submission in reversed(submissions):
             if submission['user_id'] not in users: # not in user list
                 continue
             user_id = submission['user_id']
