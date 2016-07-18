@@ -33,20 +33,14 @@ class Submissions(BasePermission):
 
 
 class Submission(BasePermission):
-    def exist(self, data={}):
-        err, res = yield from Service.Submission.get_submission({'id': data['id']})
+    def get(self, req, id):
+        if not req.account['isLOGIN']:
+            return (403, "Permission Denied")
+        err, res = yield from Service.Submission.get_submission({'id': id})
         if err:
             return err
         if res is None:
             return (404, "Not Found")
-        pass
-
-    def get(self, req, id):
-        if not req.account['isLOGIN']:
-            return (403, "Permission Denied")
-        err = yield from self.exist({'id': id})
-        if err:
-            return err
         if req.account['isADMIN']:
             return 
         if int(req.account['id']) != int(res['user_id']):
