@@ -88,12 +88,12 @@ CREATE TABLE execute_types (
     updated_at      timestamp       DEFAULT date_trunc('second',now())
 );
 CREATE TRIGGER execute_types_updated_row BEFORE UPDATE ON execute_types FOR EACH ROW EXECUTE PROCEDURE updated_row();
-INSERT INTO execute_types (description, file_name, language_id) values ('C', 'main.c', 1);
-INSERT INTO execute_types (description, file_name, language_id) values ('C++11', 'main.cpp', 2);
 INSERT INTO execute_types (description, file_name, language_id) values ('C++14', 'main.cpp', 2);
+INSERT INTO execute_types (description, file_name, language_id) values ('C++11', 'main.cpp', 2);
+INSERT INTO execute_types (description, file_name, language_id) values ('C', 'main.c', 1);
 INSERT INTO execute_types (description, file_name, language_id) values ('Java', 'Main.java', 3);
-INSERT INTO execute_types (description, file_name, language_id) values ('Python2', 'main.py', 4);
 INSERT INTO execute_types (description, file_name, language_id) values ('Python3', 'main.py', 5);
+INSERT INTO execute_types (description, file_name, language_id) values ('Python2', 'main.py', 4);
 
 CREATE TABLE execute_steps (
     id              serial          NOT NULL    PRIMARY KEY,
@@ -104,18 +104,18 @@ CREATE TABLE execute_steps (
 );
 CREATE TRIGGER execute_steps_updated_row BEFORE UPDATE ON execute_steps FOR EACH ROW EXECUTE PROCEDURE updated_row();
 CREATE INDEX ON execute_steps (execute_type_id);
-INSERT INTO execute_steps (execute_type_id, command) values (1, 'gcc -lm -std=c99 __FILE__');
+INSERT INTO execute_steps (execute_type_id, command) values (1, 'g++ -std=c++14 -O2 __FILE__');
 INSERT INTO execute_steps (execute_type_id, command) values (1, './a.out');
 INSERT INTO execute_steps (execute_type_id, command) values (2, 'g++ -std=c++11 -O2 __FILE__');
 INSERT INTO execute_steps (execute_type_id, command) values (2, './a.out');
-INSERT INTO execute_steps (execute_type_id, command) values (3, 'g++ -std=c++14 -O2 __FILE__');
+INSERT INTO execute_steps (execute_type_id, command) values (3, 'gcc -lm -std=c99 __FILE__');
 INSERT INTO execute_steps (execute_type_id, command) values (3, './a.out');
 INSERT INTO execute_steps (execute_type_id, command) values (4, 'javac __FILE__');
 INSERT INTO execute_steps (execute_type_id, command) values (4, 'java -Xmx__MEMORY_LIMIT__k -Xss__MEMORY_LIMIT__k __MAIN_FILE__');
-INSERT INTO execute_steps (execute_type_id, command) values (5, 'python2 -m py_compile __FILE__');
-INSERT INTO execute_steps (execute_type_id, command) values (5, 'python2 __FILE__');
-INSERT INTO execute_steps (execute_type_id, command) values (6, 'python3 -m py_compile __FILE__');
-INSERT INTO execute_steps (execute_type_id, command) values (6, 'python3 __FILE__');
+INSERT INTO execute_steps (execute_type_id, command) values (5, 'python3 -m py_compile __FILE__');
+INSERT INTO execute_steps (execute_type_id, command) values (5, 'python3 __FILE__');
+INSERT INTO execute_steps (execute_type_id, command) values (6, 'python2 -m py_compile __FILE__');
+INSERT INTO execute_steps (execute_type_id, command) values (6, 'python2 __FILE__');
 
 CREATE TABLE clarifications (
     id              serial          NOT NULL    PRIMARY KEY,
