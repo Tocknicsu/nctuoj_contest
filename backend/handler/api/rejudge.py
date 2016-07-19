@@ -7,7 +7,7 @@ from req import ApiRequestHandler
 class SubmissionRejudge(ApiRequestHandler):
     @tornado.gen.coroutine
     def post(self, id):
-        err, res = yield from Service.Rejudge.submission_rejudge({'id': id})
+        err, res = yield from Service.Rejudge.rejudge_submission({'id': id})
         if err:
             self.render(err)
         else:
@@ -16,7 +16,7 @@ class SubmissionRejudge(ApiRequestHandler):
 class ProblemRejudge(ApiRequestHandler):
     @tornado.gen.coroutine
     def post(self, id):
-        err, res = yield from Service.Rejudge.problem_rejudge({'id': id})
+        err, res = yield from Service.Rejudge.rejudge_problem({'id': id})
         if err:
             self.render(err)
         else:
