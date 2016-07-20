@@ -8,7 +8,7 @@ class Scoreboard(ApiRequestHandler):
     @tornado.gen.coroutine
     def get(self):
         if self.account['isLOGIN'] == False:
-            role = 2
+            role = 3
         else:
             role = self.account['type']
         err, res = yield from Service.Scoreboard.get_scoreboard({'type': role})
