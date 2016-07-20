@@ -63,9 +63,11 @@ class Scoreboard(BaseService):
             if data['type'] != 0: # not admin
                 if contest['freeze'] < 0:
                     if submission['created_at'] > contest['end'] + timedelta(minutes=contest['freeze']):
+                        users[user_id]['problems'][problem_id]['verdict_id'] = 1
                         continue
                 if contest['freeze'] > 0:
                     if submission['created_at'] > contest['start'] + timedelta(minutes=contest['freeze']):
+                        users[user_id]['problems'][problem_id]['verdict_id'] = 1
                         continue
             if submission['verdict_id'] == VERDICT_AC:
                 users[user_id]['problems'][problem_id]['ac_time'] = (submission['created_at'] - contest['start']).seconds // 60
