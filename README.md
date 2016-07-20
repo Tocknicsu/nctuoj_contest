@@ -1,6 +1,10 @@
 # NCTUOJ Contest Version
 
 ## TODO List
-- [ ] Check unit test
+- [ ] Flush Database
+- [ ] Stop Judge For all or one problem
+- [ ] Zip all problem
+- [ ] Futher Project: Docker Multi server web manager
+
 ## How To Install
 
