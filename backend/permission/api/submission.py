@@ -17,7 +17,7 @@ class Submissions(BasePermission):
             return (403, "Permission Denied")
 
         err, res = yield from Service.Util.contest_status()
-        if res == -1 and self.account['isADMIN'] == False:
+        if res == -1 and req.account['isADMIN'] == False:
             return (403, "Permission Denied")
 
         args = ['problem_id', 'execute_type_id']

@@ -4,7 +4,7 @@ from permission.base import BasePermission
 class Problems(BasePermission):
     def get(self, req):
         err, res = yield from Service.Util.contest_status()
-        if res == -1 and self.account['isADMIN'] == False:
+        if res == -1 and req.account['isADMIN'] == False:
             return (403, "Permission Denied")
 
     def post(self, req):
@@ -21,7 +21,7 @@ class Problem(BasePermission):
     def get(self, req, id):
 
         err, res = yield from Service.Util.contest_status()
-        if res == -1 and self.account['isADMIN'] == False:
+        if res == -1 and req.account['isADMIN'] == False:
             return (403, "Permission Denied")
 
         err = yield from self.exist({'id': id})
