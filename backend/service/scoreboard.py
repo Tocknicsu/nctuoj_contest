@@ -51,13 +51,6 @@ class Scoreboard(BaseService):
         submissions = submissions['data']
         # iterate submission list
         for submission in reversed(submissions):
-            if data['type'] != 0: # not admin
-                if contest['freeze'] < 0:
-                    if submission['created_at'] > contest['end'] + timedelta(minutes=contest['freeze']):
-                        continue
-                if contest['freeze'] > 0:
-                    if submission['created_at'] > contest['start'] + timedelta(minutes=contest['freeze']):
-                        continue
             if submission['user_id'] not in users: # not in user list
                 continue
             user_id = submission['user_id']
@@ -67,6 +60,13 @@ class Scoreboard(BaseService):
             if submission['verdict_id'] > 2:
                 users[user_id]['problems'][problem_id]['attempt'] += 1
                 problems[problem_id]['attempt'] += 1
+            if data['type'] != 0: # not admin
+                if contest['freeze'] < 0:
+                    if submission['created_at'] > contest['end'] + timedelta(minutes=contest['freeze']):
+                        continue
+                if contest['freeze'] > 0:
+                    if submission['created_at'] > contest['start'] + timedelta(minutes=contest['freeze']):
+                        continue
             if submission['verdict_id'] == VERDICT_AC:
                 users[user_id]['problems'][problem_id]['ac_time'] = (submission['created_at'] - contest['start']).seconds // 60
                 problems[problem_id]['ac'] += 1
