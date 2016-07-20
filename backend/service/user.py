@@ -193,7 +193,6 @@ class User(BaseService):
             else:
                 user['id'] = id
                 res['success'].append(user)
-
         return (None, res)
     
     def UploadFile(self, data={}):
