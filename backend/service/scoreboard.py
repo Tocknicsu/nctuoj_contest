@@ -57,7 +57,8 @@ class Scoreboard(BaseService):
             problem_id = submission['problem_id']
             if users[user_id]['problems'][problem_id]['verdict_id'] == VERDICT_AC: # AC already
                 continue
-            if submission['verdict_id'] > 2:
+            # ignore CE / SE
+            if submission['verdict_id'] > 4 or submission['verdict_id'] <= 2:
                 users[user_id]['problems'][problem_id]['attempt'] += 1
                 problems[problem_id]['attempt'] += 1
             if data['type'] != 0: # not admin

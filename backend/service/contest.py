@@ -7,6 +7,8 @@ from datetime import timedelta
 class Contest(BaseService):
     def get_contest(self):
         res = (yield self.db.execute("SELECT * FROM contest")).fetchone()
+        err, res['status'] = yield from Service.Util.contest_status()
+        self.log(res)
         return (None, res)
 
     def put_contest(self, data={}):
