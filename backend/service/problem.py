@@ -174,7 +174,7 @@ class Problem(BaseService):
             code_file = data.pop('file')
             data['file_name'] = code_file['filename']
             yield self.db.execute("UPDATE verdicts SET file_name=%s WHERE id=%s",(data['file_name'], data['id'],))
-            folder = os.path.join(config.DATA_ROOT, 'data/verdicts', str(id))
+            folder = os.path.join(config.DATA_ROOT, 'data/verdicts', str(data['id']))
             file_path = os.path.join(folder, data['file_name'])
             try: shutil.rmtree(folder)
             except: pass
