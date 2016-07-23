@@ -68,7 +68,16 @@ class Submission(BaseService):
         res = yield self.db.execute("SELECT * FROM submissions WHERE id=%s", (data['id'],))
         res = res.fetchone()
         res['code'] = open(os.path.join(config.DATA_ROOT, 'data/submissions', str(res['id']), res['file_name'])).read()
-        res['testdata'] = (yield self.db.execute('SELECT * FROM map_submission_testdata WHERE submission_id = %s;', (res['id'],))).fetchall()
+        return (None, res)
+
+    def get_submission_testdata(self, data={}):
+        required_args = [{
+            'name': '+id',
+            'type': int,
+        }]
+        err = self.form_validation(data, required_args)
+        if err: return (err, None)
+        res = (yield self.db.execute('SELECT * FROM map_submission_testdata WHERE submission_id = %s;', (data['id'],))).fetchall()
         return (None, res)
 
     def fixed_file_name(self, file_name):

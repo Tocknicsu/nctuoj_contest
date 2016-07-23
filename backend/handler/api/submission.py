@@ -46,8 +46,8 @@ class Submission(ApiRequestHandler):
         err, res = yield from Service.Submission.get_submission({'id': id})
         if err:
             self.render(err)
-        else:
-            self.render(res)
+        if self.account['isADMIN']:
+            err, res['testdata'] = yield from Service.Submission.get_submission_testdata({'id' :id})
 
 class SubmissionFile(StaticFileHandler):
     @tornado.gen.coroutine
