@@ -4,7 +4,7 @@ import config
 import os
 import shutil
 import hashlib
-import zipfile
+import pyminizip
 import json
 
 
@@ -447,5 +447,11 @@ class Problem(BaseService):
         err, problems = yield from self.get_problem_list()
         if err:
             return (err, None)
+        folder = os.path.join(config.DATA_ROOT, 'data/problems')
+        problem_list = [ os.path.join(folder, "%s.pdf"%chr(ord('A')+problem['id']-1)) for problem in problems]
+        self.log(problem_list)
+        zip_path = os.path.join(config.DATA_ROOT, 'data/problems/problems.zip')
+
+        pyminizip.compress_multiple(problem_list, zip_path, '12345', 5)
         return (None, None)
 
