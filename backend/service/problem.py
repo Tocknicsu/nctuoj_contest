@@ -56,12 +56,7 @@ class Problem(BaseService):
         res = yield self.db.execute(sql, param)
         res = res.fetchone()
         ### Save File
-        folder = os.path.join(config.DATA_ROOT, 'data/problems', str(res['id']))
-        file_path = os.path.join(folder, 'pdf.pdf')
-        try: os.makedirs(folder)
-        except: pass
-        with open(file_path, 'wb+') as f:
-            f.write(pdf['body'])
+        yield from self.store_pdf(res['id'], pdf)
         ### Add default verdict
         yield self.db.execute("INSERT INTO verdicts (id, file_name, execute_type_id) VALUES (%s, %s, %s)", (res['id'], "main.cpp", 2,))
         ### copy default verdict file
@@ -95,12 +90,7 @@ class Problem(BaseService):
         sql, param = self.gen_update_sql('problems', data)
         res = yield self.db.execute(sql + ' WHERE id = %s', param + (id,))
         if pdf:
-            folder = os.path.join(config.DATA_ROOT, 'data/problems', str(id))
-            file_path = os.path.join(folder, 'pdf.pdf')
-            try: os.makedirs(folder)
-            except: pass
-            with open(file_path, 'wb+') as f:
-                f.write(pdf['body'])
+            yield from self.store_pdf(id, pdf)
         return (None, {'id': id})
 
     def get_problem_execute_list(self, data={}):
@@ -442,4 +432,30 @@ class Problem(BaseService):
         else:
             return (errlist, None)
 
+    def store_pdf(self, id, pdf):
+        folder = os.path.join(config.DATA_ROOT, 'data/problems')
+        file_path = os.path.join(folder, "%s.pdf"%chr(ord('A')+id-1))
+        try: os.makedirs(folder)
+        except: pass
+        with open(file_path, 'wb+') as f:
+            f.write(pdf['body'])
+        err, res = yield from self.gen_zip()
+        return (err, None)
+
+
+    def gen_zip(self):
+        err, problems = yield from self.get_problem_list()
+        if err:
+            return (err, None)
+        zip_file_path = os.path.join(config.DATA_ROOT, 'data/problems/problems.zip')
+        with zipfile.ZipFile(zip_file_path, 'w', zipfile.ZIP_DEFLATED) as z:
+            z.setpassword("Password".encode())
+            for problem in problems:
+                file_path = os.path.join(config.DATA_ROOT, 'data/problems/', str(problem['id']), "pdf.pdf")
+                zip_path = "%s.pdf"%(chr(ord('A') + problem['id'] - 1))
+                try:
+                    z.write(file_path, zip_path)
+                except Exception as e:
+                    self.log(e)
+        return (None, None)
 
