@@ -447,15 +447,5 @@ class Problem(BaseService):
         err, problems = yield from self.get_problem_list()
         if err:
             return (err, None)
-        zip_file_path = os.path.join(config.DATA_ROOT, 'data/problems/problems.zip')
-        with zipfile.ZipFile(zip_file_path, 'w', zipfile.ZIP_DEFLATED) as z:
-            z.setpassword("Password".encode())
-            for problem in problems:
-                file_path = os.path.join(config.DATA_ROOT, 'data/problems/', str(problem['id']), "pdf.pdf")
-                zip_path = "%s.pdf"%(chr(ord('A') + problem['id'] - 1))
-                try:
-                    z.write(file_path, zip_path)
-                except Exception as e:
-                    self.log(e)
         return (None, None)
 
