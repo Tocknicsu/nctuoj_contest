@@ -451,7 +451,7 @@ class Problem(BaseService):
         problem_list = [ os.path.join(folder, "%s.pdf"%chr(ord('A')+problem['id']-1)) for problem in problems]
         self.log(problem_list)
         zip_path = os.path.join(config.DATA_ROOT, 'data/problems/problems.zip')
-
-        pyminizip.compress_multiple(problem_list, zip_path, '12345', 5)
+        zip_password = (yield self.db.execute("SELECT zip_password FROM contest")).fetchone()['zip_password']
+        pyminizip.compress_multiple(problem_list, zip_path, zip_password, 5)
         return (None, None)
 
