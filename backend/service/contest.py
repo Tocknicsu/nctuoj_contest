@@ -8,6 +8,8 @@ class Contest(BaseService):
     def get_contest(self):
         res = (yield self.db.execute("SELECT * FROM contest")).fetchone()
         err, res['status'] = yield from Service.Util.contest_status()
+        if res['status'] == -1:
+            res.pop('zip_password')
         return (None, res)
 
     def put_contest(self, data={}):

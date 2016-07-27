@@ -42,6 +42,7 @@ CREATE TABLE contest(
     "start"         timestamp       NOT NULL    DEFAULT date_trunc('second', now()),
     "freeze"        integer         NOT NULL    DEFAULT 0 CHECK ("freeze" * interval '1 minute' <= "end"-"start"),
     "end"           timestamp       NOT NULL    DEFAULT date_trunc('second', now()),
+    zip_password    varchar         NOT NULL    DEFAULT substring(upper(md5(concat(random(), random()))), 1, 16);
     created_at      timestamp       DEFAULT date_trunc('second',now()),
     updated_at      timestamp       DEFAULT date_trunc('second',now())
 );
