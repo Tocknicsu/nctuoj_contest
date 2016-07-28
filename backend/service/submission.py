@@ -78,6 +78,8 @@ class Submission(BaseService):
         err = self.form_validation(data, required_args)
         if err: return (err, None)
         res = (yield self.db.execute('SELECT * FROM map_submission_testdata WHERE submission_id = %s;', (data['id'],))).fetchall()
+        if res is None:
+            res = []
         return (None, res)
 
     def fixed_file_name(self, file_name):
