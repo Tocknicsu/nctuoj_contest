@@ -51,7 +51,7 @@ class Submission(ApiRequestHandler):
         if self.account['isADMIN']:
             err, res['testdata'] = yield from Service.Submission.get_submission_testdata({'id' :id})
         if res['verdict_id'] == 4:
-            err, res['ce'] = (yield from Service.Submission.get_submission_testdata({'id': id}))[0]['note']
+            err, res['ce'] = yield from Service.Submission.get_submission_testdata({'id': id})
         self.render(res)
 
 class SubmissionFile(StaticFileHandler):
