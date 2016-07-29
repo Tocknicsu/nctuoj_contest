@@ -14,7 +14,6 @@ class Users(ApiRequestHandler):
             'type': self.account['type']
         }
         err, res = yield from Service.User.get_user_list(data)
-        self.log(res)
         self.render(res)
 
     @tornado.gen.coroutine
