@@ -10,7 +10,8 @@ class Submissions(BasePermission):
             return (404, "Not Found")
 
     def get(self, req):
-        pass
+        if not req.account['isLOGIN']:
+            return (403, "Permission Denied")
 
     def post(self, req):
         if not req.account['isLOGIN']:
