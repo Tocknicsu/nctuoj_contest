@@ -87,6 +87,8 @@ def _form_validation(form, schema):
 
             ### check xss
             if 'xss' in item and item['xss']:
+                pass
+            else:
                 xss = XssHtml()
                 xss.feed(form[name])
                 xss.close()
