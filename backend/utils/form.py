@@ -92,7 +92,7 @@ def _form_validation(form, schema):
             pass
         elif 'xss' in item and item['xss'] == True:
             xss_check = True
-        elif 'type' in item and item['type'] == "str":
+        elif 'type' in item and item['type'] == str:
             xss_check = True
         if xss_check:
             xss = XssHtml()
