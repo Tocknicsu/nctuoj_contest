@@ -31,17 +31,19 @@ def Equal(data1, data2, ignore):
                 return False
         return True
     elif isinstance(data1, dict):
+        cp_data1 = data1.copy()
+        cp_data2 = data2.copy()
         for x in (ignore_list + ignore):
-            if x in data1:
-                data1.pop(x)
-            if x in data2:
-                data2.pop(x)
-        if len(data1) != len(data2):
+            if x in cp_data1:
+                cp_data1.pop(x)
+            if x in cp_data2:
+                cp_data2.pop(x)
+        if len(cp_data1) != len(cp_data2):
             return False
-        for x in data1:
-            if x not in data2:
+        for x in cp_data1:
+            if x not in cp_data2:
                 return False
-            if not Equal(data1[x], data2[x], ignore):
+            if not Equal(cp_data1[x], cp_data2[x], ignore):
                 return False
         return True
     else:
@@ -97,8 +99,8 @@ def test_py(filename):
             ignore = data['ignore']
         if response.status_code != data['response_status'] or not Equal(response_json, data['response_data'], ignore):
             print("Error: Unexpect Response")
-            print("Expect: [%s] %s"%(data['response_status'], data['response_data']))
-            print("Response: [%s] %s"%(response.status_code, response.text))
+            print("Expect: [%s] %s"%(data['response_status'], json.dumps(data['response_data'], indent=4, sort_keys=True)))
+            print("Response: [%s] %s"%(response.status_code, json.dumps(response_json, indent=4, sort_keys=True)))
     print('\n')
 
 def flushdb():
