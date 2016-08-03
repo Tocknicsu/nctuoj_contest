@@ -16,6 +16,7 @@ data = [
             "freeze": 0,
             "description": "XD"
         },
+        "ignore": ["zip_password"],
         "response_status": 200,
         "response_data": {
             "msg": {
@@ -33,6 +34,7 @@ data = [
         "method": "get",
         "payload": {
         },
+        "ignore": ["zip_password"],
         "response_status": 200,
         "response_data": {
             "msg": {
@@ -51,6 +53,7 @@ data = [
         "payload": {
             "token": "TEST@TOKEN"
         },
+        "ignore": ["zip_password"],
         "response_status": 200,
         "response_data": {
             "msg": {
@@ -69,6 +72,7 @@ data = [
         "payload": {
             "token": "UNOFFICIAL@TOKEN"
         },
+        "ignore": ["zip_password"],
         "response_status": 200,
         "response_data": {
             "msg": {
@@ -87,6 +91,7 @@ data = [
         "payload": {
             "token": "OFFICIAL@TOKEN"
         },
+        "ignore": ["zip_password"],
         "response_status": 200,
         "response_data": {
             "msg": {
@@ -105,6 +110,7 @@ data = [
         "payload": {
             "token": "ADMIN@TOKEN"
         },
+        "ignore": ["zip_password"],
         "response_status": 200,
         "response_data": {
             "msg": {
