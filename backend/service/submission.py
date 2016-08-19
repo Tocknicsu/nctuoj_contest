@@ -98,6 +98,7 @@ class Submission(BaseService):
         }, {
             'name': '+code',
             'type': str,
+            'xss': False,
         }, {
             'name': '+file_name',
             'type': str,
