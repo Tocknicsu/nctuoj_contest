@@ -1,43 +1,42 @@
-upstream contest_lb {                                                                           
-    server 172.17.0.3:3018;                                                             
-    server 172.17.0.4:3018;                                                             
-    server 172.17.0.5:3018;                                                             
-    server 172.17.0.6:3018;                                                             
-}                                                                                       
-
-server {                                                                                
-    root /mnt/nctuoj_contest_web/;                                                      
-    gzip on;                                                                            
-    gzip_http_version 1.1;                                                              
-    gzip_vary on;                                                                       
-    gzip_comp_level 6;                                                                  
-    gzip_proxied any;                                                                   
-    gzip_types text/plain text/html text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/javascript text/x-js;                                                                                       gzip_buffers 16 8k;                                                                 
-    gzip_disable "MSIE [1-6]\.(?!.*SV1)";                                               
-    client_max_body_size 300M;                                                          
-                                                                                        
-    location ~ (?:.+\/)((?:.+)\.(?:.+)) {                                               
-        try_files $uri /$1 /css/$1 =404;                                                
-        expires 168h;                                                                   
-add_header Cache-Control "public";                                                      
-    }                                                                                   
-                                                                                        
-    location /api {                                                                     
-        proxy_connect_timeout       600;                                                        proxy_send_timeout          600;                                                        proxy_read_timeout          600;                                                
-        send_timeout                600;                                                
-        proxy_set_header X-Real-IP $remote_addr;                                        
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;                    
-        proxy_set_header Host $http_host;                                               
-        proxy_set_header X-NginX-Proxy true;                                            
-        set $test_uri $scheme://$host$request_uri;                                      
-        if ($test_uri != $scheme://$host$uri$is_args$args) {                            
-            rewrite ^ $scheme://$host$uri$is_args$args? permanent;                      
-    }                                                                                   
-        proxy_pass http://contest_lb;                                                   
-    }                                                                                   
-                                                                                        
-    location / {                                                                        
-        expires -1;                                                                     
-        try_files $uri /index.html;                                                     
-    }                                                                                   
-}                              
+upstream contest_lb {
+    server 172.17.0.3:3019;
+    server 172.17.0.4:3019;
+    server 172.17.0.5:3019;
+    server 172.17.0.6:3019;
+}
+server {
+    root /mnt/nctuoj_contest_web/;
+    gzip on;
+    gzip_http_version 1.1;
+    gzip_vary on;
+    gzip_comp_level 6;
+    gzip_proxied any;
+    gzip_types text/plain text/html text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/javascript text/x-js;
+    gzip_buffers 16 8k;
+    gzip_disable "MSIE [1-6]\.(?!.*SV1)";
+    client_max_body_size 300M;
+    location ~ (?:.+\/)((?:.+)\.(?:.+)) {
+        try_files $uri /$1 /css/$1 =404;
+        expires 168h;
+        add_header Cache-Control "public";
+    }
+    location /api {
+        proxy_connect_timeout       600;
+        proxy_send_timeout          600;
+        proxy_read_timeout          600;
+        send_timeout                600;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $http_host;
+        proxy_set_header X-NginX-Proxy true;
+        set $test_uri $scheme://$host$request_uri;
+        if ($test_uri != $scheme://$host$uri$is_args$args) {
+            rewrite ^ $scheme://$host$uri$is_args$args? permanent;
+        }
+        proxy_pass http://contest_lb;
+    }
+    location / {
+        expires -1;
+        try_files $uri /index.html;
+    }
+}
