@@ -6,6 +6,7 @@ import shutil
 import hashlib
 import pyminizip
 import json
+import zipfile
 
 
 class Problem(BaseService):
