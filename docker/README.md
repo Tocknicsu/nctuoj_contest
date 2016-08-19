@@ -1,66 +1,76 @@
-```
-# install docker 
-curl -sSL https://get.docker.com/ | sudo sh
+# Install docker 
+`curl -sSL https://get.docker.com/ | sudo sh`
 
-# install nginx ( for load balance )
-sudo apt-get install nginx
+# Install nginx ( for load balance )
+`sudo apt-get install nginx`
 
-# add user to use docker
-sudo usermod -aG docker username
+# Add user to use docker
+`sudo usermod -aG docker username`
++   Relogin then you can use docker free.
 
-# relogin and you can use docker free
+# Have your own copy
 
-git clone https://github.com/Tocknicsu/nctuoj_contest.git
+`git clone https://github.com/Tocknicsu/nctuoj_contest.git`
 
-cd nctuoj_contest/docker
+# Enter the folder
 
-# setting config.py
-cp config.json.sample config.json
+`cd nctuoj_contest/docker`
 
-### DB, api, judge will always run at backend
-### web will run just once and generate some file
+# Initial the configuation
 
-### prefix: for docker name prefix
-###         default is contest, so the docker container name will be contest_db, contest_api_0, etc.
-### DB: setting username, password and database name
-### api: 
-###     number: how many api server 
-###     DATA_ROOT: which folder to store data
-### web:
-###     BASE_URL: where is api server
-###     DATA_ROOT: 
-### 
-### judge:
-###     number: how many judge
-###     BASE_URL: where is api server
-### judgetoken: to avoid fake judge (not implement, it should be set to "token")
+`cp config.json.sample config.json`
 
-# build docker images
-./build.py -images
+# Edit `config.json`
 
-# build db
-./build.py -db
++   `prefix` indicates the prefix of the names of the images
+    +   Will create `prefix_web`, `prefix_db`, `prefix_judge_i`, and `prefix_api_i`.
++   `DB` for the database
+    +   `POSTGRES_USER`: user name
+    +   `POSTGRES_DB`: db name
+    +   `POSTGRES_PASSWORD`: db password
++   `api` for the images of the application interface
+    +   `number`: number of server instances
+    +   `DATA_ROOT`: place for the shared data pool
++   `web`
+    +   `BASE_URL`: URL of the api server (Don't use `http://localhost`! Use your network interface if you are running the judge system locally)
+    +   `DATA_ROOT`: folder for storing web data
++   `judge`
+    +   `number`: number of server instances
+    +   `BASE_URL`: URL of the api server (Don't use `http://localhost`! Use your network interface if you are running the judge system locally)
++   `judgetoken`: use `"token"` for now.
 
-# build api
-./build.py -api
 
-./build.py -config
+# Build the judge system
 
-### first ip is db, and following four ip are apis
-### if one of those apis is 172.17.0.3
-### wait the docker 2 - 3 minutes to install lots of thing
-wget 172.17.0.3:3019/api/users
-### you should see {"msg": [{"type": 0, "name": "admin", "id": 1, "account": "admin"}]}
+## Build docker images
+`./build.py -images`
 
-# build web
-./build.py -web
-# go into the container
-# this step will take lots of time
-docker attach contest_web
+## Build database
+`./build.py -db`
 
-# <kbd>Ctrl+P</kbd>, <kbd>Ctrl+Q</kbd> detach the container
+## Build api
+`./build.py -api`
 
-cp nginx.setting /etc/nginx/sites-enabled/default
-sudo service nginx restart
+## Build judge
+`./build.py -judge`
 
-```
+## Check the configuration
+`./build.py -config`
+
++   The first IP is db, and following IPs are instances of the api server. 
++   You might have to wait for 2 - 3 minutes until docker installed lots of thing.
++   If the IP of some api server is 172.17.0.3, then use `curl 172.17.0.3:3019/api/users/` to check if the api server is activated.
+    +   You should see `{"msg": [{"type": 0, "name": "admin", "id": 1, "account": "admin"}]}` if the server is setup properly.
+
+# Build web
+`./build.py -web`
++   This step will take lots of time
+    +   Use `docker attach contest_web` to monitor the installation progress if you didn't change the prefix in `config.json`.
+    +   Hold <kbd>Ctrl</kbd> then press <kbd>P</kbd>, then press <kbd>Q</kbd> to detach the container.
+
+# Setup `nginx`
+`cp nginx.setting /etc/nginx/sites-enabled/default`
+`sudo service nginx restart`
+
+# Done!
+If everyhing works properly, then you may go to `BASE_URL` (depends on what you set in `config.json`) and login account `admin` with password `admin` after all iamges start.
