@@ -1,0 +1,30 @@
+{
+    "basic": {
+        "score_type": 1, 
+        "title": "Problem A",
+        "file": "problem.pdf"
+    },
+    "testdata": [
+            {
+                "output_limit": 64,
+                "memory_limit": 65536,
+                "time_limit": 1000,
+                "score": 100,
+                "input": "0.in",
+                "output": "0.out"
+            },
+            {
+                "output_limit": 64,
+                "memory_limit": 65536,
+                "time_limit": 1000,
+                "score": 100,
+                "input": "1.in",
+                "output": "1.out"
+            }
+    ],
+    "verdict": {
+        "file": "verdict.cpp",
+        "execute_type_id": 1,
+    },
+    "executes": [1, 2, 3, 4]
+}

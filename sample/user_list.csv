@@ -1,0 +1,5 @@
+judge,Judge is also admin,pwd_judge,0
+tester,Test,pwd_test,1
+unofficial,Unofficial Team,pwd_unofficial,2
+official,Official Team,pwd_official,3
+invalid account,Invalid,pwd_invalid,4
