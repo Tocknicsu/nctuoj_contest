@@ -16,16 +16,21 @@ Extract files from the [Sample](problem_meta.zip). The configuration is describe
     +   `"score"`: score weighting. Not supported in ACM-ICPC format.
     +   `"input"`: filename of the input.
     +   `"output"`: filename of the output.
-+   `"verdict"`: description of the validator. If you don't specify it, then the default is a token-based `diff`.
++   `"verdict"`: description of the validator. If you don't specify it, then the default validator is a token-based `diff`.
+    +   The validator takes two arguments.
+        +   The first one specifies the answer.
+        +   The second one specifies the output of the submission.
     +   `"file"`: the source code of the validator
     +   `"execute_type_id"`: execution enviroment of the validator. See the list below `"executes"`
 +   `"executes"`: a list of execution environment settings
-    +   `1`: C++14
-    +   `2`: C++11
-    +   `3`: C
-    +   `4`: Java
-    +   `5`: Python 3
-    +   `6`: Python 2
+    +   Can be customized.
+    +   The following is the default settings.
+        +   `1`: C++14
+        +   `2`: C++11
+        +   `3`: C
+        +   `4`: Java
+        +   `5`: Python 3
+        +   `6`: Python 2
 
 # User list in `.csv` format
 
