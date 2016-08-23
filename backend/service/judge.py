@@ -33,6 +33,7 @@ class Judge(BaseService):
         }, {
             'name': 'note',
             'type': str,
+            'xss': False,
         }]
         err = self.form_validation(data, required_args)
         if err: return (err, None)
