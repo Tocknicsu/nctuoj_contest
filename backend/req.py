@@ -15,6 +15,7 @@ from utils.utils import *
 from include import *
 from map import *
 from tornado_cors import CorsMixin
+import traceback
 
 class DatetimeEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -50,11 +51,21 @@ def Service__init__():
     include(Service.Permission, "./permission/", ["base.py"], True)
 
 class RequestHandler(CorsMixin, tornado.web.RequestHandler):
-    CORS_ORIGIN = '*'
+    CORS_METHODS = "GET, POST, PUT, DELETE, OPTIONS"
+    CORS_ORIGIN = "*"
+    CORS_CREDENTIALS = True
+    CORS_EXPOSE_HEADERS = 'Content-Type, Authorization, Content-Length, X-Requested-With, X-Prototype-Version, Origin, Allow, *'
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.log = log
+        try:
+            self.CORS_ORIGIN = self.request.headers['Origin']
+        except:
+            self.CORS_ORIGIN = '*'
+        self.set_header('Access-Control-Allow-Origin', self.CORS_ORIGIN)
+        self.set_header('Access-Control-Allow-Credentials', 'true')
+        self.set_header('Access-Control-Allow-Headers', 'Content-Type')
 
 
     def get_args(self, name):
@@ -74,12 +85,6 @@ class RequestHandler(CorsMixin, tornado.web.RequestHandler):
 
     @tornado.gen.coroutine
     def check_permission(self):
-        """
-        err, res = yield from Service.Util.contest_status()
-        uri = self.request.uri.split('?')[0]
-        if res == -1 and self.account['isADMIN'] == False and uri not in config.URL_WHITE_LIST:
-            self.render((403, "Permission Denied"))
-        """
         now = Service.Permission
         for attr in self.path[1:]:
             if hasattr(now, attr):
@@ -97,9 +102,6 @@ class RequestHandler(CorsMixin, tornado.web.RequestHandler):
 
     @tornado.gen.coroutine
     def prepare(self):
-        ##################################################
-        ### Get IP                                     ###
-        ##################################################
         x_real_ip = self.request.headers.get("X-Real-IP")
         remote_ip = x_real_ip or self.request.remote_ip
         self.remote_ip = remote_ip
@@ -107,13 +109,29 @@ class RequestHandler(CorsMixin, tornado.web.RequestHandler):
 
 
         yield self.get_identity()
-        ##################################################
-        ### Get Identity                               ###
-        ##################################################
-        ### API Using token
-        ##################################################
-        ### Get Basic Information                      ###
-        ##################################################
+        def encode(data):
+            if isinstance(data, dict):
+                for x in data:
+                    try:
+                        data[x] = encode(data[x])
+                    except:
+                        pass
+            elif isinstance(data, list):
+                for x in data:
+                    try:
+                        x = encode(x)
+                    except:
+                        pass
+            else:
+                if isinstance(data, int):
+                    data = str(data).encode()
+            return data
+        try:
+            json_data = json.loads(self.request.body.decode())
+            json_data = encode(json_data)
+            self.request.arguments.update({x: y if isinstance(y, list) else [y,] for x, y in json_data.items()})
+        except:
+            pass
        
 
     @tornado.gen.coroutine
@@ -141,7 +159,6 @@ class RequestHandler(CorsMixin, tornado.web.RequestHandler):
 
 class ApiRequestHandler(RequestHandler):
     def render(self, msg=""):
-        # self.set_header('Access-Control-Allow-Origin', '*')
         if isinstance(msg, tuple): code, msg = msg
         else: code = 200
         self.set_status(code)
@@ -154,14 +171,12 @@ class ApiRequestHandler(RequestHandler):
         self.finish(msg)
 
     def write_error(self, err, **kwargs):
-        self.render((err, kwargs))
+        traceback.print_tb(kwargs['exc_info'][2])
+        self.render((err, str(err)))
 
     @tornado.gen.coroutine
     def prepare(self):
         res = yield super().prepare()
-        ##################################################
-        ### Check Permission                           ###
-        ##################################################
         msg = yield self.check_permission()
         if isinstance(msg, tuple):
             self.render(msg)
