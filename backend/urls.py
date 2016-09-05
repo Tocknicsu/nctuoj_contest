@@ -42,5 +42,5 @@ urls = [
     ('/api/scoreboard/', Handler.api.scoreboard.Scoreboard),
     ('/api/judge/', Handler.api.judge.JudgeSubmission),
     ('/api/judge/testdata/', Handler.api.judge.JudgeSubmissionTestdata),
-    ('/api/db/(w+)/', Handler.api.db.DB),
+    ('/api/db/(\w*)/', Handler.api.db.DB),
 ]
