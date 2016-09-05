@@ -6,13 +6,13 @@ import tornado.web
 import tornado.websocket
 import datetime
 from urllib.parse import quote
-from log import log
+from utils.log import log
 import momoko
 import config
 import types
 from utils.form import form_validation
 from utils.utils import *
-from include import *
+from utils.include import *
 from map import *
 from tornado_cors import CorsMixin
 import traceback
@@ -46,9 +46,9 @@ def Service__init__():
     ##################################################
     ### Importing Service Module                   ###
     ##################################################
-    include(Service, "./service", ["base.py"], True)
+    include(Service, "./service", ["base.py"], True, False,)
     Service.Permission = T()
-    include(Service.Permission, "./permission/", ["base.py"], True)
+    include(Service.Permission, "./permission/", ["base.py"], True, True)
 
 class RequestHandler(CorsMixin, tornado.web.RequestHandler):
     CORS_METHODS = "GET, POST, PUT, DELETE, OPTIONS"

@@ -7,7 +7,7 @@ import re
 class T:
     pass
 
-def include(cls, dir="./", ignore=[], isobject=False):
+def include(cls, dir="./", ignore=[], isobject=False, all_path=True):
     ##################################################
     ### Recursive all files under dir              ###
     ##################################################
@@ -30,10 +30,16 @@ def include(cls, dir="./", ignore=[], isobject=False):
         packagepath = packagepath.replace("/", ".")
         classbuildpath = packagepath[len(dir):]
         now = cls
-        for attr in classbuildpath.split(".")[:-1]:
-            if not hasattr(now, attr):
-                setattr(now, attr, T())
-            now = getattr(now, attr)
+        if all_path:
+            for attr in classbuildpath.split("."):
+                if not hasattr(now, attr):
+                    setattr(now, attr, T())
+                now = getattr(now, attr)
+        else:
+            for attr in classbuildpath.split(".")[:-1]:
+                if not hasattr(now, attr):
+                    setattr(now, attr, T())
+                now = getattr(now, attr)
         package = importlib.import_module(packagepath)
         classes = inspect.getmembers(package, inspect.isclass)
         reg_exp = "^.*" + packagepath + "\..*$"
@@ -43,4 +49,4 @@ def include(cls, dir="./", ignore=[], isobject=False):
                     setattr(now, classname, getattr(package, classname)())
                 else:
                     setattr(now, classname, getattr(package, classname))
-                setattr(getattr(now, classname), 'path', packagepath.split(".")[:-1] + [classname])
+                setattr(getattr(now, classname), 'path', packagepath.split(".") + [classname])
