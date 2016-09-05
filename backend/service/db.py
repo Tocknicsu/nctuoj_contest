@@ -11,6 +11,6 @@ class DB(BaseService):
         err = self.form_validation(data,required_args)
         if err:
             return (err, None)
-        yield self.db.execute('TRUNCATE %s RESTART IDENTITY CASCADE', (data['name'],))
+        yield self.db.execute('TRUNCATE %s RESTART IDENTITY CASCADE'%(data['name']))
         return (None, None)
 
