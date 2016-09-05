@@ -4,9 +4,7 @@ ENV LANG en_US.UTF-8
 ENV TZ=Asia/Taipei
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN apt -y update && apt -y upgrade
-RUN apt -y install git 
-RUN apt -y install curl
-RUN apt -y install gcc g++ python python3 software-properties-common
+RUN apt -y install python3
 RUN apt -y install python3-pip
 RUN apt clean
 RUN apt autoclean
