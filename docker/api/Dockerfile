@@ -22,6 +22,8 @@ ENV DB_PORT=5432
 ENV DB_USER=nctuoj_contest
 ENV DB_NAME=nctuoj_contest
 ENV DB_PASSWORD=nctuoj_contest
+ENV JUDGE_TOKEN=judgetoken
+ENV SB_TOKEN=sbtoken
 VOLUME ["/mnt/oj/"]
 EXPOSE $PORT
 ENTRYPOINT ["bash", "contest.sh"]

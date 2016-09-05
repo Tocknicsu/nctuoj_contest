@@ -17,5 +17,6 @@ RUN apt clean
 RUN apt autoclean
 RUN apt autoremove
 RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+ENV JUDGE_TOKEN=judgetoken
 ADD judge.sh /judge.sh
 ENTRYPOINT ["bash", "judge.sh"]

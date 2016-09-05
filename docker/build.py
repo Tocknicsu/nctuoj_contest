@@ -27,6 +27,8 @@ def build_api():
             "-e", "DB_USER=%s"%(config['DB']['POSTGRES_USER']),
             "-e", "DB_PASSWORD=%s"%(config['DB']['POSTGRES_PASSWORD']),
             "-e", "DB_HOST=%s_db"%(config['prefix']),
+            "-e", "JUDGE_TOKEN=%s"%(config['judgetoken']),
+            "-e", "SB_TOKEN=%s"%(config['sbtoken']),
             "-v", "%s:/mnt/oj/"%(config['api']['DATA_ROOT']),
             "%s_api"%(config['prefix']),
         ]
@@ -65,6 +67,7 @@ def build_judge():
         cmd = ["docker", "run", "-itd", "--privileged",
                 "--name", "%s_judge_%d"%(config['prefix'], x),
                 "-e", "BASE_URL=%s"%(config['judge']['BASE_URL']),
+                "-e", "JUDGE_TOKEN=%s"%(config['judgetoken']),
                 "%s_judge"%(config["prefix"])]
         print(cmd)
         sp.call(cmd)
