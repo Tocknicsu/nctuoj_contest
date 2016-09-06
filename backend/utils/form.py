@@ -1,6 +1,5 @@
 from dateutil import parser
 from datetime import datetime
-from utils.pxfilter import XssHtml
 def form_validation(form ,schema):
     err = _form_validation(form, schema)
     return (400, err) if err else None
@@ -85,19 +84,5 @@ def _form_validation(form, schema):
         if 'check_dict' in item:
             err = form_validation(form[name], item['check_dict'])
             if err: return err
-
-        ### check xss
-        xss_check = False
-        if 'xss' in item and item['xss'] == False:
-            pass
-        elif 'xss' in item and item['xss'] == True:
-            xss_check = True
-        elif 'type' in item and item['type'] == str:
-            xss_check = True
-        if xss_check:
-            xss = XssHtml()
-            xss.feed(form[name])
-            xss.close()
-            form[name] = xss.getHtml()
 
     return None

@@ -157,6 +157,10 @@ class RequestHandler(CorsMixin, tornado.web.RequestHandler):
             self.account['isADMIN'] = True
             self.account['isJUDGE'] = True
 
+        if token == config.SB_TOKEN:
+            self.account['isLOGIN'] = True
+            self.account['isADMIN'] = True
+
 class ApiRequestHandler(RequestHandler):
     def render(self, msg=""):
         if isinstance(msg, tuple): code, msg = msg
