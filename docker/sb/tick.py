@@ -6,7 +6,7 @@ import datetime
 
 def tick_user(Type):
     data = {
-        "token": config.admin_token,
+        "token": config.sb_token,
         "type": Type
     }
     url = "%s/api/scoreboard/"%(config.base_url,)
