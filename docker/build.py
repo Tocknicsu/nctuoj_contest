@@ -72,6 +72,16 @@ def build_judge():
         print(cmd)
         sp.call(cmd)
 
+def build_sb():
+    config = json.load(open(CONFIG_FILE, 'r'))
+    cmd = ["docker", "run", "-itd",
+            "--name", "%s_sb"%(config['prefix']),
+            "-e", "BASE_URL=%s"%(config['judge']['BASE_URL']),
+            "-e", "SB_TOKEN=%s"%(config['sbtoken']),
+            "%s_sb"%(config["prefix"])]
+    print(cmd)
+    sp.call(cmd)
+
 def build_image(name, directory):
     if sp.call(["docker", "build", "-t", name, directory]):
         print("Docker Build Broken.")
@@ -84,6 +94,7 @@ def build_images():
     build_image("%s_api"%(config['prefix']), "./api/")
     build_image("%s_judge"%(config['prefix']), "./judge/")
     build_image("%s_web"%(config['prefix']), "./web/")
+    build_image("%s_sb"%(config['prefix']), "./sb/")
     print("=====>Docker Build Done.")
 
 def print_config():
@@ -102,6 +113,7 @@ if __name__ == "__main__":
     parser.add_argument("-api", help="create api", action="store_true")
     parser.add_argument("-web", help="create web", action="store_true")
     parser.add_argument("-judge", help="create judge", action="store_true")
+    parser.add_argument("-sb", help="create sb", action="store_true")
     parser.add_argument("-images", help="build images(db, api, web, judge)", action="store_true")
     parser.add_argument("-all", help="create db api web judge", action="store_true")
     parser.add_argument("-config", help="print config", action="store_true")
@@ -127,5 +139,7 @@ if __name__ == "__main__":
         build_web()
     if args.judge or args.all:
         build_judge()
+    if args.sb or args.all:
+        build_sb()
 
 
