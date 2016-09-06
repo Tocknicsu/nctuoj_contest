@@ -17,6 +17,9 @@
         "number": 4,
         "BASE_URL": "https://contest.oj.nctu.me"
     },
+    "sb": {
+        "BASE_URL": "https://contest.oj.nctu.me",
+    },
     "judgetoken": "judgefortoken",
     "sbtoken": "sbtoken"
 }
