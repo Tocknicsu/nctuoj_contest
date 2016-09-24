@@ -91,10 +91,12 @@ CREATE TABLE execute_types (
 CREATE TRIGGER execute_types_updated_row BEFORE UPDATE ON execute_types FOR EACH ROW EXECUTE PROCEDURE updated_row();
 INSERT INTO execute_types (description, file_name, language_id) values ('C++14', 'main.cpp', 2);
 INSERT INTO execute_types (description, file_name, language_id) values ('C++11', 'main.cpp', 2);
-INSERT INTO execute_types (description, file_name, language_id) values ('C', 'main.c', 1);
+INSERT INTO execute_types (description, file_name, language_id) values ('C++', 'main.cpp', 2);
 INSERT INTO execute_types (description, file_name, language_id) values ('Java', 'Main.java', 3);
 INSERT INTO execute_types (description, file_name, language_id) values ('Python3', 'main.py', 5);
 INSERT INTO execute_types (description, file_name, language_id) values ('Python2', 'main.py', 4);
+INSERT INTO execute_types (description, file_name, language_id) values ('C11', 'main.c', 1);
+INSERT INTO execute_types (description, file_name, language_id) values ('C99', 'main.c', 1);
 
 CREATE TABLE execute_steps (
     id              serial          NOT NULL    PRIMARY KEY,
@@ -109,7 +111,7 @@ INSERT INTO execute_steps (execute_type_id, command) values (1, 'g++ -std=c++14 
 INSERT INTO execute_steps (execute_type_id, command) values (1, './a.out');
 INSERT INTO execute_steps (execute_type_id, command) values (2, 'g++ -std=c++11 -O2 __FILE__');
 INSERT INTO execute_steps (execute_type_id, command) values (2, './a.out');
-INSERT INTO execute_steps (execute_type_id, command) values (3, 'gcc -lm -std=c99 __FILE__');
+INSERT INTO execute_steps (execute_type_id, command) values (3, 'g++ -O2  __FILE__');
 INSERT INTO execute_steps (execute_type_id, command) values (3, './a.out');
 INSERT INTO execute_steps (execute_type_id, command) values (4, 'javac __FILE__');
 INSERT INTO execute_steps (execute_type_id, command) values (4, 'java -Xmx__MEMORY_LIMIT__k -Xss__MEMORY_LIMIT__k __MAIN_FILE__');
@@ -117,6 +119,10 @@ INSERT INTO execute_steps (execute_type_id, command) values (5, 'python3 -m py_c
 INSERT INTO execute_steps (execute_type_id, command) values (5, 'python3 __FILE__');
 INSERT INTO execute_steps (execute_type_id, command) values (6, 'python2 -m py_compile __FILE__');
 INSERT INTO execute_steps (execute_type_id, command) values (6, 'python2 __FILE__');
+INSERT INTO execute_steps (execute_type_id, command) values (7, 'gcc -lm -O2 __FILE__');
+INSERT INTO execute_steps (execute_type_id, command) values (7, './a.out');
+INSERT INTO execute_steps (execute_type_id, command) values (8, 'gcc -lm -std=c99 -O2 __FILE__');
+INSERT INTO execute_steps (execute_type_id, command) values (8, './a.out');
 
 CREATE TABLE clarifications (
     id              serial          NOT NULL    PRIMARY KEY,
