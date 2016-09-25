@@ -111,7 +111,7 @@ INSERT INTO execute_steps (execute_type_id, command) values (1, 'g++ -std=c++14 
 INSERT INTO execute_steps (execute_type_id, command) values (1, './a.out');
 INSERT INTO execute_steps (execute_type_id, command) values (2, 'g++ -std=c++11 -O2 __FILE__');
 INSERT INTO execute_steps (execute_type_id, command) values (2, './a.out');
-INSERT INTO execute_steps (execute_type_id, command) values (3, 'g++ -O2  __FILE__');
+INSERT INTO execute_steps (execute_type_id, command) values (3, 'g++ -O2 __FILE__');
 INSERT INTO execute_steps (execute_type_id, command) values (3, './a.out');
 INSERT INTO execute_steps (execute_type_id, command) values (4, 'javac __FILE__');
 INSERT INTO execute_steps (execute_type_id, command) values (4, 'java -Xmx__MEMORY_LIMIT__k -Xss__MEMORY_LIMIT__k __MAIN_FILE__');
