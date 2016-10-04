@@ -20,3 +20,8 @@ class ProblemVerdict(BasePermission):
         err = yield from self.exist({'id': id})
         if err:
             return err
+
+class ProblemVerdictFile(BasePermission):
+    def get(self, req, id):
+        if not req.account['isADMIN']:
+            return (403, "Permission Denied")
