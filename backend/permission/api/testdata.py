@@ -3,10 +3,10 @@ from permission.base import BasePermission
 
 
 class Testdata(BasePermission):
-    def get(self, req):
+    def get(self, req, problem_id):
         pass
 
-    def post(self, req):
+    def post(self, req, problem_id):
         if not req.account['isADMIN']:
             return (403, "Permission Denied")
 
