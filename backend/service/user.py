@@ -200,16 +200,33 @@ class User(BaseService):
             'name': '+id',
             'type': int
         }, {
-            'name': '+file',
+            'name': 'file',
+        }, {
+            'name': '+new_team',
+            'type': bool,
+        }, {
+            'name': '+follow_rule',
+            'type': bool
+        }, {
+            'name': '+password',
+            'type': str,
         }]
         err = self.form_validation(data, required_args)
         if err: return (err, None)
+        user = (yield self.db.execute('SELECT password FROM users WHERE id = %s;', (data['id'],))).fetchone()
+        hpwd = HashPassword(data['password'])
+        self.log(user)
+        self.log(hpwd)
+        if user['password'] != hpwd:
+            return ((403, 'Confirm you password'), None)
+        yield self.db.execute('UPDATE users SET follow_rule = %s, new_team = %s WHERE id = %s', (data['follow_rule'], data['new_team'], data['id']))
         folder = os.path.join(config.DATA_ROOT, 'data/users', str(data['id']))
-        try: shutil.rmtree(folder)
-        except: pass
-        try: os.makedirs(folder)
-        except: pass
-        file_path = os.path.join(folder, data['file']['filename'])
-        with open(file_path, 'wb+') as f:
-            f.write(data['file']['body'])
+        if data['file']:
+            try: shutil.rmtree(folder)
+            except: pass
+            try: os.makedirs(folder)
+            except: pass
+            file_path = os.path.join(folder, data['file']['filename'])
+            with open(file_path, 'wb+') as f:
+                f.write(data['file']['body'])
         return (None, None)

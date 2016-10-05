@@ -60,6 +60,11 @@ def _form_validation(form, schema):
                 if item['type'] == datetime:
                     try: form[name] = parser.parse(form[name])
                     except Exception as e: return name + str(e)
+                elif item['type'] == bool:
+                    if form[name] in ["True", "true", "1", 1]:
+                        form[name] = True
+                    else:
+                        form[name] = False
                 else:
                     try: form[name] = item['type'](form[name])
                     except Exception as e: return name + str(e)

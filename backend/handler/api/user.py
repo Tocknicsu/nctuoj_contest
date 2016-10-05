@@ -105,10 +105,10 @@ class UserSignIn(ApiRequestHandler):
 class UserUpload(ApiRequestHandler):
     @tornado.gen.coroutine
     def put(self):
-        args = ['file[file]']
+        args = ['file[file]', 'new_team', 'follow_rule', 'password']
         data = self.get_args(args)
         data['id'] = self.account['id']
-        err, res = Service.User.UploadFile(data)
+        err, res = yield from Service.User.UploadFile(data)
         if err:
             self.render(err)
         else:

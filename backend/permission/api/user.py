@@ -22,3 +22,7 @@ class UsersCSV(BasePermission):
         if not req.account['isADMIN']:
             return (403, "Permission Denied")
 
+class UserUpload(BasePermission):
+    def post(self, req, id):
+        if 'id' not in req.account or int(req.account['id']) != int(id):
+            return (403, "Permission Denied")
