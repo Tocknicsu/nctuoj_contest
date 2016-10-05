@@ -208,17 +208,14 @@ class User(BaseService):
             'name': '+follow_rule',
             'type': bool
         }, {
-            'name': '+password',
+            'name': '+team',
             'type': str,
         }]
         err = self.form_validation(data, required_args)
         if err: return (err, None)
-        user = (yield self.db.execute('SELECT password FROM users WHERE id = %s;', (data['id'],))).fetchone()
-        hpwd = HashPassword(data['password'])
-        self.log(user)
-        self.log(hpwd)
-        if user['password'] != hpwd:
-            return ((403, 'Confirm you password'), None)
+        user = (yield self.db.execute('SELECT name FROM users WHERE id = %s;', (data['id'],))).fetchone()
+        if user['name'] != data['team']:
+            return ((403, 'Confirm you team name'), None)
         yield self.db.execute('UPDATE users SET follow_rule = %s, new_team = %s WHERE id = %s', (data['follow_rule'], data['new_team'], data['id']))
         folder = os.path.join(config.DATA_ROOT, 'data/users', str(data['id']))
         if data['file']:
