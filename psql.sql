@@ -57,6 +57,7 @@ CREATE TABLE users (
     token           varchar(64)     NOT NULL,
     new_team        boolean         DEFAULT false,
     follow_rule     boolean         DEFAULT false,
+    photo           varchar(255)    NOT NULL DEFAULT '',
     "type"          integer         NOT NULL    CHECK("type" = ANY('{0, 1, 2, 3}')),
     created_at      timestamp       DEFAULT date_trunc('second', now()),
     updated_at      timestamp       DEFAULT date_trunc('second', now())

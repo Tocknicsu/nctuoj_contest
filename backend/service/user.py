@@ -223,6 +223,7 @@ class User(BaseService):
             except: pass
             try: os.makedirs(folder)
             except: pass
+            yield self.db.execute('UPDATE users SET photo = %s WHERE id = %s', (data['file']['filename'], data['id'],))
             file_path = os.path.join(folder, data['file']['filename'])
             with open(file_path, 'wb+') as f:
                 f.write(data['file']['body'])
