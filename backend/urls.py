@@ -11,6 +11,7 @@ urls = [
     ('/api/users/', Handler.api.user.Users),
     ('/api/users/(\d+)/', Handler.api.user.User),
     ('/api/users/me/', Handler.api.user.UsersMe),
+    ('/api/users/photo/', Handler.api.user.UserPhoto, {'path': os.path.join(config.DATA_ROOT, 'data/users')}),
     ('/api/users/upload/', Handler.api.user.UserUpload),
     ('/api/users/code/', Handler.api.user.UsersCode, {'path': os.path.join(config.DATA_ROOT, 'data/tmp')}),
     ('/api/users/csv/', Handler.api.user.UsersCSV),

@@ -113,3 +113,9 @@ class UserUpload(ApiRequestHandler):
             self.render(err)
         else:
             self.render(res)
+
+class UserPhoto(StaticFileHandler):
+    @tornado.gen.coroutine
+    def get(self, include_body=True):
+        path = '%d/%s' % (self.account['id'], self.account['photo'])
+        super().get(path, include_body=include_body)
