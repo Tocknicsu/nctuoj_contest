@@ -101,7 +101,7 @@ class Problem(BaseService):
         }]
         err = self.form_validation(data, required_args)
         if err: return (err, None)
-        res = yield self.db.execute("SELECT e.id, e.description FROM map_problem_execute as me, execute_types as e WHERE e.id=me.execute_type_id and me.problem_id=%s", (data['id'],))
+        res = yield self.db.execute("SELECT e.id, e.description FROM map_problem_execute as me, execute_types as e WHERE e.id=me.execute_type_id and me.problem_id=%s ORDER BY e.id ASC", (data['id'],))
         res = res.fetchall()
         return (None, res)
 
